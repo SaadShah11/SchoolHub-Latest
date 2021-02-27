@@ -1,0 +1,137 @@
+.rootCont {
+    background-Color:white;
+    padding-bottom: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.div1 {
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    margin-top: 4%;
+}
+
+.div2 {
+
+    width: 20%;
+}
+
+.div4 {
+    width: 25%;
+    /* text-align: center; */
+}
+
+.abtHead{
+    font-family: "Josefin Sans", Arial, sans-serif;
+    font-size: 25px;
+    margin-top: 40px;
+    text-align: center;
+    margin-bottom: 30px;
+}
+.abtHead2{
+    font-family: "Josefin Sans", Arial, sans-serif;
+    font-size: 25px;
+    text-align: start;
+}
+.title{
+    font-size:30px
+}
+.abtText{
+    font-family: "Poppins", Arial, sans-serif;
+    font-size: 15px;
+    margin-bottom: 30px;
+    text-align: justify;
+    font-weight: 300;
+    padding:0px 15px 0px 15px;
+}
+/* .abtText:hover{
+    color:orange;
+} */
+
+.accCont{
+    display: flex;
+    flex-direction: row;
+    width: 50%;
+    justify-content: space-between      ;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.accIcon{
+    height: 40px;
+    width:40px;
+}
+.linksCont{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.links{
+    text-decoration: none;
+    font-size:20px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+}
+ 
+.links:hover{
+    color: rgb(155, 13, 13);
+    cursor: pointer; 
+    transition: all 400ms ease;
+} 
+
+.contactLink{
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.contactIcon{
+    height: 30px;
+    width: 30px;
+}
+
+.contactText{
+    font: 16px "Poppins", sans-serif;
+    font-weight: 400;
+    margin-left: 10px;
+    overflow: auto;
+}
+.logo{
+    width: 100px;
+    height: 100px;
+    padding-left: 10px;
+}
+@media(max-width:900px){
+    .abtHead{
+        font-size: 20px;
+    }
+    .contactText{
+        font-size: 13px;
+    }
+    .links{
+        font-size: 18px;
+    }
+    .abtText{
+        font-size: 13px;
+    }
+}
+
+@media(max-width:550px){
+    .rootCont{
+        flex-direction: column;
+        align-items: center;
+    }
+    .div1,.div2,.div4{
+        width: 80%;
+    }
+}

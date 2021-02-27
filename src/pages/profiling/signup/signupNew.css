@@ -1,0 +1,72 @@
+.root { 
+    background-Color: #262626;
+    height: 100vh;
+    color: white;
+    display: flex;
+    justify-Content: space-evenly;
+    align-Items: center
+}
+.welcome{
+    background-Color: #262626;
+     font-Weight: 'bold';
+      font-Size: '30px' 
+}
+.welcome2{
+    background-Color: #262626;
+}
+.form {
+    width: 400px;
+     justify-Content: center;
+      align-Items: center;
+       text-Align: center 
+}
+.radio{
+    color: white;
+   text-align: left;
+}
+.usertype{
+    color: white;
+}
+.radioB{
+    width: 100%;
+    display: flex;
+    color: white;
+    flex-direction:row;
+}
+.head{
+    width: 100%;
+    text-align: center;
+}
+
+.info{
+    background-Color: #262626;
+    width: 600px;
+    display: flex;
+    flex-Direction: column;
+    justify-Items: center;
+    justify-Content: center 
+}
+.input{
+    width:100%;  
+    background-Color: #262626;
+    border-Bottom: 2px solid red;
+    margin-Bottom: 20px;
+    color: white;
+    height: 6vh;
+ 
+}
+.buttonDiv{
+    width:100%;
+    background-Color: #af1b1b;
+     font-Size:20px;
+      padding:5px;
+       border-Radius:7px;
+        cursor:pointer
+}
+.button{
+    background-Color: #af1b1b;
+     font-Size:20px;
+     padding:5px;
+      border-Radius:7px;
+      cursor:pointer
+}

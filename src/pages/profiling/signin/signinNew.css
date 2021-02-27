@@ -1,0 +1,85 @@
+.root { 
+    background-Color: #262626;
+    height: 100vh;
+    color: white;
+    display: flex;
+    justify-Content: space-evenly;
+    align-Items: center
+}
+.welcome{
+    background-Color: #262626;
+     font-Weight: 'bold';
+      font-Size: '30px' 
+}
+.welcome2{
+    background-Color: #262626;
+}
+.form {
+    width: 400px;
+     justify-Content: center;
+      align-Items: center;
+       text-Align: center 
+}
+.radio{
+    color: white;
+    display: flex;
+    flex-direction: row;
+}
+.usertype{
+    color: white;
+}
+.input{
+    width:100%;  
+    background-Color: #262626;
+    border-Bottom: 2px solid red;
+    margin-Bottom: 20px;
+    color: white;
+    height: 6vh;
+ 
+}
+.buttonDiv{
+    width:100%;
+    background-Color: #af1b1b;
+     font-Size:20px;
+      padding:5px;
+       border-Radius:7px;
+        cursor:pointer;
+        justify-content: center;
+}
+.usertype{
+    color: white;
+}
+.button{
+    background-Color: #af1b1b;
+    font-Size:20px;
+    padding:5px;
+    border-Radius:7px;
+    cursor:pointer
+}
+.radioB{
+    width: 100%;
+    display: flex;
+    color: white;
+    flex-direction:row;
+}
+
+.form {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.head{
+    width: 100%;
+    text-align: center;
+}
+.info{
+    background-Color: '#262626';
+     width: "600px";
+     display: 'flex';
+      flex-Direction: 'column';
+       justify-Items: 'center';
+        justify-Content: 'center' 
+}

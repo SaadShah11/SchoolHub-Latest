@@ -65,7 +65,7 @@ export default function Maps() {
   //fee={min:0,max:5}
   //distance={min:0,max:5}
 
-  var [fee, setFee] = useState();
+  var [fee, setFee] = useState({min:200, max:1000});
   var [distance, setDistance] = useState();
   var [schoolType, setSchoolType] = useState('Co-Education');
   var [educationLevel, setEducationLevel] = useState('Primary');
@@ -82,6 +82,10 @@ export default function Maps() {
 
   const user = AuthService.getCurrentUser()
 
+  const handleChangeSearch = (event) => {
+    setSearchValue(event.target.value);
+    console.log(searchValue)
+  };
   const handleChangeSchoolType = (event) => {
     setSchoolType(event.target.value);
     console.log(schoolType)
@@ -219,9 +223,11 @@ export default function Maps() {
         <Grid item md={3}>
           <Widget title="Search School Here" disableWidgetMenu>
             <div className={classes.searchfield}>
+              <InputBase placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
 
               <FilterListIcon class={classes.icon} onClick={handleClickOpen} />
-              <SearchIcon fontSize='large' class={classes.icon} />
+              {/* <SearchIcon fontSize='large' class={classes.icon} /> */}
+              <Button onClick={() => handleSend()}> <SearchIcon fontSize='large' class={classes.icon} /></Button>
               <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Filters</DialogTitle>
                 <DialogContent>
@@ -264,7 +270,7 @@ export default function Maps() {
                   <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Education level: </text>
                     <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationlevel" name="educationlevel"
-                     value={educationLevel} onChange={handleChangeEducationLevel}>
+                      value={educationLevel} onChange={handleChangeEducationLevel}>
                       <FormControlLabel value="Primary" control={<Radio color='inherit' />} label="Primary" />
                       <FormControlLabel value="Middle" control={<Radio color='inherit' />} label="Middle" />
                       <FormControlLabel value="Higher" control={<Radio color='inherit' />} label="Higher " />
@@ -272,8 +278,8 @@ export default function Maps() {
                   </div>
                   <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Education type: </text>
-                    <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  " 
-                    value={educationType} onChange={handleChangeEducationType}>
+                    <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  "
+                      value={educationType} onChange={handleChangeEducationType}>
                       <FormControlLabel value="Matric/Fsc" control={<Radio />} label="Matric/Fsc" />
                       <FormControlLabel value="IGCSE" control={<Radio />} label="IGCSE" />
                     </RadioGroup>

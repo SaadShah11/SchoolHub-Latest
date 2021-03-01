@@ -27,6 +27,7 @@ const customMarker = new L.icon({
 const MyMarkersList = ({ markers }) => {
   const items = markers.map(({ key, ...props }) => (
     <MyPopupMarker key={key} {...props} />
+
   ))
   return <Fragment>{items}</Fragment>
 }
@@ -50,7 +51,7 @@ const Schools = [
 ]
 
 let newData = {
-  //filters: [],
+  filters: "",
   search: ""
 }
 
@@ -65,11 +66,16 @@ export default function Maps() {
   //fee={min:0,max:5}
   //distance={min:0,max:5}
 
-  var [fee, setFee] = useState({min:200, max:1000});
+  var [fee, setFee] = useState();
+  var [feeMin, setFeeMin] = useState();
+  var [feeMax, setFeeMax] = useState();
   var [distance, setDistance] = useState();
-  var [schoolType, setSchoolType] = useState('Co-Education');
-  var [educationLevel, setEducationLevel] = useState('Primary');
-  var [educationType, setEducationType] = useState('Matric/Fsc')
+  // var [schoolType, setSchoolType] = useState('Co-Education');
+  // var [educationLevel, setEducationLevel] = useState('Primary');
+  // var [educationType, setEducationType] = useState('Matric/Fsc')
+  var [schoolType, setSchoolType] = useState();
+  var [educationLevel, setEducationLevel] = useState();
+  var [educationType, setEducationType] = useState()
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -102,15 +108,20 @@ export default function Maps() {
   const position = [30.3753, 69.3451]
 
   let handleSend = () => {
-    // let finalSearch = {
-    //   //filters: filterValue,
-    //   search: searchValue
-    // }
-    //newData.filters = finalComment
+    let finalFilters = {
+      //filters: filterValue,
+      fee:{min:feeMin,max:feeMax},
+      distance:distance,
+      schoolType:schoolType,
+      educationLevel:educationLevel,
+      educationType:educationType
+    }
+    newData.filters = finalFilters
     console.log("search Value")
     console.log(searchValue)
     newData.search = searchValue
-
+    console.log("NewData")
+    console.log(newData)
     postSearch()
   }
 
@@ -254,8 +265,8 @@ export default function Maps() {
                   </div>
                   <div class={classes.eachF1}>
                     <text style={{ fontWeight: 'bold' }}>Fee: </text>
-                    <TextField placeholder="Min" class={classes.feefield} />
-                    <TextField placeholder="Max" class={classes.feefield} />
+                    <TextField placeholder="Min" class={classes.feefield} onChange={e => setFeeMin(e.target.value)}/>
+                    <TextField placeholder="Max" class={classes.feefield} onChange={e => setFeeMax(e.target.value)}/>
                   </div>
 
                   <div class={classes.eachF1}>

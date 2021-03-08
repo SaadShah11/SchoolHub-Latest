@@ -15,11 +15,11 @@ export default class Footer extends Component {
                 <div className={classes.second}>
                     <div className={classes.contactLink}>
                         <PhoneIcon className={classes.contactIcon}  />
-                        <p className={classes.contactText}>(+92)-323-2344242</p>
+                        <p className={classes.contactText}>{this.props.school[0].contactNumber}</p>
                     </div>
                     <div className={classes.contactLink}>
                         <MailOutlineIcon className={classes.contactIcon} s />
-                        <p className={classes.contactText}>rootsinter@gmail.com</p>
+                        <p className={classes.contactText}>{this.props.school[0].schoolEmail}</p>
                     </div>
                     <div className={classes.contactLink}>
                         <WhatsAppIcon className={classes.contactIcon} />

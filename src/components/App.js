@@ -1,5 +1,5 @@
 import React from "react";
-import { HashRouter, Route, Switch, Redirect, Router } from "react-router-dom";
+import { HashRouter, Route, Switch, Redirect, Router, BrowserRouter } from "react-router-dom";
 
 // components
 import Layout from "./Layout";
@@ -15,6 +15,7 @@ import { useUserState } from "../context/UserContext";
 import Home from "../pages/home/Home";
 import Dashboard from "../pages/dashboard/Dashboard";
 import AdminAdding from '../pages/Admin/AdminAdding'
+import SchoolDetails from "../pages/Admin/SchoolView/School"
 //import checkboxUI from "../pages/Admin/checkbox"
 
 
@@ -33,8 +34,14 @@ export default function App() {
         {/* <Route exact path="/" render={() => <Redirect to="/app/home" />} /> */}
         {/* <Route exact path="/app" render={() => <Redirect to="/app/home" />}/> */}
 
-
+        <Route path="/schoolDetails" render={(props) => (
+          <SchoolDetails {...props} />
+        )} />
         <Route exact path="/admin" component={AdminAdding} />
+        {/* <Route exact path="/" render={(props) => (
+          <Landing {...props} fetchUrl1={url1} fetchUrl2={url2} />
+        )} /> */}
+        {/* <Route exact path="/landing" component={Landing} /> */}
         <Route exact path="/" render={(props) => (
           <Login {...props} fetchUrl1={url1} fetchUrl2={url2} />
         )} />

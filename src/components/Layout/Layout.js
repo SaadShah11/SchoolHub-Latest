@@ -12,6 +12,7 @@ import Sidebar from "../Sidebar";
 // pages
 import Dashboard from "../../pages/dashboard";
 import Home from "../../pages/home/Home";
+import SchoolDetails from "../../pages/Admin/SchoolView/School"
 import Notifications from "../../pages/notifications";
 import Maps from "../../pages/maps";
 import Charts from "../../pages/charts";
@@ -37,6 +38,9 @@ function Layout(props) {
             <Route path="/app/home" render={(props) => (
               <Home {...props} fetchUrl={url1} />
             )} />
+            {/* <Route path="/app/schoolDetails" render={(props) => (
+              <SchoolDetails {...props}  />
+            )} /> */}
             <Route path="/app/home" component={Home} />
             <Route path="/app/typography" component={Dashboard} />
             <Route path="/app/map" component={Maps} />

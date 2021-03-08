@@ -17,6 +17,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import useStyles from "./styles";
 
 import axios from "../../Util/axios"
+import * as geolib from 'geolib';
 import AuthService from "../../services/auth.service";
 
 const customMarker = new L.icon({
@@ -34,7 +35,9 @@ const MyMarkersList = ({ markers }) => {
 
 const MyPopupMarker = ({ content, position }) => (
   <Marker position={position} icon={customMarker} >
-    <Popup>{content}</Popup>
+    <Popup>
+      {content}
+    </Popup>
   </Marker>
 )
 const markers = [
@@ -50,12 +53,16 @@ const Schools = [
   { id: '3', name: 'Grafton School, Islamabad', location: 'Taramri chowk, Islamabad' }
 ]
 
-let newData = {
-  filters: "",
-  search: ""
+let currentLocation = {
+
 }
 
-export default function Maps() {
+let newData = {
+  filters: ""
+}
+
+export default function Maps(props) {
+
   const [value, setValue] = React.useState('Co-Education');
   const [value2, setValue2] = React.useState('Primary');
   const [value3, setValue3] = React.useState('Matric/Fsc');
@@ -76,6 +83,7 @@ export default function Maps() {
   var [schoolType, setSchoolType] = useState();
   var [educationLevel, setEducationLevel] = useState();
   var [educationType, setEducationType] = useState()
+  //var [currentLocation, setCurrentLocation] = useState()
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -110,11 +118,12 @@ export default function Maps() {
   let handleSend = () => {
     let finalFilters = {
       //filters: filterValue,
-      fee:{min:feeMin,max:feeMax},
-      distance:distance,
-      schoolType:schoolType,
-      educationLevel:educationLevel,
-      educationType:educationType
+      fee: { min: feeMin, max: feeMax },
+      distance: distance,
+      schoolType: schoolType,
+      educationLevel: educationLevel,
+      educationType: educationType,
+      currentLocation: currentLocation
     }
     newData.filters = finalFilters
     console.log("search Value")
@@ -128,6 +137,7 @@ export default function Maps() {
   const getAllSchools = useCallback(async (bool) => {
     async function fetchData() {
       let request;
+      console.log("inside get all schools")
       request = await axios.get("http://localhost:8080/searchSchool/search/")
       console.log("request")
       setAllSchools(request.data)
@@ -137,7 +147,20 @@ export default function Maps() {
     fetchData()
   }, [])
 
+  let getCurrentLocation = () => {
+    navigator.geolocation.getCurrentPosition(function (position) {
+      console.log("Latitude is :", position.coords.latitude);
+      console.log("Longitude is :", position.coords.longitude);
+      //setCurrentLocation({ latitude:position.coords.latitude, longitude:position.coords.longitude })
+      currentLocation.latitude = position.coords.latitude
+      currentLocation.longitude = position.coords.longitude
+      console.log("Current Location")
+      console.log(currentLocation)
+    });
+  }
+
   useEffect(() => {
+    getCurrentLocation()
     getAllSchools()
     //getItems().then(data => setItems(data));
   }, []);
@@ -147,7 +170,7 @@ export default function Maps() {
       let request;
       console.log("NewData")
       console.log(newData)
-      request = await axios.post("http://localhost:8080/searchSchool/search/" + newData.search, newData)
+      request = await axios.post("http://localhost:8080/searchSchool/search/" + newData.search, newData.filters)
       console.log("request")
       console.log(request)
       setSearchResults(request.data)
@@ -167,7 +190,11 @@ export default function Maps() {
       //   username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
       // />
       return (
-        <div class={classes.result}>
+        <div class={classes.result} onClick={()=>{
+          AuthService.setCurrentSchool({schoolID:i._id})
+          props.history.push("/schoolDetails");
+          //props.history.push({ pathname: '/schoolDetails', data: i._id })
+        }}>
           <text>{i.schoolName}</text>
           <br />
           <text style={{ fontSize: '10px' }}>{i.schoolAddress}</text>
@@ -255,7 +282,6 @@ export default function Maps() {
                         <MenuItem value="">
                           <em>None</em>
                         </MenuItem>
-                        <MenuItem value={0.5}>500m</MenuItem>
                         <MenuItem value={1}>1km</MenuItem>
                         <MenuItem value={5}>5km</MenuItem>
                         <MenuItem value={10}>10km</MenuItem>
@@ -265,8 +291,8 @@ export default function Maps() {
                   </div>
                   <div class={classes.eachF1}>
                     <text style={{ fontWeight: 'bold' }}>Fee: </text>
-                    <TextField placeholder="Min" class={classes.feefield} onChange={e => setFeeMin(e.target.value)}/>
-                    <TextField placeholder="Max" class={classes.feefield} onChange={e => setFeeMax(e.target.value)}/>
+                    <TextField placeholder="Min" class={classes.feefield} onChange={e => setFeeMin(e.target.value)} />
+                    <TextField placeholder="Max" class={classes.feefield} onChange={e => setFeeMax(e.target.value)} />
                   </div>
 
                   <div class={classes.eachF1}>

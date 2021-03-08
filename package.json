@@ -24,6 +24,7 @@
     "date-fns": "latest",
     "firebase": "^8.2.9",
     "font-awesome": "^4.7.0",
+    "geolib": "^3.3.1",
     "intersection-observer": "^0.12.0",
     "leaflet": "^1.7.1",
     "material-ui-table-edit": "^3.0.3",

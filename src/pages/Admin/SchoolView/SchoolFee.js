@@ -43,8 +43,11 @@ const StyledTableCell = withStyles((theme) => ({
     },
   });
   
-  export default function SchoolFee() {
+  export default function SchoolFee(props) {
     const classes = useStyles();
+
+    let schoolFee = props.school[0].feeStructure
+    console.log(schoolFee)
   
     return (
       <TableContainer style={{marginBottom:'20vh'}} component={Paper}>

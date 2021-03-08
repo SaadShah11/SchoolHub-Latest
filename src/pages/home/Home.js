@@ -55,6 +55,7 @@ export default function Home(props) {
 
   var [allPosts, setAllPosts] = useState()
   var [kee, setKee] = useState()
+  let [reloadHome, setReloadHome] = useState(false)
   // var [loadPosts, setLoadPosts] = useState(false);
   //var [allowPost, setAllowPost] = useState(false)
 
@@ -63,22 +64,19 @@ export default function Home(props) {
       let request;
       request = await axios.get("http://localhost:8080/dashboard/Home")
       console.log("request")
-      setAllPosts(request.data)
+      setAllPosts(request.data.reverse())
       return request.data;
     }
     //And here you call it
     fetchData()
+    setReloadHome(true)
   }, [])
 
   //const auth = useContext(AuthContext);
   var classes = useStyles();
 
   const user = AuthService.getCurrentUser()
-
-  useEffect(() => {
-    getPosts()
-    //getItems().then(data => setItems(data));
-  }, []);
+  console.log(user)
 
   // var [useridValue, setUseridValue] = useState("");
   // var [usernameValue, setUsernameValue] = useState("");
@@ -97,19 +95,23 @@ export default function Home(props) {
 
   const handleImageAsFile = (e) => {
     const image = e.target.files[0]
+    console.log("image")
+    console.log(image)
 
-    if (image != undefined) {
+    if (image !== undefined) {
       var imageExtension = image.name.split('.').pop();
       console.log(imageExtension)
+
+      let newImage = uuidv4() + '.' + imageExtension;
+      console.log(newImage)
+
+      setImageAsFile(imageFile => (image))//(newImage))
+
+      imgBool = true
+      setImageBoolean(true)
     }
 
-    let newImage = uuidv4() + '.' + imageExtension;
-    console.log(newImage)
 
-    setImageAsFile(imageFile => (image))//(newImage))
-
-    imgBool = true
-    setImageBoolean(true)
   }
 
   const handleFireBaseUpload = e => {
@@ -194,7 +196,8 @@ export default function Home(props) {
         // } else {
         //   setLoadPosts(true)
         // }
-        window.location.reload()
+        //window.location.reload()
+        setReloadHome(true)
         return request;
       } else {
         console.log("post is false")
@@ -239,6 +242,12 @@ export default function Home(props) {
     console.log("nothing")
   }
   //}
+
+  useEffect(() => {
+    getPosts()
+    setReloadHome(false)
+    //getItems().then(data => setItems(data));
+  }, [reloadHome]);
 
   return (
     <>

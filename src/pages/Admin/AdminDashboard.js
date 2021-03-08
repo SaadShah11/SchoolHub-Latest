@@ -8,13 +8,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import {mdiFacebook as FacebookIcon,mdiTwitter as TwitterIcon,mdiGithub as GithubIcon,} from '@mdi/js'
 import {Box, IconButton, Link} from '@material-ui/core';
 import Icon from '@mdi/react';
-import Acad from './Acad.jpg'
-import Fee from './feee.jpg'
-import Live from './Live.jpg'
-import Photos from "./Photos.jpg"
-import Request from './Request.jpg'
-import Reviews from './Reviews.jpg'
-import General from './General.jpg'
+import Acad from './images/Acad.jpg'
+import Fee from './images/feee.jpg'
+import Live from './images/Live.jpg'
+import Photos from "./images/Photos.jpg"
+import Request from './images/Request.jpg'
+import Reviews from './images/Reviews.jpg'
+import General from './images/General.jpg'
 // context
 import { useUserDispatch, loginUser, admin } from "../../context/UserContext";
 import Widget from "../../components/Widget/Widget";

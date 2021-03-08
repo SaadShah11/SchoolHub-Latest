@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Header from "../Header/Header";
 import Slider from "./Slider";
 import ReactPlayer from 'react-player'
@@ -14,6 +14,9 @@ import Carousel from 'react-grid-carousel'
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
+import axios from "../../../Util/axios"
+import AuthService from "../../../services/auth.service";
+import Review from "./review"
 
 const useStyles = makeStyles((theme) => ({
     intro: {
@@ -104,26 +107,126 @@ const reviews = [
     { id: '6', name: 'Another Name', content: 'Brother asked a very good questions.', rating: 3, date: '5 aug 2020' }
 
 ]
-export default function SchoolProfile() {
+
+let reviewData = {
+    schoolID: '',
+    userID: '',
+    username: '',
+    userProilePic: '',
+    date: '',
+    reviewText: '',
+    rating: ''
+}
+
+export default function SchoolProfile(props) {
+
+    console.log("props")
+    //console.log(props.school)
+    let school = props.school
+    console.log(school)
+    //console.log(school[0].aboutSchool)
+
+    const user = AuthService.getCurrentUser()
+
     const classes = useStyles();
-    const position = [30.3753, 69.3451]
+    const position = [school[0].schoolCoordinates.latitude, school[0].schoolCoordinates.longitude]
+
+    let [newReview, setNewReview] = useState();
+    let [newRating, setNewRating] = useState();
+    let [allReviews, setAllReviews] = useState();    
+    let [reloadReview, setReloadReview] = useState(false);
+
+    const handleSend = () => {
+
+        let current = new Date()
+        let year = current.getFullYear().toString();
+        let month = current.getMonth() + 1;
+        let day = current.getDate();
+
+        let hours = current.getHours().toString();
+        let minutes = current.getMinutes();
+        let seconds = current.getSeconds();
+
+        let finalDate = year.concat("/", month, "/", day)
+        let finalTime = hours.concat(":", minutes, ":", seconds)
+
+        let timee = finalDate.concat(" ", finalTime)
+
+        reviewData.reviewText = newReview
+        reviewData.date = timee
+        reviewData.schoolID = school[0]._id
+        reviewData.rating = newRating
+        reviewData.userID = user._id
+        reviewData.username = user.username
+
+        postReview()
+    }
+
+    const postReview = useCallback(async () => {
+        async function fetchData() {
+            let request;
+            console.log("ReviewData")
+            console.log(reviewData)
+            request = await axios.post("http://localhost:8080/review/addReview", reviewData)
+            console.log("request")
+            console.log(request)
+            return request.data;
+        }
+        fetchData()
+        setReloadReview(true)
+    }, [])
+
+    const getReviews = useCallback(async () => {
+        async function fetchData() {
+            let request;
+            request = await axios.get("http://localhost:8080/review/reviews")
+            console.log("request")
+            console.log(request)
+            setAllReviews(request.data)
+            return request.data;
+        }
+        fetchData()
+    }, [])
+
+    useEffect(() => {
+        getReviews()
+        setReloadReview(false)
+        console.log("reload review")
+        console.log(reloadReview)
+    }, [reloadReview]);
+
+    let displayReviews //= () => { let displayPostsVar
+
+    if (allReviews != undefined) {
+        console.log("inside displayReviews")
+        // displayReviews = allReviews.map((i) => {
+        //     return <Review key={i._id} id={i._id}
+        //         username={i.username} date={i.date} reviewText={i.reviewText}
+        //         rating={i.rating} userProilePic={i.userProilePic} schoolID={i.schoolID}
+        //         userID={i.userID}
+        //     //onSelect={this.onSelect} 
+        //     />
+        // })
+        displayReviews =
+            <Review reviews={allReviews}/>
+
+    } else {
+        console.log("nothing")
+    }
+
     return (
         <div style={{ width: '200vh' }}>
-            <Slider />
+            <Slider school={props.school} />
             <Widget className={classes.intro} title='About School' disableWidgetMenu>
                 <div className={classes.intro}>
                     <div className={classes.texts}>
                         <img className={classes.schoolLogo} src={Logo} />
                         <br />
-                        <text>Welcome to <b>ROOTS INTERNATIONAL SCHOOLS and COLLEGES</b> <br /></text>
-                        <text >Roots International Schools is one of the leading private institutions of Pakistan.
-                        RIS is a world class academic institution with a proud history of achievements and ambitious
-                        plans for the future. Roots International Schools provide quality education from early years
-                        till high school. It focuses on nurturing the individual holistically by implanting in them,
-                        a balanced approach towards life. Consistent with our national values, we seek to develop the
-                        hidden potentials to excel and persevere in meeting the challenges they have to encounter in
-                        life by grooming them intellectually and to make them morally strong and effective global citizens.
-                    </text>
+                        <text>Welcome to <b>{school[0].schoolName}</b> <br />
+                        </text>
+                        {school[0].aboutSchool}
+                        <text >
+                        </text>
                     </div>
                     <div className={classes.video}>
                         <Widget title='Life at School' disableWidgetMenu>
@@ -156,8 +259,12 @@ export default function SchoolProfile() {
                 <div className={classes.reviews}>
                     <Widget style={{ height: '65vh' }} title='Rate our School' disableWidgetMenu>
                         <div className={classes.leavecomment}>
-                            <textarea className={classes.para} id="about" placeholder="Leave a review" fullWidth />
-                            <Button style={{ float: "right" }} size="large" variant="contained" color="seconadary"> Submit</Button>
+                            <StarRatings starDimension="20px" rating={newRating}
+                                starSpacing="3px" changeRating={(rating) => { setNewRating(rating) }} starRatedColor="#D10B0B" />
+                            <textarea className={classes.para} id="about" placeholder="Leave a review"
+                                onChange={e => setNewReview(e.target.value)} fullWidth />
+                            <Button style={{ float: "right" }} onClick={() => handleSend()}
+                                size="large" variant="contained" color="seconadary"> Submit</Button>
                         </div>
                         <Typography variant='h3'>Frequently Asked Questions</Typography>
 
@@ -166,38 +273,12 @@ export default function SchoolProfile() {
                 </div>
 
             </div>
-
-
-            <Grid style={{ width: "100%", paddingBottom: '20px' }}>
-                <div class={classes.toptitle}>
-                    <text>User Reviews</text>
-                    <StarRatings rating={4} starDimension="18px" starSpacing="3px" starRatedColor="#D10B0B" />
-                    <text style={{ fontSize: '14px' }}>({reviews.length} Reviews)</text>
-                </div>
-                <Carousel cols={5} rows={1} gap={2} loop autoplay={3000}>
-                    {reviews.map(function (item) {
-                        return (
-                            <Carousel.Item>
-                                <Grid item xs={3} class={classes.top}>
-                                    <Widget disableWidgetMenu>
-                                        <AccountCircleIcon style={{ fontSize: '40' }} />
-                                        <div className={classes.nameanddate}>
-                                            <StarRatings rating={item.rating} starDimension="20px" starSpacing="3px" starRatedColor="#D10B0B" />
-                                            <text className={classes.name}><br />by <b>{item.name}</b> on {item.date}</text>
-                                        </div>
-                                        <text className={classes.time}>{item.content}</text>
-                                    </Widget>
-                                </Grid>
-                            </Carousel.Item>
-
-                        )
-                    })}
-                </Carousel>
-            </Grid>
-
+            {
+                displayReviews
+            }
             <div >
                 <Widget disableWidgetMenu>
-                    <Footer />
+                    <Footer school={props.school} />
                 </Widget>
             </div>
         </div>

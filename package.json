@@ -37,6 +37,8 @@
     "react-dom": "^16.14.0",
     "react-google-maps": "^9.4.5",
     "react-grid-carousel": "^1.0.1",
+    "react-hls-player": "^1.1.0",
+    "react-iframe": "^1.8.0",
     "react-leaflet": "^3.0.5",
     "react-material-ui-calendar": "^0.2.3",
     "react-player": "^2.8.2",

@@ -289,13 +289,13 @@ export default function Maps(props) {
                       </Select>
                     </FormControl>
                   </div>
-                  <div class={classes.eachF1}>
+                  <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Fee: </text>
-                    <TextField placeholder="Min" class={classes.feefield} onChange={e => setFeeMin(e.target.value)} />
-                    <TextField placeholder="Max" class={classes.feefield} onChange={e => setFeeMax(e.target.value)} />
+                    <TextField placeholder="Min (PKR)" class={classes.feefield} onChange={e => setFeeMin(e.target.value)} />
+                    <TextField placeholder="Max (PKR)" class={classes.feefield} onChange={e => setFeeMax(e.target.value)} />
                   </div>
 
-                  <div class={classes.eachF1}>
+                  <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>School type: </text>
                     <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="type" name="type" value={schoolType}
                       onChange={handleChangeSchoolType}>

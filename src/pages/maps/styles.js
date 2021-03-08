@@ -41,9 +41,10 @@ export default makeStyles(theme => ({
     
   },
   eachF:{
-    disply:"flex",
+    alignItems:'center',
+    justifyContent:'space-between',
+    display:"flex",
     flexDirection:'row',
-    justifyContent:'space-around',
     width:'100%'
   },
   buttons:{

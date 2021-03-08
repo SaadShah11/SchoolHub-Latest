@@ -17,6 +17,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import AdminAdding from '../pages/Admin/AdminAdding'
 import SchoolDetails from "../pages/Admin/SchoolView/School"
 //import checkboxUI from "../pages/Admin/checkbox"
+import Live from '../pages/Admin/DashboardTabs/LiveStream' 
 
 
 
@@ -38,6 +39,7 @@ export default function App() {
           <SchoolDetails {...props} />
         )} />
         <Route exact path="/admin" component={AdminAdding} />
+        <Route exact path="/landing" component={Landing} />
         {/* <Route exact path="/" render={(props) => (
           <Landing {...props} fetchUrl1={url1} fetchUrl2={url2} />
         )} /> */}
@@ -45,6 +47,7 @@ export default function App() {
         <Route exact path="/" render={(props) => (
           <Login {...props} fetchUrl1={url1} fetchUrl2={url2} />
         )} />
+        <Route exact path="/live" component={Live} />
         <Route path="/app/dashboard" component={Dashboard} />
         <Route path="/app" component={Layout} />
         {/* <PublicRoute path="/login" render={(props) => (

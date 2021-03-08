@@ -18,6 +18,7 @@ import Maps from "../../pages/maps";
 import Charts from "../../pages/charts";
 import Signin from '../../pages/profiling/signin/signinNew'
 import Footer from '../Footer/footer'
+import Live from "../../pages/Live/live";
 
 
 function Layout(props) {
@@ -41,6 +42,7 @@ function Layout(props) {
             {/* <Route path="/app/schoolDetails" render={(props) => (
               <SchoolDetails {...props}  />
             )} /> */}
+            <Route path="/app/live" component={Live} />
             <Route path="/app/home" component={Home} />
             <Route path="/app/typography" component={Dashboard} />
             <Route path="/app/map" component={Maps} />

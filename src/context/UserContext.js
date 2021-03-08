@@ -72,7 +72,7 @@ function loginUser(dispatch, login, password, history, setIsLoading, setError) {
 function signOut(dispatch, history) {
   localStorage.removeItem("id_token");
   dispatch({ type: "SIGN_OUT_SUCCESS" });
-  history.push("/login");
+  history.push("/");
 }
 function admin( history) {
   history.push("/admin");
@@ -82,7 +82,7 @@ function toLogin(history) {
   history.push("/login");
 }
 function toProfile(history) {
-  history.push("/profile");
+  history.push("/UserProfile");
 }
 function home(history) {
   history.push("/app/home");

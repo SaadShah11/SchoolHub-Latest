@@ -12,6 +12,9 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
 import { useUserDispatch, signOut, toProfile, home } from "../../context/UserContext";
+import AuthService from "../../services/auth.service";
+
+
 const messages = [
   {id: 0,variant: "warning",name: "Jane Hew",message: "Hey! How is it going?",time: "9:32"},
   {id: 1,variant: "success",name: "Lloyd Brown",message: "Check out my new Dashboard",time: "9:18",},
@@ -25,6 +28,11 @@ const profile={name:'John Smith', user:'Student', profile:'Profile', photo:<Acco
 
 
 export default function Header(props) {
+
+  const user = AuthService.getCurrentUser()
+  console.log("User")
+  console.log(user)
+
   var classes = useStyles();
   // global
   var layoutState = useLayoutState();
@@ -198,13 +206,13 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="bold">
-              {profile.name}
+              {user.username}
             </Typography>
             <Typography
               component="a"
               color="inherit"
             >
-              {profile.user}
+              {user.type}
             </Typography>
           </div>
           <MenuItem

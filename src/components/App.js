@@ -9,6 +9,7 @@ import Error from "../pages/error";
 import Login from "../pages/login";
 import Signin from '../pages/profiling/signin/signinNew'
 import Landing from './../pages/landing/Landing'
+import userProfile from '../pages/UserProfile/UserProfile'
 
 // context
 import { useUserState } from "../context/UserContext";
@@ -50,6 +51,8 @@ export default function App() {
         <Route exact path="/live" component={Live} />
         <Route path="/app/dashboard" component={Dashboard} />
         <Route path="/app" component={Layout} />
+        <Route path="/userProfile" component={userProfile} />
+
         {/* <PublicRoute path="/login" render={(props) => (
           <Login {...props} fetchUrl={url1} fetchUrl2={url2} />
         )} /> */}

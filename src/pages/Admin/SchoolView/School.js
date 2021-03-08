@@ -51,6 +51,12 @@ function School(props) {
   let displayTabs;
   if (schoolValue !== undefined) {
     return (
+      <div>
+      <Header history={props.history}/>
+      <br />
+      <br />
+      <br />
+      <br />
       <Grid container className={classes.container}>
         <div className={classes.formContainer}>
 
@@ -87,6 +93,7 @@ function School(props) {
         </div>
 
       </Grid>
+      </div>
     )
   }else{
     console.log("schoolValue undefined")

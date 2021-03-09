@@ -102,7 +102,7 @@ export default function Review(props) {
                 <StarRatings rating={4} starDimension="18px" starSpacing="3px" starRatedColor="#D10B0B" />
                 <text style={{ fontSize: '14px' }}>({reviews.length} Reviews)</text>
             </div>
-            <Carousel cols={5} rows={1} gap={2} loop autoplay={3000}>
+            <Carousel cols={5} rows={1} gap={2} loop autoplay={2000}>
                 {reviews.map(function (item) {
                     return (
                         <Carousel.Item>

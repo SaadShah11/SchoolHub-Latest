@@ -146,7 +146,7 @@ export default function Home(props) {
 
 
         <div style={{ marginLeft: '28%' }}>
-          <Grid container spacing={4} >
+          <Grid container spacing={4}>
             {
               displayPosts
             }

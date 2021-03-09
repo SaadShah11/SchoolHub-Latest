@@ -133,7 +133,7 @@ export default function SchoolProfile(props) {
 
     let [newReview, setNewReview] = useState();
     let [newRating, setNewRating] = useState();
-    let [allReviews, setAllReviews] = useState();    
+    let [allReviews, setAllReviews] = useState();
     let [reloadReview, setReloadReview] = useState(false);
 
     const handleSend = () => {
@@ -182,7 +182,14 @@ export default function SchoolProfile(props) {
             request = await axios.get("http://localhost:8080/review/reviews")
             console.log("request")
             console.log(request)
-            setAllReviews(request.data)
+            let finalReviews = [];
+            request.data.map((i) => {
+                if (i.schoolID==school[0]._id){
+                    finalReviews.push(i)
+                }
+            }
+            )
+            setAllReviews(finalReviews)
             return request.data;
         }
         fetchData()
@@ -208,7 +215,7 @@ export default function SchoolProfile(props) {
         //     />
         // })
         displayReviews =
-            <Review reviews={allReviews}/>
+            <Review reviews={allReviews} />
 
     } else {
         console.log("nothing")

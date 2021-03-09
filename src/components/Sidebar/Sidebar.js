@@ -15,7 +15,7 @@ const structure = [
   {id: 1, label: "Map", link: "/app/map", icon: <Map />},
   {id: 2, label: "Statistics", link: "/app/charts", icon: <Stats /> },
   {id: 3,label: "Live Stream",link: "/app/live",icon: <Stream />},
-  {id: 4,label: "another tab",link: "/app/signin",icon: <UIElementsIcon />},
+  {id: 4,label: "FAQs",link: "/app/faq",icon: <UIElementsIcon />},
 ];
 
 function Sidebar({ location }) {

@@ -336,7 +336,7 @@ export default function AdminAdding(props) {
                                     Back
                                 </Button>
                                 <Button variant="contained"  className={classes.button}
-                                    onClick={activeStep===4 ? () => toLogin(props.history): handleNext}
+                                    onClick={activeStep===4 ? () => props.history.push('/adminDashboard'): handleNext}
                                     >
                                     {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                                 </Button>

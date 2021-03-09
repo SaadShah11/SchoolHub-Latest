@@ -19,6 +19,7 @@ import Charts from "../../pages/charts";
 import Signin from '../../pages/profiling/signin/signinNew'
 import Footer from '../Footer/footer'
 import Live from "../../pages/Live/live";
+import Faq from '../../pages/faq/Feedback'
 
 
 function Layout(props) {
@@ -44,6 +45,7 @@ function Layout(props) {
             )} /> */}
             <Route path="/app/live" component={Live} />
             <Route path="/app/home" component={Home} />
+            <Route path="/app/faq" component={Faq} />
             <Route path="/app/typography" component={Dashboard} />
             <Route path="/app/map" component={Maps} />
             <Route path="/app/notifications" component={Notifications} />

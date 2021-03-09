@@ -259,7 +259,6 @@ function Login(props) {
                     <FormControlLabel value="Student" control={<Radio />} label="Student" />
                     <FormControlLabel value="Parent" control={<Radio />} label="Parent" />
                   </RadioGroup>
-
                   <TextField
                     id="email"
                     InputProps={{
@@ -294,28 +293,28 @@ function Login(props) {
                     {isLoading ? (
                       <CircularProgress size={26} className={classes.loginLoader} />
                     ) : (
-                        <Button
-                          // onClick={() =>
-                          //   loginUser(
-                          //     userDispatch,
-                          //     loginValue,
-                          //     passwordValue,
-                          //     props.history,
-                          //     setIsLoading,
-                          //     setError,
-                          //   )
-                          // }
-                          type="submit"
+                      <Button
+                        // onClick={() =>
+                        //   loginUser(
+                        //     userDispatch,
+                        //     loginValue,
+                        //     passwordValue,
+                        //     props.history,
+                        //     setIsLoading,
+                        //     setError,
+                        //   )
+                        // }
+                        type="submit"
 
-                          disabled={
-                            emailValue.length === 0 || passwordValue.length === 0
-                          }
-                          variant="contained"
-                          size="large"
-                        >
-                          Login
-                        </Button>
-                      )}
+                        disabled={
+                          emailValue.length === 0 || passwordValue.length === 0
+                        }
+                        variant="contained"
+                        size="large"
+                      >
+                        Login
+                      </Button>
+                    )}
                     <Button
                       size="large"
                       className={classes.forgetButton}
@@ -413,24 +412,24 @@ function Login(props) {
                     {isLoading ? (
                       <CircularProgress size={26} />
                     ) : (
-                        <Button
+                      <Button
 
-                          disabled={
-                            emailValue.length === 0 ||
-                            passwordValue.length === 0 ||
-                            nameValue.length === 0
-                          }
-                          size="large"
-                          variant="contained"
-                          color="primary"
-                          fullWidth
-                          className={classes.createAccountButton}
-                          type="submit"
+                        disabled={
+                          emailValue.length === 0 ||
+                          passwordValue.length === 0 ||
+                          nameValue.length === 0
+                        }
+                        size="large"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
+                        className={classes.createAccountButton}
+                        type="submit"
 
-                        >
-                          Create your account
-                        </Button>
-                      )}
+                      >
+                        Create your account
+                      </Button>
+                    )}
                   </div>
                 </form>
                 {/* <div className={classes.formDividerContainer}>

@@ -1,6 +1,6 @@
 
 import React from "react";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { Grid } from "@material-ui/core";
 import { TextField, InputBase, Button, InputLabel } from "@material-ui/core";
 import pic1 from './school1.jpg'
@@ -18,6 +18,7 @@ import PageTitle from "../../components/PageTitle/PageTitle";
 import PhotoIcon from '@material-ui/icons/Photo';
 import Widget from "../../components/Widget/Widget";
 import { storage } from "../../Util/firebase"
+import AuthService from "../../services/auth.service";
 // import { useForm } from '../../shared/hooks/form-hook';
 // import { useHttpClient } from '../../shared/hooks/http-hook';
 //import Card from '../../shared/Card'
@@ -29,10 +30,18 @@ let newData = {
 
 export default function Post(props) {
 
+    const user = AuthService.getCurrentUser()
+
     let [commentValue, setCommentValue] = useState();
     let [likesValue, setLikesValue] = useState(false);
+    //let [reloadPost, setReloadPost] = useState(false)
 
     var classes = useStyles();
+
+    const searchInput = useRef(null)
+    function handleFocus() {
+        searchInput.current.focus()
+    }
 
     let handleLikes = () => {
         setLikesValue(!likesValue)
@@ -42,7 +51,7 @@ export default function Post(props) {
     let handleSend = () => {
         let finalComment = {
             text: commentValue,
-            username: props.username
+            username: user.username
         }
         newData.comments = finalComment
         if (likesValue === true) {
@@ -62,11 +71,17 @@ export default function Post(props) {
             request = await axios.patch("http://localhost:8080/dashboard/" + props.id, newData)
             console.log("request")
             console.log(request)
+            //setReloadPost(true)
             window.location.reload()
             return request.data;
         }
         fetchData()
     }, [])
+
+    // useEffect(() => {
+    //     getPosts()
+    //     setReloadHome(false)
+    //   }, [reloadHome]);
 
     let correctIcon = () => {
         if (likesValue === true) {
@@ -102,12 +117,12 @@ export default function Post(props) {
                             }
                             <text style={{ fontSize: '16px' }}>Like</text>
                         </div>
-                        <div class={classes.comm}><CommentIcon fontSize='medium' />
+                        <div onClick={handleFocus} class={classes.comm}><CommentIcon fontSize='medium' />
                             <text style={{ fontSize: '16px' }}>Comment</text></div>
                     </div>
                     {/* <div class={classes.commentbox}> */}
                     <div class={classes.commentbox}>
-                        <InputBase className={classes.comment} onChange={e => setCommentValue(e.target.value)}
+                        <InputBase className={classes.comment} inputRef={searchInput} onChange={e => setCommentValue(e.target.value)}
                             placeholder='Leave a comment'></InputBase>
                         <Button onClick={() => handleSend()}> <SendIcon class={classes.commButton} /></Button>
                     </div>

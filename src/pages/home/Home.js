@@ -1,10 +1,11 @@
 import React from "react";
 import { useState, useCallback, useContext, useEffect } from "react";
 import { Grid } from "@material-ui/core";
-import { TextField, InputBase } from "@material-ui/core";
+import { TextField, InputBase, CircularProgress } from "@material-ui/core";
 
 // styles
 import useStyles from "./styles";
+import Loading from "../../components/Loading/loading"
 
 // components
 import Post from "./post"
@@ -29,35 +30,13 @@ let post = {
   comments: {}
 }
 
-//let allPosts = [];
-
-// const getPosts = async () => {
-
-//   async function fetchData() {
-//     let request;
-//     request = await axios.get("http://localhost:8080/dashboard/Home")
-//     console.log("request")
-//     //console.log(request.data)
-//     allPosts = request.data;
-//     return request.data;
-//   }
-//   //And here you call it
-//   fetchData()
-// }
-
-// getPosts()
-// console.log("getPosts")
-// console.log(allPosts)
-
 export default function Home(props) {
 
-  //useEffect(() => {
-
+  var [isLoading, setIsLoading] = useState(false);
+  var [loadingPage, setLoadingPage] = useState(false);
   var [allPosts, setAllPosts] = useState()
   var [kee, setKee] = useState()
   let [reloadHome, setReloadHome] = useState(false)
-  // var [loadPosts, setLoadPosts] = useState(false);
-  //var [allowPost, setAllowPost] = useState(false)
 
   const getPosts = useCallback(async (bool) => {
     async function fetchData() {
@@ -110,8 +89,6 @@ export default function Home(props) {
       imgBool = true
       setImageBoolean(true)
     }
-
-
   }
 
   const handleFireBaseUpload = e => {
@@ -143,6 +120,8 @@ export default function Home(props) {
   }
 
   const postSubmit = (PostBool) => {
+
+    setLoadingPage(true)
 
     let current = new Date()
     let year = current.getFullYear().toString();
@@ -197,6 +176,7 @@ export default function Home(props) {
         //   setLoadPosts(true)
         // }
         //window.location.reload()
+        setLoadingPage(false)
         setReloadHome(true)
         return request;
       } else {
@@ -230,21 +210,29 @@ export default function Home(props) {
 
   let displayPosts //= () => { let displayPostsVar
 
-  if (allPosts != undefined) {
-    console.log("inside displayPost")
-    // {return <GetAllPosts allPosts= {allPosts}/>}
-    displayPosts = allPosts.map((i) => {
-      return <Post key={i._id} id={i._id}
-        username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
-      />
-    })
-  } else {
-    console.log("nothing")
+  try {
+    if (allPosts != undefined) {
+      console.log("inside displayPost")
+      // {return <GetAllPosts allPosts= {allPosts}/>}
+      displayPosts = allPosts.map((i) => {
+        return <Post key={i._id} id={i._id}
+          username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
+        />
+      })
+      //setIsLoading(false)
+    } else {
+      console.log("nothing")
+    }
+  } catch (err) {
+    console.log("error")
+    console.log(err)
   }
+
   //}
 
   useEffect(() => {
     getPosts()
+    //setIsLoading(true)
     setReloadHome(false)
     //getItems().then(data => setItems(data));
   }, [reloadHome]);
@@ -252,34 +240,41 @@ export default function Home(props) {
   return (
     <>
       <Grid container spacing={4}>
-        <Grid item md={8}>
-          <Widget title="What's on your mind?" disableWidgetMenu>
-            <form onSubmit={handleFireBaseUpload}>
-              <TextField className={classes.textfield} value={textValue}
-                onChange={e => setTextValue(e.target.value)} placeholder='Post here...'></TextField>
+        {
+          loadingPage ? <Loading /> :
+            <Grid item md={8}>
+              <Widget title="What's on your mind?" disableWidgetMenu>
+                <form onSubmit={handleFireBaseUpload}>
+                  <TextField className={classes.textfield} value={textValue}
+                    onChange={e => setTextValue(e.target.value)} placeholder='Post here...'></TextField>
 
-              <div className={classes.postbottom}>
-                <div className={classes.postbottomL} >
-                  {/* <PhotoIcon fontSize='large' className='icon' />
+                  <div className={classes.postbottom}>
+                    <div className={classes.postbottomL} >
+                      {/* <PhotoIcon fontSize='large' className='icon' />
                 <text>Upload photo</text> */}
-                  <input
-                    type="file"
-                    onChange={handleImageAsFile}
-                  />
-                </div>
-                <button className={classes.postButton}>Post</button>
-              </div>
-            </form>
-          </Widget>
-          {/* <div><img src={imageAsUrl.imgUrl} alt="image tag" /></div> */}
-        </Grid>
+                      <input
+                        type="file"
+                        onChange={handleImageAsFile}
+                      />
+                    </div>
+                    <button className={classes.postButton}>Post</button>
+                  </div>
+                </form>
+              </Widget>
+              {/* <div><img src={imageAsUrl.imgUrl} alt="image tag" /></div> */}
+            </Grid>
+            }
         {/* <img src={imageAsUrl.imgUrl} alt="image tag" /> */}
+      
         <div style={{ width: '95%', marginLeft: '15px' }}>
           {
-            displayPosts
+            isLoading ? (<CircularProgress size={50} />) : displayPosts
           }
         </div>
+        
       </Grid>
+        
+
     </>
   );
 }

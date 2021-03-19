@@ -254,6 +254,7 @@ export default function Home(props) {
                 <text>Upload photo</text> */}
                       <input
                         type="file"
+                        // multiple
                         onChange={handleImageAsFile}
                       />
                     </div>

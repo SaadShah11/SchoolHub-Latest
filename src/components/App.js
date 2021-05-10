@@ -26,6 +26,10 @@ import EditPhotos from '../pages/Admin/DashboardTabs/EditPhotos'
 import EditFee from '../pages/Admin/DashboardTabs/EditFee'
 import Faculty from '../pages/Admin/DashboardTabs/Faculty'
 import Feedback from '../pages/Admin/DashboardTabs/Feedback'
+import uploadImage from '../pages/uploadImage/upload'
+
+import superAdminlogin from '../pages/SuperAdmin/login/Login'
+import SuperAdmin from './LayoutSuperAdmin'
 
 import Faq from '../pages/faq/Feedback'
 
@@ -53,6 +57,7 @@ export default function App() {
         <Route exact path="/acad" component={EditInfo} />
         <Route exact path="/requests" component={Faculty} />
         <Route exact path="/reviews" component={Feedback} />
+        <Route exact path="/uploadImage" component={uploadImage} />
 
         <Route exact path="/admin" component={AdminAdding} />
         <Route exact path="/adminDashboard" component={AdminDashboard} />
@@ -68,6 +73,9 @@ export default function App() {
         <Route path="/app/dashboard" component={Dashboard} />
         <Route path="/app" component={Layout} />
         <Route path="/userProfile" component={userProfile} />
+
+        <Route exact path="/superAdmin" component={superAdminlogin} />
+        <Route path="/superAdminDashboard" component={SuperAdmin} />
 
         {/* <PublicRoute path="/login" render={(props) => (
           <Login {...props} fetchUrl={url1} fetchUrl2={url2} />

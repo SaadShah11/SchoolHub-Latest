@@ -25,7 +25,7 @@ let post = {
   username: "",
   text: "",
   image: "",
-  likes: 0,
+  likes: {},
   time: "",
   comments: {}
 }
@@ -60,7 +60,7 @@ export default function Home(props) {
   // var [useridValue, setUseridValue] = useState("");
   // var [usernameValue, setUsernameValue] = useState("");
   var [textValue, setTextValue] = useState("");
-  var [likesValue, setLikesValue] = useState(0);
+  var [likesValue, setLikesValue] = useState([]);
   //var [timeValue, setTimeValue] = useState("");
   var [commentValue, setCommentValue] = useState([]);
   var [imgBoolean, setImageBoolean] = useState()
@@ -216,7 +216,7 @@ export default function Home(props) {
       // {return <GetAllPosts allPosts= {allPosts}/>}
       displayPosts = allPosts.map((i) => {
         return <Post key={i._id} id={i._id}
-          username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
+          username={i.username} userID={i.userID} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} totalLikes={i.totalLikes}//onSelect={this.onSelect} 
         />
       })
       //setIsLoading(false)
@@ -258,7 +258,7 @@ export default function Home(props) {
                         onChange={handleImageAsFile}
                       />
                     </div>
-                    <button className={classes.postButton}>Post</button>
+                    <button type='submit' className={classes.postButton}>Post</button>
                   </div>
                 </form>
               </Widget>

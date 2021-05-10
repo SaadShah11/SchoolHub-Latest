@@ -22,19 +22,19 @@ import Header from '../../components/Header/Header'
 
 import axios from "../../Util/axios"
 import AuthService from "../../services/auth.service";
-
-const user = {
-  firstName: 'Muhammad',
-  lastName: 'Osama',
-  email: 'mosama4u@gmail.com',
-  type: 'student',
-  contact: '+92333535782'
-};
+import { storage } from "../../Util/firebase"
+import { v4 as uuidv4 } from 'uuid';
+import './style.css'
 
 export default function Home(props) {
   var classes = useStyles();
   const [open, setOpen] = React.useState(false);
   var [allPosts, setAllPosts] = useState()
+  var [userData, setUserData] = useState({ profilePic: "" })
+  const allInputs = { imgUrl: '' }
+  const [imageAsFile, setImageAsFile] = useState('')
+  const [imageAsUrl, setImageAsUrl] = useState(allInputs)
+  var [imgBoolean, setImageBoolean] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -47,6 +47,21 @@ export default function Home(props) {
   const user = AuthService.getCurrentUser()
   console.log(user)
 
+  const getUser = useCallback(async () => {
+    async function fetchData() {
+      let request;
+      console.log("Inside Get User")
+      request = await axios.get("http://localhost:8080/user_management/userProfile/" + user._id)
+      console.log("request")
+      let userDataa = request.data
+      setUserData(userDataa[0])
+
+      return request.data;
+    }
+
+    fetchData()
+  }, [])
+
   const getPosts = useCallback(async (bool) => {
     async function fetchData() {
       let request;
@@ -54,8 +69,8 @@ export default function Home(props) {
       console.log("request")
       let finalPosts = []
       let allPosts = request.data.reverse()
-      allPosts.map((i)=>{
-        if(user.username == i.username){
+      allPosts.map((i) => {
+        if (user.username == i.username) {
           finalPosts.push(i)
         }
       })
@@ -68,8 +83,97 @@ export default function Home(props) {
 
   useEffect(() => {
     getPosts()
+    getUser()
+    
   }, []);
 
+  const handleImageAsFile = (e) => {
+    const image = e.target.files[0]
+    console.log("image")
+    console.log(image)
+
+    if (image !== undefined) {
+      var imageExtension = image.name.split('.').pop();
+      console.log(imageExtension)
+
+      let newImage = uuidv4() + '.' + imageExtension;
+      console.log(newImage)
+
+      setImageAsFile(imageFile => (image))//(newImage))
+
+      //imgBool = true
+      setImageBoolean(true)
+    }
+
+  }
+
+  const handleFireBaseUpload = e => {
+    //e.preventDefault()
+    console.log('start of upload')
+    // async magic goes here...
+    if (imageAsFile === '') {
+      console.error(`not an image, the image file is a ${typeof (imageAsFile)}`)
+    }
+    const uploadTask = storage.ref(`/images/${imageAsFile.name}`).put(imageAsFile)
+
+    //initiates the firebase side uploading 
+    uploadTask.on('state_changed',
+      (snapShot) => {
+        //takes a snap shot of the process as it is happening
+        console.log(snapShot)
+      }, (err) => {
+        //catches the errors
+        console.log(err)
+      }, () => {
+        // gets the functions from storage refences the image storage in firebase by the children
+        // gets the download url then sets the image from firebase as the value for the imgUrl key:
+        storage.ref('images').child(imageAsFile.name).getDownloadURL()
+          .then(fireBaseUrl => {
+            setImageAsUrl(prevObject => ({ ...prevObject, imgUrl: fireBaseUrl }))
+          })
+
+      })
+
+      
+  }
+
+  const updateProfilePic = useCallback(async (img) => {
+    console.log("Inside Update Profile Pic")
+    async function fetchData() {
+      let request;
+      console.log("New Pic")
+      console.log(img)
+      request = await axios.patch("http://localhost:8080/user_management/userProfile/updateProfilePic/" + user._id, img)
+      console.log("request")
+      console.log(request)
+      //setReloadPost(true)
+      window.location.reload()
+      return request.data;
+    }
+    fetchData()
+  }, [])
+
+  if (imgBoolean === true) {
+    console.log("inside if")
+    if (imageAsUrl.imgUrl === '') {
+      console.log("empty img")
+      console.log(imageAsUrl.imgUrl)
+    } else {
+      console.log("inside else img")
+      console.log(imageAsUrl.imgUrl)
+      let img = {
+        profilePic: imageAsUrl.imgUrl
+      }
+      updateProfilePic(img)
+      setImageBoolean(false)
+    }
+  } else {
+    console.log("bool:")
+    console.log(imgBoolean)
+  }
+
+  console.log("Img URL")
+  console.log(imageAsUrl.imgUrl)
   let displayPosts //= () => { let displayPostsVar
 
   try {
@@ -99,9 +203,18 @@ export default function Home(props) {
 
         <div className={classes.info}>
           <Widget disableWidgetMenu>
-            <div >
-              <img className={classes.dp} src={DP} />
-              <AddAPhoto className={classes.editimage} />
+            <div>
+              <img className={classes.dp} src={userData.profilePic} />
+              {/* replace with add icon */}
+              <form onSubmit={handleFireBaseUpload}>
+                <div id='updateImg'>
+                  <AddAPhoto className={classes.editimage} />
+                  <input type="file" onChange={handleImageAsFile} />
+
+                </div>
+                <Button type='submit'>Update</Button>
+              </form>
+
             </div>
             <Typography variant="h5">{user.username} </Typography>
             <Typography >{user.type}</Typography>

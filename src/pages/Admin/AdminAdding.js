@@ -191,49 +191,49 @@ function GetStepContent(stepIndex) {
     const [files, setFiles] = useState([])
 
     const onFileChange = e => {
-        for (let i = 0; i < e.target.files.length; i++) {
-            const newFile = e.target.files[i];
-            newFile["id"] = Math.random();
-            // add an "id" property to each File object
-            setFiles(prevState => [...prevState, newFile]);
-        }
+        // for (let i = 0; i < e.target.files.length; i++) {
+        //     const newFile = e.target.files[i];
+        //     newFile["id"] = Math.random();
+        //     // add an "id" property to each File object
+        //     setFiles(prevState => [...prevState, newFile]);
+        // }
     };
 
-    const uploadTask =
-        firebase.storage().ref().child(`/schoolImages/${files.name}`).put(files);
-    uploadTask.on(
-        firebase.storage.TaskEvent.STATE_CHANGED,
-        snapshot => {
-            const progress = (
-                (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-            console.log(`Progress: ${progress}%`);
-            if (snapshot.state === firebase.storage.TaskState.RUNNING) {
-                console.log('file uploading...')
-            }
-            // ...etc
-        },
-        error => console.log(error.code),
-        async () => {
-            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-            console.log(downloadURL);
-            // the web storage url for our file
-        });
+    // const uploadTask =
+    //     firebase.storage().ref().child(`/schoolImages/${files.name}`).put(files);
+    // uploadTask.on(
+    //     firebase.storage.TaskEvent.STATE_CHANGED,
+    //     snapshot => {
+    //         const progress = (
+    //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+    //         console.log(`Progress: ${progress}%`);
+    //         if (snapshot.state === firebase.storage.TaskState.RUNNING) {
+    //             console.log('file uploading...')
+    //         }
+    //         // ...etc
+    //     },
+    //     error => console.log(error.code),
+    //     async () => {
+    //         const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+    //         console.log(downloadURL);
+    //         // the web storage url for our file
+    //     });
 
-    const onUploadSubmission = e => {
-        e.preventDefault(); // prevent page refreshing
-        const promises = [];
-        files.forEach(file => {
-            const uploadTask = firebase.storage().ref().child(`your/file/path/${file.name}`).put(file);
-            promises.push(uploadTask);
-            uploadTask.on(
-                firebase.storage.TaskEvent.STATE_CHANGED,
-                snapshot => {
+    // const onUploadSubmission = e => {
+    //     e.preventDefault(); // prevent page refreshing
+    //     const promises = [];
+    //     files.forEach(file => {
+    //         const uploadTask = firebase.storage().ref().child(`your/file/path/${file.name}`).put(file);
+    //         promises.push(uploadTask);
+    //         uploadTask.on(
+    //             firebase.storage.TaskEvent.STATE_CHANGED,
+    //             snapshot => {
 
-                }
-            );
-        });
+    //             }
+    //         );
+    //     });
 
-    }
+    // }
 
     console.log("School Name")
     console.log(educationLevel)

@@ -191,5 +191,8 @@ export default makeStyles(theme => ({
     flexDirection:'row',
     alignItems:"center",
     marginTop:"5px",
+  },
+  updateImg:{
+    display: 'none'
   }
 }));

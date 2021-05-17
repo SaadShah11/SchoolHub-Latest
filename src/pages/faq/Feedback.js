@@ -95,7 +95,8 @@ let reviewData = {
   userProilePic: '',
   date: '',
   reviewText: '',
-  rating: ''
+  rating: '',
+  reply:[]
 }
 
 function Feedback(props) {

@@ -157,7 +157,7 @@ function Login(props) {
         AuthService.login(userLogin).then(
           (response) => {
             console.log(response)
-            if (response.type === "Admin") {
+            if (response.type === "School") {
               props.history.push("/admin");
               window.location.reload();
             } else {
@@ -254,10 +254,10 @@ function Login(props) {
                   <text className={classes.signin}>Sign in as:</text>
                   <RadioGroup className={classes.radio} name="type" value={typeValue}
                     onChange={(e) => { setTypeValue(e.target.value) }}>
-                    <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+                    <FormControlLabel value="School" control={<Radio />} label="School" />
                     <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
                     <FormControlLabel value="Student" control={<Radio />} label="Student" />
-                    <FormControlLabel value="Parent" control={<Radio />} label="Parent" />
+                    {/* <FormControlLabel value="Parent" control={<Radio />} label="Parent" /> */}
                   </RadioGroup>
                   <TextField
                     id="email"
@@ -342,10 +342,10 @@ function Login(props) {
                 <form onSubmit={signUpSubmit}>
                   <RadioGroup class={classes.radio} name="type" value={typeValue}
                     onChange={(e) => { setTypeValue(e.target.value) }} >
-                    <FormControlLabel value="Admin" control={<Radio />} label="Admin" />
+                    <FormControlLabel value="School" control={<Radio />} label="School" />
                     <FormControlLabel value="Teacher" control={<Radio />} label="Teacher" />
                     <FormControlLabel value="Student" control={<Radio />} label="Student" />
-                    <FormControlLabel value="Parent" control={<Radio />} label="Parent" />
+                    {/* <FormControlLabel value="Parent" control={<Radio />} label="Parent" /> */}
                   </RadioGroup>
 
                   <TextField

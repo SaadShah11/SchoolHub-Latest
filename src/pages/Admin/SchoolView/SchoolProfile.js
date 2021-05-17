@@ -115,7 +115,8 @@ let reviewData = {
     userProilePic: '',
     date: '',
     reviewText: '',
-    rating: ''
+    rating: '',
+    reply:{}
 }
 
 export default function SchoolProfile(props) {
@@ -154,7 +155,7 @@ export default function SchoolProfile(props) {
 
         reviewData.reviewText = newReview
         reviewData.date = timee
-        reviewData.schoolID = school[0]._id
+        reviewData.schoolID = school[0].adminID
         reviewData.rating = newRating
         reviewData.userID = user._id
         reviewData.username = user.username
@@ -184,7 +185,7 @@ export default function SchoolProfile(props) {
             console.log(request)
             let finalReviews = [];
             request.data.map((i) => {
-                if (i.schoolID==school[0]._id){
+                if (i.schoolID==school[0].adminID){
                     finalReviews.push(i)
                 }
             }

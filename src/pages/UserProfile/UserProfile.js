@@ -253,6 +253,41 @@ export default function Home(props) {
                   </Button>
               </DialogActions>
             </Dialog>
+
+            <Button variant='contained' style={{ marginTop: '5px' }} onClick={handleClickOpen}>Add School</Button>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+              <DialogTitle id="form-dialog-title">Add School</DialogTitle>
+              <DialogContent>
+                <div className={classes.editfields}>
+                  <Typography>Username: </Typography>
+                  <InputBase value={user.username} className={classes.editinputs}></InputBase>
+                </div>
+                <div className={classes.editfields}>
+                  <Typography>Phone number: </Typography>
+                  <InputBase value={user.phoneNumber} className={classes.editinputs}></InputBase>
+                </div>
+                <div className={classes.editfields}>
+                  <Typography>Old Password: </Typography>
+                  <InputBase type='password' className={classes.editinputs}></InputBase>
+                </div>
+                <div className={classes.editfields}>
+                  <Typography>New Password: </Typography>
+                  <InputBase type='password' className={classes.editinputs}></InputBase>
+                </div>
+                <div className={classes.editfields}>
+                  <Typography>Confirm New Password:  </Typography>
+                  <InputBase type='password' className={classes.editinputs}></InputBase>
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                  </Button>
+                <Button onClick={handleClose} color="primary">
+                  Update
+                  </Button>
+              </DialogActions>
+            </Dialog>
           </Widget>
 
         </div>

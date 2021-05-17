@@ -128,7 +128,7 @@ function Login(props) {
         AuthService.login(userLogin).then(
           (response) => {
             console.log(response)
-            if (response.type === "Admin") {
+            if (response.type === "School") {
               props.history.push("/admin");
               window.location.reload();
             } else {
@@ -204,10 +204,10 @@ function Login(props) {
                     <text class={classes.signin}>Sign in as:</text>
                     <RadioGroup class={classes.radio} name="type" value={typeValue}
                       onChange={(e) => { setTypeValue(e.target.value) }} >
-                      <FormControlLabel value="Admin" control={<Radio color='inherit' />} label="Admin" />
+                      <FormControlLabel value="School" control={<Radio color='inherit' />} label="School" />
                       <FormControlLabel value="Teacher" control={<Radio color='inherit' />} label="Teacher" />
                       <FormControlLabel value="Student" control={<Radio color='inherit' />} label="Student" />
-                      <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" />
+                      {/* <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" /> */}
                     </RadioGroup>
 
                     <TextField
@@ -284,10 +284,10 @@ function Login(props) {
                   <text class={classes.signin}>Sign up as:</text>
                   <RadioGroup class={classes.radio}  name="type" value={typeValue}
                     onChange={(e) => { setTypeValue(e.target.value) }}>
-                    <FormControlLabel value="Admin" control={<Radio color='inherit' />} label="Admin" />
+                    <FormControlLabel value="School" control={<Radio color='inherit' />} label="School" />
                     <FormControlLabel value="Teacher" control={<Radio color='inherit' />} label="Teacher" />
                     <FormControlLabel value="Student" control={<Radio color='inherit' />} label="Student" />
-                    <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" />
+                    {/* <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" /> */}
                   </RadioGroup>
 
                   <TextField

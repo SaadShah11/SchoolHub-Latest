@@ -121,7 +121,7 @@ function Login(props) {
                   Something is wrong with your login or password :(
                 </Typography>
               </Fade>
-              <form onSubmit={loginSubmit}>
+              {/* <form onSubmit={loginSubmit}> */}
                 <TextField
                   id="email"
                   InputProps={{
@@ -159,6 +159,7 @@ function Login(props) {
                     <Button
 
                       type="submit"
+                      onClick={()=>loginSubmit()}
 
                       disabled={
                         emailValue.length === 0 || passwordValue.length === 0
@@ -176,7 +177,7 @@ function Login(props) {
                     Forget Password
                 </Button>
                 </div>
-              </form>
+              {/* </form> */}
             </React.Fragment>
 
 

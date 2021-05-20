@@ -5,6 +5,7 @@ import { withRouter } from "react-router-dom";
 import SchoolProfile from './SchoolProfile'
 import SchoolFee from './SchoolFee'
 import SchoolAcad from './SchoolAcad'
+import SchoolFaculty from './schoolFac'
 import Header from '../../../components/Header/Header'
 
 import AuthService from "../../../services/auth.service";
@@ -86,6 +87,11 @@ function School(props) {
             {activeTabId === 2 && (
               <React.Fragment>
                 <SchoolAcad school={schoolValue} />
+              </React.Fragment>
+            )}
+            {activeTabId === 3 && (
+              <React.Fragment>
+                <SchoolFaculty school={schoolValue} />
               </React.Fragment>
             )}
           </div>

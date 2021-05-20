@@ -65,6 +65,8 @@ export default function Reviews() {
   let [reloadHome, setReloadHome] = useState(false)
   var [allReviews, setAllReviews] = useState()
   var [status, setStatus] = useState()
+  let [replyValue, setReplyValue] = useState();
+  //let [reload, setReload] = useState(false);
 
   const getReviews = useCallback(async () => {
     async function fetchData() {
@@ -78,6 +80,33 @@ export default function Reviews() {
     //And here you call it
     fetchData()
     setReloadHome(true)
+  }, [])
+
+  let handleReply = (id) => {
+    console.log("replyValue")
+    console.log(id)
+    //Add schoolIcon later
+    let reply = {
+      text: replyValue
+    }
+    updateReply(reply, id)
+  }
+
+  const updateReply = useCallback(async (reply, id) => {
+    async function fetchData() {
+      let request;
+      console.log("NewData")
+      console.log(id)
+      console.log(reply)
+
+      request = await axios.patch("http://localhost:8080/mainReview/updateReview/" + id, reply)
+      console.log("request")
+      console.log(request)
+
+      setReloadHome(true)
+      //return request.data;
+    }
+    fetchData()
   }, [])
 
   useEffect(() => {
@@ -109,11 +138,30 @@ export default function Reviews() {
               </div>
               <text className={classes.time}>{item.reviewText}</text>
               <br />
-              <text className={classes.replybutton} onClick={handleClickOpen}>Reply</text>
+              <div>
+                {item.reply.map(function (items) {
+                  return (
+                    <div className={classes.profile1}>
+                      {/* <AccountCircleIcon style={{ fontSize: '40' }} /> */}
+                      <img className={classes.dp1} src={items.schoolIcon} />
+                      <div className={classes.nameanddate}>
+                        {/* <text className={classes.name}>{items.username}</text> */}
+                        <text className={classes.time}>{items.text}</text>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              {/* <br />
+              <text className={classes.replybutton} onClick={handleClickOpen}>Reply</text> */}
               <br />
-              <div style={{ display: open, borderBottom: '1px solid rgba(0,0,0, 0.2)' }}>
+              {/* <div style={{ display: open, borderBottom: '1px solid rgba(0,0,0, 0.2)' }}>
                 <InputBase className={classes.comment} placeholder='Reply here'></InputBase>
                 <Send class={classes.commButton} />
+              </div> */}
+              <div class={classes.commentbox}>
+                <InputBase className={classes.reply} onChange={e => setReplyValue(e.target.value)} placeholder='Reply'></InputBase>
+                <Send class={classes.commButton} onClick={() => { handleReply(item._id) }} />
               </div>
             </Widget>
           </Grid>

@@ -228,7 +228,7 @@ export default function SchoolProfile(props) {
             <Widget className={classes.intro} title='About School' disableWidgetMenu>
                 <div className={classes.intro}>
                     <div className={classes.texts}>
-                        <img className={classes.schoolLogo} src={Logo} />
+                        <img className={classes.schoolLogo} src={school[0].schoolIcon} />
                         <br />
                         <text>Welcome to <b>{school[0].schoolName}</b> <br />
                         </text>
@@ -238,7 +238,8 @@ export default function SchoolProfile(props) {
                     </div>
                     <div className={classes.video}>
                         <Widget title='Life at School' disableWidgetMenu>
-                            <ReactPlayer url='https://youtu.be/4NR4JOL4_2o' />
+                            {/* <ReactPlayer url='https://youtu.be/4NR4JOL4_2o' /> */}
+                            <ReactPlayer url={school[0].video} />
                         </Widget>
                     </div>
                 </div>

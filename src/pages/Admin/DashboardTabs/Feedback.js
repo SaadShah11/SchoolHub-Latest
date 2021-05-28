@@ -128,6 +128,9 @@ function Feedback(props) {
 
   const user = AuthService.getCurrentUser()
   console.log(user)
+  const school = AuthService.getCurrentSchool()
+  console.log("SCHOOL")
+  console.log(school)
 
   const getReviews = useCallback(async () => {
     async function fetchData() {
@@ -137,10 +140,10 @@ function Feedback(props) {
       console.log(request)
       let finalReviews = [];
       request.data.map((i) => {
-        console.log(i.schoolID)
+        console.log(i)
         console.log("yep")
         console.log(user._id)
-        if (i.schoolID == user._id) {
+        if (i.schoolID == school.schoolID) {
           console.log("Inside If1")
           finalReviews.push(i)
         }
@@ -230,7 +233,7 @@ function Feedback(props) {
 
   return (
     <div>
-      <Header />
+      <Header history={props.history}/>
       <br /><br /><br /><br />
       <Grid container >
         <div className={classes.box}>
@@ -242,7 +245,7 @@ function Feedback(props) {
               centered
             >
               <Tab label="School Feedback" classes={{ root: classes.tab }} />
-              <Tab label="Rate SchoolHub" classes={{ root: classes.tab }} />
+              {/* <Tab label="Rate SchoolHub" classes={{ root: classes.tab }} /> */}
             </Tabs>
             {activeTabId === 0 && (
               <React.Fragment >
@@ -256,13 +259,13 @@ function Feedback(props) {
 
               </React.Fragment>
             )}
-            {activeTabId === 1 && (
+            {/* {activeTabId === 1 && (
               <React.Fragment>
                 <div>
 
                 </div>
               </React.Fragment>
-            )}
+            )} */}
             <br />
             <Button size="large" variant="contained" color="seconadary"
               className={classes.button}

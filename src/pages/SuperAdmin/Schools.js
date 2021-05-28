@@ -74,6 +74,26 @@ export default function Schools() {
     setReloadHome(true)
   }, [])
 
+
+  let handleUpdateDelete = (id) => {
+    deleteSchool(id)
+  }
+
+  const deleteSchool = useCallback(async (schoolID) => {
+    async function fetchData() {
+      let request;
+      console.log("SchoolID")
+      console.log(schoolID)
+      request = await axios.post("http://localhost:8080/school/delete_school/" + schoolID)
+      console.log("request")
+      console.log(request)
+      return request;
+    }
+    //And here you call it
+    fetchData()
+    setReloadHome(true)
+  }, [])
+
   useEffect(() => {
     getSchools()
     //setIsLoading(true)
@@ -81,9 +101,6 @@ export default function Schools() {
     //getItems().then(data => setItems(data));
   }, [reloadHome]);
 
-  let handleUpdateDelete = (id) => {
-    //deleteSchool(id)
-  }
 
   let displaySchools //= () => { let displayPostsVar
 
@@ -95,10 +112,10 @@ export default function Schools() {
         return <StyledTableRow key={row._id}>
           <StyledTableCell style={{ width: '15px', backgroundColor: '#C5C5C5' }}>{i} </StyledTableCell>
           <StyledTableCell align="center">{row.schoolName}</StyledTableCell>
-          <StyledTableCell align="center">{row.educationLevel}</StyledTableCell>
+          <StyledTableCell align="center">{row.educationType}</StyledTableCell>
           <StyledTableCell align="center">{row.schoolAddress}</StyledTableCell>
           <StyledTableCell align="center">{row.contactNumber}</StyledTableCell>
-          <StyledTableCell onClick={() => { handleUpdateDelete(row._id)}} className={classes.delete} align="center">Delete</StyledTableCell>
+          <StyledTableCell onClick={() => { handleUpdateDelete(row._id) }} className={classes.delete} align="center">Delete</StyledTableCell>
         </StyledTableRow>
 
       })

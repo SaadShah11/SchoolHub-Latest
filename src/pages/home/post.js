@@ -40,6 +40,7 @@ export default function Post(props) {
     let [commentValue, setCommentValue] = useState();
     let [likesValue, setLikesValue] = useState(false);
     let [postImg, setPostImg] = useState();
+    let [postLikes, setPostlikes] = useState(props.totalLikes);
 
     //let [reloadPost, setReloadPost] = useState(false)
 
@@ -124,6 +125,7 @@ export default function Post(props) {
             request = await axios.patch("http://localhost:8080/dashboard/updateLike/" + props.id, newLike)
             console.log("request")
             console.log(request)
+            setPostlikes(request.data.totalLikes)
             //setReloadPost(true)
             //window.location.reload()
             return request.data;
@@ -174,10 +176,10 @@ export default function Post(props) {
 
     let correctIcon = () => {
         if (likesValue === true) {
-            return <ThumbUpAltIcon onClick={() => handleSendLike(false)} color="primary" fontSize='medium' />
+            return <div><text>{postLikes}</text><ThumbUpAltIcon onClick={() => handleSendLike(false)} color="primary" fontSize='medium' /></div>
         }
         else {
-            return <ThumbUpAltIcon onClick={() => handleSendLike(true)} fontSize='medium' />
+            return <div><text>{postLikes}</text><ThumbUpAltIcon onClick={() => handleSendLike(true)} fontSize='medium' /></div>
         }
     }
 

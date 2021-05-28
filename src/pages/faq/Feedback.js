@@ -106,7 +106,7 @@ function Feedback(props) {
   var [activeTabId, setActiveTabId] = useState(0);
   const [Tvalue1, setTValue1] = useState('');
   let [newReview, setNewReview] = useState();
-  let [newRating, setNewRating] = useState();
+  let [newRating, setNewRating] = useState(1);
   let [allReviews, setAllReviews] = useState();
   let [reloadReview, setReloadReview] = useState(false);
 
@@ -132,6 +132,8 @@ function Feedback(props) {
     reviewData.date = timee
     //reviewData.schoolID = school[0]._id
     reviewData.rating = newRating
+    console.log("New Rating")
+    console.log(newRating)
     reviewData.userID = user._id
     reviewData.username = user.username
 
@@ -146,6 +148,7 @@ function Feedback(props) {
       request = await axios.post("http://localhost:8080/mainReview/schoolHubReviews", reviewData)
       console.log("request")
       console.log(request)
+      alert("Review Added Successfully")
       return request.data;
     }
     fetchData()

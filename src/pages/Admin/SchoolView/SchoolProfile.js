@@ -116,7 +116,7 @@ let reviewData = {
     date: '',
     reviewText: '',
     rating: '',
-    reply:{}
+    reply: {}
 }
 
 export default function SchoolProfile(props) {
@@ -132,10 +132,11 @@ export default function SchoolProfile(props) {
     const classes = useStyles();
     const position = [school[0].schoolCoordinates.latitude, school[0].schoolCoordinates.longitude]
 
-    let [newReview, setNewReview] = useState();
-    let [newRating, setNewRating] = useState();
+    let [newReview, setNewReview] = useState('');
+    let [newRating, setNewRating] = useState(1);
     let [allReviews, setAllReviews] = useState();
     let [reloadReview, setReloadReview] = useState(false);
+    let [teacherButton, setTeacherButton] = useState(false);
 
     const handleSend = () => {
 
@@ -155,7 +156,7 @@ export default function SchoolProfile(props) {
 
         reviewData.reviewText = newReview
         reviewData.date = timee
-        reviewData.schoolID = school[0].adminID
+        reviewData.schoolID = school[0]._id
         reviewData.rating = newRating
         reviewData.userID = user._id
         reviewData.username = user.username
@@ -185,7 +186,7 @@ export default function SchoolProfile(props) {
             console.log(request)
             let finalReviews = [];
             request.data.map((i) => {
-                if (i.schoolID==school[0].adminID){
+                if (i.schoolID == school[0]._id) {
                     finalReviews.push(i)
                 }
             }
@@ -196,11 +197,48 @@ export default function SchoolProfile(props) {
         fetchData()
     }, [])
 
+    let joinSchool = () => {
+
+        let finalObj = {
+            teacherID: user._id,
+            teacherName: user.username,
+            teacherEmail: user.email,
+            teacherProfilePic: user.profilePic,
+            schoolID: props.school[0]._id,
+            adminID: props.school[0].adminID,
+            status: ''
+        }
+
+        console.log("Final Object")
+        console.log(finalObj)
+
+        addTeacherRequest(finalObj)
+
+    }
+
+    const addTeacherRequest = useCallback(async (finalObj) => {
+        async function fetchData() {
+            let request;
+            console.log("FinalData")
+            console.log(finalObj)
+            request = await axios.post("http://localhost:8080/teacherRequest/addTeacherRequest", finalObj)
+            console.log("request")
+            console.log(request)
+            alert("Request Sent, Please wait for approval by School Admin")
+            return request.data;
+        }
+        fetchData()
+        setReloadReview(true)
+    }, [])
+
     useEffect(() => {
         getReviews()
         setReloadReview(false)
         console.log("reload review")
         console.log(reloadReview)
+        if (user.type == 'Teacher') {
+            setTeacherButton(true)
+        }
     }, [reloadReview]);
 
     let displayReviews //= () => { let displayPostsVar
@@ -235,11 +273,15 @@ export default function SchoolProfile(props) {
                         {school[0].aboutSchool}
                         <text >
                         </text>
+                        <br />
+                        {
+                            teacherButton ? <Button size="large" variant="contained" color="seconadary" onClick={() => joinSchool()}>Join School</Button> : <div></div>
+                        }
                     </div>
                     <div className={classes.video}>
                         <Widget title='Life at School' disableWidgetMenu>
                             {/* <ReactPlayer url='https://youtu.be/4NR4JOL4_2o' /> */}
-                            <ReactPlayer url={school[0].video} />
+                            <ReactPlayer url={school[0].videos} />
                         </Widget>
                     </div>
                 </div>
@@ -272,8 +314,12 @@ export default function SchoolProfile(props) {
                                 starSpacing="3px" changeRating={(rating) => { setNewRating(rating) }} starRatedColor="#D10B0B" />
                             <textarea className={classes.para} id="about" placeholder="Leave a review"
                                 onChange={e => setNewReview(e.target.value)} fullWidth />
-                            <Button style={{ float: "right" }} onClick={() => handleSend()}
-                                size="large" variant="contained" color="seconadary"> Submit</Button>
+                            <Button style={{ float: "right" }} onClick={() => handleSend()
+                            }
+                                size="large" variant="contained" color="seconadary"
+                                disabled={
+                                    newReview.length === 0  || newReview === '' || newReview ===undefined
+                                }> Submit</Button>
                         </div>
                         <Typography variant='h3'>Frequently Asked Questions</Typography>
 

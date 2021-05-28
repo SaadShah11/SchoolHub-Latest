@@ -11,7 +11,7 @@ import Notification from "../../notifications/Notifications";
 import UserAvatar from "../../../components/UserAvatar"; 
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../../context/LayoutContext";
-import { useUserDispatch, signOut } from "../../../context/UserContext";
+import { useUserDispatch, signOut, Shome } from "../../../context/UserContext";
 const messages = [
   {id: 0,variant: "warning",name: "Jane Hew",message: "Hey! How is it going?",time: "9:32"},
   {id: 1,variant: "success",name: "Lloyd Brown",message: "Check out my new Dashboard",time: "9:18",},
@@ -38,8 +38,12 @@ export default function Header(props) {
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
       <img style={{marginLeft:'20px', width:"40px", height:'45px'}} src={Logo} />
-        <Typography variant="h5" weight="bold" className={classes.logotype}>
+      <Typography 
+        onClick={() => props.history.push('/adminDashboard')}
+        variant="h5" weight="bold" className={classes.logotype}>
+          
           SCHOOLHUB
+          
         </Typography>
         
         <div className={classes.grow} />

@@ -20,6 +20,9 @@ import Signin from '../../pages/profiling/signin/signinNew'
 import Footer from '../Footer/footer'
 import Live from "../../pages/Live/live";
 import Faq from '../../pages/faq/Feedback'
+import Friends from '../../pages/friends/friends'
+import Chat from '../../pages/Chat/chat'
+import LiveAvailable from "../../pages/Live/LiveAvailable";
 
 
 function Layout(props) {
@@ -43,9 +46,12 @@ function Layout(props) {
             {/* <Route path="/app/schoolDetails" render={(props) => (
               <SchoolDetails {...props}  />
             )} /> */}
-            <Route path="/app/live" component={Live} />
+            {/* <Route path="/app/live" component={Live} /> */}
             <Route path="/app/home" component={Home} />
+            <Route path="/app/live" component={LiveAvailable} />
             <Route path="/app/faq" component={Faq} />
+            <Route path="/app/inbox" component={Chat} />
+            <Route path="/app/friends" component={Friends} />
             <Route path="/app/typography" component={Dashboard} />
             <Route path="/app/map" component={Maps} />
             <Route path="/app/notifications" component={Notifications} />

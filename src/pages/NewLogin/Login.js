@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   Grid,
   CircularProgress,
@@ -18,6 +18,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel"
 // styles
 import useStyles from "./styles";
 import AuthService from "../../services/auth.service";
+import axios from "../../Util/axios"
+import { CometChat } from "@cometchat-pro/chat"
 
 
 // logo
@@ -60,7 +62,24 @@ function Login(props) {
   var [typeValue, setTypeValue] = useState('')
   var [users, setUsers] = useState([])
   var [userId, setUserId] = useState('')
+  var [allSchools, setAllSchools] = useState()
   let signupBool;
+
+  const getSchools = useCallback(async () => {
+    async function fetchData() {
+      let request;
+      request = await axios.get("http://localhost:8080/school/School_Details")
+      console.log("request")
+      console.log(request.data)
+      setAllSchools(request.data)
+      return request.data;
+    }
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    getSchools()
+  }, [])
 
   const signUpSubmit = () => {
     if (typeValue === "" || emailValue === "" || nameValue === ""
@@ -97,11 +116,13 @@ function Login(props) {
 
       console.log(userLogin)
       signupBool = false
-      sendRequest(signupBool)
+      sendRequest(signupBool, allSchools)
     }
   }
 
-  const sendRequest = useCallback(async (bool) => {
+
+
+  const sendRequest = useCallback(async (bool, allSchoolss) => {
     console.log("inside useEffect")
     async function fetchData() {
       console.log('inside fetchdata')
@@ -113,6 +134,23 @@ function Login(props) {
         AuthService.register(user).then(
           response => {
             console.log(response.data.message)
+
+            let authKey = "6686381f7d6999ea04c5eb3feea375ae7d205b0f";
+            var uid = response.data._id;
+            var name = response.data.username;
+
+            var user = new CometChat.User(uid);
+
+            user.setName(name);
+
+            CometChat.createUser(user, authKey).then(
+              user => {
+                console.log("user created", user);
+              }, error => {
+                console.log("error", error);
+              }
+            )
+
             setActiveTabId(0)
           },
           error => {
@@ -129,9 +167,41 @@ function Login(props) {
           (response) => {
             console.log(response)
             if (response.type === "School") {
-              props.history.push("/admin");
-              window.location.reload();
+              // props.history.push("/adminDashboard");
+              console.log("STEP1")
+              console.log(allSchoolss)
+              if (allSchoolss != undefined) {
+                console.log("STEP2")
+                let existingSchool = '';
+                existingSchool = allSchoolss.filter((item) => {
+                  if (item.adminID == response._id) {
+                    return item
+                  }
+                })
+                if (existingSchool == '') {
+                  props.history.push("/admin");
+                } else {
+                  props.history.push("/adminDashboard");
+                }
+
+                //window.location.reload();
+              }
+
             } else {
+              // console.log("Response")
+              // console.log(response)
+
+              var UID = response._id
+              var authKey = "6686381f7d6999ea04c5eb3feea375ae7d205b0f";
+
+              CometChat.login(UID, authKey).then(
+                user => {
+                  console.log("Login Successful:", { user });
+                },
+                error => {
+                  console.log("Login failed with exception:", { error });
+                }
+              );
               props.history.push("/app/home");
               window.location.reload();
             }
@@ -149,6 +219,8 @@ function Login(props) {
     //And here you call it
     fetchData()
   }, [])
+
+
 
   //}, [props.fetchUrl1], [props.fetchUrl2])
 
@@ -201,69 +273,69 @@ function Login(props) {
                 </Typography>
                   </Fade>
                   {/* <form onSubmit={loginSubmit}> */}
-                    <text class={classes.signin}>Sign in as:</text>
-                    <RadioGroup class={classes.radio} name="type" value={typeValue}
-                      onChange={(e) => { setTypeValue(e.target.value) }} >
-                      <FormControlLabel value="School" control={<Radio color='inherit' />} label="School" />
-                      <FormControlLabel value="Teacher" control={<Radio color='inherit' />} label="Teacher" />
-                      <FormControlLabel value="Student" control={<Radio color='inherit' />} label="Student" />
-                      {/* <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" /> */}
-                    </RadioGroup>
+                  <text class={classes.signin}>Sign in as:</text>
+                  <RadioGroup class={classes.radio} name="type" value={typeValue}
+                    onChange={(e) => { setTypeValue(e.target.value) }} >
+                    <FormControlLabel value="School" control={<Radio color='inherit' />} label="School" />
+                    <FormControlLabel value="Teacher" control={<Radio color='inherit' />} label="Teacher" />
+                    <FormControlLabel value="Student" control={<Radio color='inherit' />} label="Student" />
+                    {/* <FormControlLabel value="Parent" control={<Radio color='inherit' />} label="Parent" /> */}
+                  </RadioGroup>
 
-                    <TextField
-                      id="email"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={emailValue}
-                      onChange={e => setEmailValue(e.target.value)}
-                      margin="normal"
-                      placeholder="Email Adress"
-                      type="email"
-                      fullWidth
-                    />
-                    <TextField
-                      id="password"
-                      InputProps={{
-                        classes: {
-                          underline: classes.textFieldUnderline,
-                          input: classes.textField,
-                        },
-                      }}
-                      value={passwordValue}
-                      onChange={e => setPasswordValue(e.target.value)}
-                      margin="normal"
-                      placeholder="Password"
-                      type="password"
-                      fullWidth
-                    />
+                  <TextField
+                    id="email"
+                    InputProps={{
+                      classes: {
+                        underline: classes.textFieldUnderline,
+                        input: classes.textField,
+                      },
+                    }}
+                    value={emailValue}
+                    onChange={e => setEmailValue(e.target.value)}
+                    margin="normal"
+                    placeholder="Email Adress"
+                    type="email"
+                    fullWidth
+                  />
+                  <TextField
+                    id="password"
+                    InputProps={{
+                      classes: {
+                        underline: classes.textFieldUnderline,
+                        input: classes.textField,
+                      },
+                    }}
+                    value={passwordValue}
+                    onChange={e => setPasswordValue(e.target.value)}
+                    margin="normal"
+                    placeholder="Password"
+                    type="password"
+                    fullWidth
+                  />
 
-                    <Button
-                      onClick={() =>
-                        loginSubmit()
-                      }
+                  <Button
+                    onClick={() =>
+                      loginSubmit()
+                    }
 
-                      disabled={
-                        emailValue.length === 0 || passwordValue.length === 0 || typeValue === undefined
-                      }
-                      variant="contained"
-                      size="large"
-                      fullWidth
-                    >
-                      Login
+                    disabled={
+                      emailValue.length === 0 || passwordValue.length === 0 || typeValue === undefined
+                    }
+                    variant="contained"
+                    size="large"
+                    fullWidth
+                  >
+                    Login
                   </Button>
 
-                    <Button
-                      size="large"
-                      className={classes.forgetButton}
-                    >
-                      Forget Password
+                  <Button
+                    size="large"
+                    className={classes.forgetButton}
+                  >
+                    Forget Password
                 </Button>
 
-                    {/* <Link onClick={() => admin(props.history)}>hi</Link> */}
+                  {/* <Link onClick={() => admin(props.history)}>hi</Link> */}
                   {/* </form> */}
                 </React.Fragment>
               )}
@@ -282,7 +354,7 @@ function Login(props) {
                   </div>
 
                   <text class={classes.signin}>Sign up as:</text>
-                  <RadioGroup class={classes.radio}  name="type" value={typeValue}
+                  <RadioGroup class={classes.radio} name="type" value={typeValue}
                     onChange={(e) => { setTypeValue(e.target.value) }}>
                     <FormControlLabel value="School" control={<Radio color='inherit' />} label="School" />
                     <FormControlLabel value="Teacher" control={<Radio color='inherit' />} label="Teacher" />
@@ -356,7 +428,7 @@ function Login(props) {
                     ) : (
                       <Button
 
-                      onClick={()=>{signUpSubmit()}}
+                        onClick={() => { signUpSubmit() }}
 
                         disabled={
                           emailValue.length === 0 ||

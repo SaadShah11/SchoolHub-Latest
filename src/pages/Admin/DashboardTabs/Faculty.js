@@ -96,6 +96,9 @@ function Faculty(props) {
 
   const user = AuthService.getCurrentUser()
   console.log(user)
+  const school = AuthService.getCurrentSchool()
+  console.log("SCHOOL")
+  console.log(school)
 
   const getTeachers = useCallback(async () => {
     async function fetchData() {
@@ -185,6 +188,26 @@ function Faculty(props) {
     fetchData()
   }, [])
 
+  const deleteTeacher = useCallback(async (id) => {
+    async function fetchData() {
+      let request;
+      console.log("NewData")
+      let stat = {
+        teacherID: id
+      }
+      console.log(stat)
+      console.log(school.schoolID)
+      //console.log(status)
+      request = await axios.post("http://localhost:8080/school/delete_Teacher/" + school.schoolID, stat)
+      console.log("request")
+      console.log(request)
+      setReloadHome(true)
+      //window.location.reload()
+      return request.data;
+    }
+    fetchData()
+  }, [])
+
   useEffect(() => {
     getTeachers()
     getTeacherRequests()
@@ -260,7 +283,7 @@ function Faculty(props) {
                   <Typography variant='h6'>{item.teacherName}</Typography>
                   <text>{item.teacherEmail}</text>
                 </div>
-                <Delete className={classes.delete} />
+                <Delete onClick={()=>{deleteTeacher(item.teacherID)}} className={classes.delete} />
               </div>
             </Widget>
           </Grid>
@@ -331,7 +354,7 @@ function Faculty(props) {
   const [Tvalue1, setTValue1] = useState('');
   return (
     <div>
-      <Header />
+      <Header history={props.history}/>
       <br /><br /><br /><br />
       <Grid container >
         <div className={classes.box}>

@@ -98,8 +98,23 @@ const comment = [
 ]
 const detail = { name: 'School-Hub', time: '20 mins ago' }
 var stream = 1
-export default function Live() {
+export default function Live(props) {
+
   var classes = useStyles();
+  console.log("props")
+  console.log(props.location.state)
+  let liveStreamData = props.location.state
+
+  let srcUrl = "https://dist.bambuser.net/player/?resourceUri="
+  //let url = 'https%3A%2F%2Fcdn.bambuser.net%2Fgroups%2F101842%2Fbroadcasts%3Fby_authors%3D%26title_contains%3D%26has_any_tags%3D%26has_all_tags%3D%26da_id%3D60ab58d7-50fb-320f-94fd-6b79d9cb36b4%26da_timestamp%3D1621954098%26da_signature_method%3DHMAC-SHA256%26da_ttl%3D0%26da_static%3D1%26da_signature%3Dcac1fbd7eac0b1d480f6992d50c8748fa32eb6d1bd6e6e7c63769b90b06733ba'
+  //let url = 'https://cdn.bambuser.net/groups/101842/broadcasts?by_authors=&title_contains=&has_any_tags=&has_all_tags=&da_id=60ab58d7-50fb-320f-94fd-6b79d9cb36b4&da_timestamp=1621954098&da_signature_method=HMAC-SHA256&da_ttl=0&da_static=1&da_signature=cac1fbd7eac0b1d480f6992d50c8748fa32eb6d1bd6e6e7c63769b90b06733ba'
+  //let url = 'https://cdn.bambuser.net/broadcasts/9b4864a2-1b2b-499c-95ca-725a7b00771b?da_signature_method=HMAC-SHA256&da_id=9e1b1e83-657d-7c83-b8e7-0b782ac9543a&da_timestamp=1621602118&da_static=1&da_ttl=0&da_signature=53be188ce17b88497584701a5cc31fec167a33811190208cb187cfa926035767'
+  let url = liveStreamData.resourceURI
+  //let url = 'https://cdn.bambuser.net/broadcasts/9b4864a2-1b2b-499c-95ca-725a7b00771b?da_signature_method=HMAC-SHA256&da_id=9e1b1e83-657d-7c83-b8e7-0b782ac9543a&da_timestamp=1621602118&da_static=1&da_ttl=0&da_signature=53be188ce17b88497584701a5cc31fec167a33811190208cb187cfa926035767'
+  const uri = encodeURIComponent(url);
+  console.log(uri)
+  let srcUrl1 = srcUrl + uri
+  console.log(srcUrl1)
 
   return (
     <>
@@ -110,27 +125,13 @@ export default function Live() {
               <div className={classes.profile}>
                 <AccountCircleIcon style={{ fontSize: '50' }} />
                 <div className={classes.nameanddate}>
-                  <text className={classes.name}><b>{detail.name}</b> is live now.</text>
-                  <text className={classes.time}>{detail.time}</text>
+                  <text className={classes.name}><b>{liveStreamData.schoolName}</b> is live now.</text>
+                  <text className={classes.time}>Start Time: {liveStreamData.startTime}</text>
                 </div>
               </div>
-              <ReactHlsPlayer
-                url='http://www.youtube.com/embed/xDMP3i36naA'
-                autoplay={false}
-                controls={true}
-                width={730}
-                height="auto"
-            />
-              {/* <Iframe
-                url="http://www.youtube.com/embed/xDMP3i36naA"
-                width="700px"
-                height="450px"
-                id="myId"
-                className="myClassname"
-                display="initial"
-                position="relative"
-              /> */}
-              {/* <ReactPlayer url='https://dist.bambuser.net/player/?resourceUri=https%3A%2F%2Fcdn.bambuser.net%2Fbroadcasts%2F84297594-ed7d-4015-9384-2e070b253cfe%3Fda_signature_method%3DHMAC-SHA256%26da_id%3D9e1b1e83-657d-7c83-b8e7-0b782ac9543a%26da_timestamp%3D1615116481%26da_static%3D1%26da_ttl%3D0%26da_signature%3D5508a766532d32b59e86fdbf5d79aa8b38dece4ae886f589bdfafd5e4830ca99'/> */}
+              <Iframe src={srcUrl1} style="border: none" width="850px"
+        height="450px"></Iframe>
+              
             </Widget>
           </Grid>
           <Grid item md={4}>

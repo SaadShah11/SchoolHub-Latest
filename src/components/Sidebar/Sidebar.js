@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Drawer, List } from "@material-ui/core";
 import {LiveTv as Stream, Equalizer as Stats, LocationOn as Map, Home as HomeIcon,FilterNone as UIElementsIcon} from "@material-ui/icons";
+import GroupIcon from '@material-ui/icons/Group';
+import ChatIcon from '@material-ui/icons/Chat';
 import { useTheme } from "@material-ui/styles";
 import { withRouter } from "react-router-dom";
 // styles
@@ -15,7 +17,10 @@ const structure = [
   {id: 1, label: "Map", link: "/app/map", icon: <Map />},
   {id: 2, label: "Statistics", link: "/app/charts", icon: <Stats /> },
   {id: 3,label: "Live Stream",link: "/app/live",icon: <Stream />},
-  {id: 4,label: "FAQs",link: "/app/faq",icon: <UIElementsIcon />},
+  {id: 4,label: "Friends",link: "/app/friends",icon: <GroupIcon />},
+  {id: 6,label: "Inbox",link: "/app/inbox",icon: <ChatIcon />},
+  {id: 5,label: "FAQs",link: "/app/faq",icon: <UIElementsIcon />}
+  ,
 ];
 
 function Sidebar({ location }) {

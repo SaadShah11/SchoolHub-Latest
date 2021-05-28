@@ -57,6 +57,7 @@ export default function Home(props) {
   const user = AuthService.getCurrentUser()
   console.log(user)
 
+
   // var [useridValue, setUseridValue] = useState("");
   // var [usernameValue, setUsernameValue] = useState("");
   var [textValue, setTextValue] = useState("");

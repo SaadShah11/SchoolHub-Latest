@@ -114,12 +114,29 @@ export default function Review(props) {
                                         <text className={classes.name}><br />by <b>{item.username}</b> on {item.date}</text>
                                     </div>
                                     <text className={classes.time}>{item.reviewText}</text>
+                                    <br />
+                                    <text ><b>Reply</b></text>
+                                    <div>
+                                        {item.reply.map(function (items) {
+                                            return (
+                                                <div className={classes.profile1}>
+                                                    {/* <AccountCircleIcon style={{ fontSize: '40' }} /> */}
+                                                    <img className={classes.dp1} src={items.schoolIcon} />
+                                                    <div className={classes.nameanddate}>
+                                                        {/* <text className={classes.name}>{items.username}</text> */}
+                                                        <text className={classes.time}>{items.text}</text>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
                                 </Widget>
+
                             </Grid>
                         </Carousel.Item>
                     )
                 })}
             </Carousel>
-        </Grid> 
+        </Grid>
     )
 }

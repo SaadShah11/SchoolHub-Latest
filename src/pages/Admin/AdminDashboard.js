@@ -15,6 +15,7 @@ import Photos from "./images/Photos.jpg"
 import Request from './images/Request.jpg'
 import Reviews from './images/Reviews.jpg'
 import General from './images/General.jpg'
+import AuthService from "../../services/auth.service";
 // context
 import { useUserDispatch, loginUser, admin } from "../../context/UserContext";
 import Widget from "../../components/Widget/Widget";
@@ -51,15 +52,18 @@ const teachers=[
 function Login(props) {
   var classes = useStyles();
 
+  const school = AuthService.getCurrentSchool()
+  console.log(school)
+
   return (
       <div>
-    <Header />
+    <Header history={props.history}/>
     <div className={classes.container}>
     <Widget  title='SCHOOL DASHBOARD' disableWidgetMenu>
     <Grid style={{justifyContent:'center'}} container  spacing={4} >
             <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./general')}} src={General} /></Widget></Grid>
             <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./photos')}} src={Photos} /></Widget></Grid>
-            <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./acad')}} src={Acad} /></Widget></Grid>
+            {/* <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./acad')}} src={Acad} /></Widget></Grid> */}
             <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./fee')}} src={Fee} /></Widget></Grid>
             <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./live')}} src={Live} /></Widget></Grid>
             <Grid className={classes.tab} item><Widget disableWidgetMenu><img className={classes.pic} onClick={()=>{props.history.push('./requests')}} src={Request} /></Widget></Grid>

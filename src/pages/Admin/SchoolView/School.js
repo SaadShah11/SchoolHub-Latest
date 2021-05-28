@@ -71,7 +71,7 @@ function School(props) {
             >
               <Tab label="Home" classes={{ root: classes.tab }} />
               <Tab label="Fee" classes={{ root: classes.tab }} />
-              <Tab label="Academic" classes={{ root: classes.tab }} />
+              {/* <Tab label="Academic" classes={{ root: classes.tab }} /> */}
               <Tab label="Faculty" classes={{ root: classes.tab }} />
             </Tabs>
             {activeTabId === 0 && (
@@ -84,12 +84,12 @@ function School(props) {
                 <SchoolFee school={schoolValue} />
               </React.Fragment>
             )}
-            {activeTabId === 2 && (
+            {/* {activeTabId === 2 && (
               <React.Fragment>
                 <SchoolAcad school={schoolValue} />
               </React.Fragment>
-            )}
-            {activeTabId === 3 && (
+            )} */}
+            {activeTabId === 2 && (
               <React.Fragment>
                 <SchoolFaculty school={schoolValue} />
               </React.Fragment>

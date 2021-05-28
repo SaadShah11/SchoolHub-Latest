@@ -15,7 +15,7 @@ class AuthService {
           console.log("inside1 loginAxios")
           console.log(response.data)
           localStorage.setItem("superAdmin", JSON.stringify(response.data));
-        }else{
+        } else {
           console.log("LoginAxios failed")
         }
         //console.log(response.data)
@@ -26,7 +26,7 @@ class AuthService {
   logoutSuperAdmin() {
     localStorage.removeItem("superAdmin");
   }
-  
+
   login(user) {
     return axios
       .post(API_URL + "login", user)
@@ -37,7 +37,20 @@ class AuthService {
           console.log("inside1 loginAxios")
           console.log(response.data)
           localStorage.setItem("user", JSON.stringify(response.data));
-        }else{
+          if (user.type == 'School') {
+            axios
+              .get('http://localhost:8080/searchSchool/search/')
+              .then(response1 => {
+                console.log("response")
+                console.log(response1)
+                console.log(response1.data)
+                if(response1.data.adminID == response.data._id){
+                  localStorage.setItem("school", JSON.stringify(response1.data));
+                }
+                
+              });
+          }
+        } else {
           console.log("LoginAxios failed")
         }
         //console.log(response.data)
@@ -59,16 +72,46 @@ class AuthService {
     return getCurrentUser;
   }
 
-  setCurrentSchool(schoolId){
+  setCurrentSchool(schoolId) {
     console.log("inside setCurrentSchool")
     localStorage.setItem("school", JSON.stringify(schoolId));
   }
 
-  getCurrentSchool(){
+  setSchoolFromAdminID(adminID) {
+    return axios
+      .get('http://localhost:8080/searchSchool/search/')
+      .then(response => {
+        console.log("response")
+        console.log(response)
+        if (response.status === 200) {
+          console.log("inside1 loginAxios")
+          console.log(response.data)
+          localStorage.setItem("school", JSON.stringify(response.data._id));
+        } else {
+          console.log("LoginAxios failed")
+        }
+        //console.log(response.data)
+        return response.data;
+      });
+  }
+
+  getCurrentSchool() {
     console.log("inside getCurrentSchool")
     const getCurrentSchool = JSON.parse(localStorage.getItem('school'));
     return getCurrentSchool;
   }
+
+  setSelectedUser(userID){
+    console.log("inside setSelectedUser")
+    localStorage.setItem("selectedUser", JSON.stringify(userID));
+  }
+
+  getSelectedUser() {
+    console.log("inside getSelectedUser")
+    const getSelectedUser = JSON.parse(localStorage.getItem('selectedUser'));
+    return getSelectedUser;
+  }
+  
 }
 
 export default new AuthService();

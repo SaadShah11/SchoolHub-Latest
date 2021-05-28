@@ -9,6 +9,8 @@ import AuthService from "../../services/auth.service";
 import SearchIcon from '@material-ui/icons/Search';
 // components
 import Widget from "../../components/Widget/Widget";
+import { useRechartToPng } from "recharts-to-png";
+import FileSaver from "file-saver";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -114,6 +116,16 @@ let currentLocation = {}
 export default function Charts(props) {
   var theme = useTheme();
   var classes = useStyles();
+
+  const [png, ref] = useRechartToPng();
+
+  const handleDownload = React.useCallback(async () => {
+    FileSaver.saveAs(png, "myChart.png");
+  }, [png]);
+
+  const handleDownload1 = React.useCallback(async () => {
+    FileSaver.saveAs(png, "myChart1.png");
+  }, [png]);
 
   let [searchValue, setSearchValue] = useState("");
   var [searchResults, setSearchResults] = useState();
@@ -289,7 +301,7 @@ export default function Charts(props) {
         <div class={classes.result} onClick={() => {
           //setschool(getschools.push(i))
           //getschools.push(i)
-          
+
           //This is how you update an array
           setschool(schools => [...schools, i]);
           setReload(true)
@@ -311,7 +323,7 @@ export default function Charts(props) {
   try {
     displayBarGraph = <Widget title="Ratings Comparision" noBodyPadding upperTitle disableWidgetMenu>
       <ResponsiveContainer width="100%" height={350} >
-        <BarChart width={730} height={250} data={getschools}>
+        <BarChart ref={ref} width={730} height={250} data={getschools}>
 
           <XAxis dataKey="schoolName" />
           <YAxis domain={[0, 5]} label={{ value: 'Average Ratings', angle: -90 }} />
@@ -321,6 +333,7 @@ export default function Charts(props) {
         </BarChart>
 
       </ResponsiveContainer>
+      <Button onClick={handleDownload}>Download</Button>
     </Widget>
   } catch (err) {
     console.log(err)
@@ -333,6 +346,7 @@ export default function Charts(props) {
     return <Widget title="Fee Comparision" noBodyPadding upperTitle disableWidgetMenu>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
+          ref={ref}
           width={500}
           height={400}
           data={getschools}
@@ -353,6 +367,7 @@ export default function Charts(props) {
           <Bar dataKey="higher" fill="#43445d" />
         </BarChart>
       </ResponsiveContainer>
+      <Button onClick={handleDownload1}>Download</Button>
     </Widget>
     //}, [reload])
   }
@@ -394,7 +409,7 @@ export default function Charts(props) {
       <div className={classes.charts}>
 
         <div>
-          
+
           {
             displayBarGraph
           }

@@ -87,7 +87,7 @@ function EditInfo(props) {
     const [picss, setpicss] = React.useState(5)
     return (
         <div>
-            <Header />
+            <Header history={props.history}/>
             <br /><br /><br /><br />
             <Grid container >
                 <div className={classes.box}>

@@ -14,6 +14,7 @@ import Widget from "../../../components/Widget/Widget";
 import axios from "../../../Util/axios"
 import AuthService from "../../../services/auth.service";
 import { Cancel, AddBox, PhotoSizeSelectActual, PlayArrow, PartyMode } from '@material-ui/icons'
+import { mdiConsoleLine } from "@mdi/js";
 const useStyles = makeStyles((theme) => ({
   box: {
     width: "50%",
@@ -103,16 +104,16 @@ const rows = [
 ];
 
 let newData = {
-  schoolID:'',
-  schoolName:'',
-  title:'',
-  date:'',
-  startTime:'',
-  endTime:'',
-  currentTime:'',
-  description:'',
-  privacy:'',
-  status:''
+  schoolID: '',
+  schoolName: '',
+  title: '',
+  date: '',
+  startTime: '',
+  endTime: '',
+  currentTime: '',
+  description: '',
+  privacy: '',
+  status: ''
 }
 
 
@@ -149,7 +150,7 @@ function LiveStream(props) {
   }, [])
 
   let handleAddLiveStream = () => {
-    
+
     let current = new Date()
     let year = current.getFullYear().toString();
     let month = current.getMonth() + 1;
@@ -166,16 +167,36 @@ function LiveStream(props) {
     console.log("Current Time")
     console.log(timee)
 
+    let newDvalue = Dvalue + ''
+    let dateArr = newDvalue.split(" ")
+    console.log("Date value")
+    let monthh = Dvalue.getMonth()+1;
+    let dayy = dateArr[2]
+    let yearr = dateArr[3]
+
+    let finalDateee = dayy+'/'+monthh+'/'+yearr
+    //console.log(finalDateee)
+
+    console.log("Time Value")
+    let newTvalue = Tvalue + ''
+    let startTimeArr = newTvalue.split(" ")
+    let finalStartTime = startTimeArr[4]
+    //console.log(startTimeArr)
+    let newTvalue1 = Tvalue1 + ''
+    let endTimeArr = newTvalue1.split(" ")
+    let finalEndTime = endTimeArr[4]
+    //console.log(endTimeArr)
+
+
     newData.schoolID = user._id
     newData.schoolName = user.username
     newData.title = eventName
     newData.description = eventDescription
     newData.currentTime = timee
-    newData.date = Dvalue
-    newData.startTime = Tvalue
-    newData.endTime = Tvalue1
-    newData.privacy = eventPrivacyValue
-    //newData.title = 
+    newData.date = finalDateee
+    newData.startTime = finalStartTime
+    newData.endTime = finalEndTime
+    //newData.privacy = eventPrivacyValue
 
     addLiveStream(newData)
   }
@@ -216,15 +237,15 @@ function LiveStream(props) {
       // console.log(Dvalue)
       displayLiveStreams = allLiveStreams.map((row, id) => {
         // if (row.status === "Pending") {
-          return <StyledTableRow key={row.description}>
-            <StyledTableCell style={{ width: '15px', backgroundColor: '#C5C5C5' }}>{id} </StyledTableCell>
-            <StyledTableCell align="center">{row.schoolName}</StyledTableCell>
-            <StyledTableCell align="center">{row.title}</StyledTableCell>
-            <StyledTableCell align="center">{row.date}</StyledTableCell>
-            <StyledTableCell align="center">{row.startTime}</StyledTableCell>
-            <StyledTableCell align="center">{row.endTime}</StyledTableCell>
-            <StyledTableCell align="center">{row.status}</StyledTableCell>
-          </StyledTableRow>
+        return <StyledTableRow key={row.description}>
+          <StyledTableCell style={{ width: '15px', backgroundColor: '#C5C5C5' }}>{id} </StyledTableCell>
+          <StyledTableCell align="center">{row.schoolName}</StyledTableCell>
+          <StyledTableCell align="center">{row.title}</StyledTableCell>
+          <StyledTableCell align="center">{row.date}</StyledTableCell>
+          <StyledTableCell align="center">{row.startTime}</StyledTableCell>
+          <StyledTableCell align="center">{row.endTime}</StyledTableCell>
+          <StyledTableCell align="center">{row.status}</StyledTableCell>
+        </StyledTableRow>
 
         // }
 
@@ -240,7 +261,7 @@ function LiveStream(props) {
 
   return (
     <div>
-      <Header />
+      <Header history={props.history} />
       <br /><br /><br /><br />
       <Grid container >
         <div className={classes.box}>
@@ -257,20 +278,20 @@ function LiveStream(props) {
             {activeTabId === 0 && (
               <React.Fragment >
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <TextField className={classes.textfield} id="name" placeholder="Event Name" 
-                  value={eventName}
-                  onChange={e => setEventName(e.target.value)}
-                  fullWidth />
-                  <TextField className={classes.textfield} placeholder="Event Description" 
-                  value={eventDescription}
-                  onChange={e => setEventDescription(e.target.value)}
-                  fullWidth />
+                  <TextField className={classes.textfield} id="name" placeholder="Event Name"
+                    value={eventName}
+                    onChange={e => setEventName(e.target.value)}
+                    fullWidth />
+                  <TextField className={classes.textfield} placeholder="Event Description"
+                    value={eventDescription}
+                    onChange={e => setEventDescription(e.target.value)}
+                    fullWidth />
 
-                  <RadioGroup class={classes.radio} value={eventPrivacyValue} onChange={(event) => seteventPrivacyValue(event.target.value)}>
+                  {/* <RadioGroup class={classes.radio} value={eventPrivacyValue} onChange={(event) => seteventPrivacyValue(event.target.value)}>
                     <text class={classes.signin}>Event Type:</text>
                     <FormControlLabel style={{ marginLeft: '30px' }} value="Private" control={<Radio color='defualt' />} label="Private" />
                     <FormControlLabel value="Public" control={<Radio color='defualt' />} label="Public" />
-                  </RadioGroup>
+                  </RadioGroup> */}
                 </div>
 
                 <div className={classes.request}>
@@ -303,7 +324,7 @@ function LiveStream(props) {
                     <Button size="large" variant="contained" color="seconadary"
                       className={classes.button2}
                       disabled={Dvalue.length === 0 || Tvalue.length === 0 || Tvalue1.length === 0}
-                    onClick={()=>{handleAddLiveStream()}}> Send Request</Button>
+                      onClick={() => { handleAddLiveStream() }}> Send Request</Button>
                   </div>
                 </div>
 

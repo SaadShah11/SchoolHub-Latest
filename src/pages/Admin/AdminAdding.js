@@ -1,18 +1,25 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Widget from "../../components/Widget/Widget";
 import { FormGroup, Tabs, Tab, InputAdornment, Checkbox, FormControlLabel, Radio, RadioGroup, Button, Stepper, Step, StepLabel, TextField, Typography } from '@material-ui/core';
 import { Delete, VideoCall, Photo } from '@material-ui/icons';
+// import {Fee, primary} from './fee'
 import Fee from './fee'
+import { primary, middle, higher } from "./fee"
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet'
 import { toLogin } from "../../context/UserContext";
 import { AccountCircle, Room, PhoneAndroid, AlternateEmail, Code, Facebook } from '@material-ui/icons'
+import InfoIcon from '@material-ui/icons/Info';
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import { Cancel, AddBox, PhotoSizeSelectActual, PlayArrow, PartyMode } from '@material-ui/icons'
 
 import { v4 as uuidv4 } from 'uuid';
 import firebase from "../../Util/firebase"
+import { storage } from "../../Util/firebase"
+import axios from "../../Util/axios"
+import AuthService from "../../services/auth.service";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -130,19 +137,40 @@ function getSteps() {
     return ['Add General Information', 'Add photos/video', 'Add Fee details', 'Add location', 'Finish'];
 }
 
-let School = {
+let school = {
+    adminID: '',
     schoolName: "",
     schoolAddress: "",
+    schoolIcon: '',
     zipCode: "",
     schoolEmail: "",
-    schoolPhoneNumber: "",
+    aboutSchool: '',
+    contactNumber: "",
     schoolFB: "",
     schoolType: "",
-    educationLevel: "",
-    educationType: ""
+    educationLevel: {
+        primary: false,
+        middle: false,
+        higher: false
+    },
+    educationType: "",
+    schoolCoordinates: {},
+    feeStructure: [],
+    images: [],
+    videos: '',
+    teachers: []
+
 }
 
-function GetStepContent(stepIndex) {
+let selectedlocation = {
+    longitude: '',
+    latitude: ''
+}
+
+let FileLinks = []
+
+function GetStepContent(stepIndex, props) {
+
     const position = [30.3753, 69.3451]
     const classes = useStyles();
     const pics = [
@@ -156,6 +184,7 @@ function GetStepContent(stepIndex) {
         { id: 0, source: <PlayArrow className={classes.video} /> },
     ]
 
+
     let [schoolName, setSchoolName] = useState()
     let [schoolAddress, setSchoolAddress] = useState()
     let [zipCode, setZipCode] = useState()
@@ -163,6 +192,9 @@ function GetStepContent(stepIndex) {
     let [schoolPhoneNumber, setSchoolPhoneNumber] = useState()
     let [schoolFB, setSchoolFB] = useState()
     let [educationType, setEducationType] = useState()
+    let [schoolIcon, setSchoolIcon] = useState()
+    let [aboutSchool, setAboutSchool] = useState()
+    let [createSchoolBool, setCreateSchoolBool] = useState(false)
 
     let [educationLevel, setEducationLevel] = useState({
         checkedA: false,
@@ -172,71 +204,152 @@ function GetStepContent(stepIndex) {
 
     let [schoolType, setSchoolType] = useState()
     var [activeTabId, setActiveTabId] = useState(0);
-    const [video1, setVideo1] = React.useState('true');
-    const [picss, setpicss] = React.useState(5)
-    const [value, setValue] = React.useState('Co-Education');
-    const [value3, setValue3] = React.useState('Matric/Fsc');
+    // const [video1, setVideo1] = React.useState('true');
+    // const [picss, setpicss] = React.useState(5)
+    // const [value, setValue] = React.useState('Co-Education');
+    // const [value3, setValue3] = React.useState('Matric/Fsc');
+
+    //const [files, setFiles] = useState("")
+    let [files, setFiles] = useState([])
+    let [videoLink, setVideoLink] = useState()
+
+    const user = AuthService.getCurrentUser()
+    console.log(user)
 
     const handleChangeSchoolType = (event) => {
-        setValue(event.target.value);
+        setSchoolType(event.target.value);
     };
     const handleChange3 = (event) => {
-        setValue3(event.target.value);
+        setEducationType(event.target.value);
     };
 
     const handleChangeEducationLevel = (event) => {
         setEducationLevel({ ...educationLevel, [event.target.name]: event.target.checked });
     };
 
-    const [files, setFiles] = useState([])
+    const handleImageSelect = (files) => {
+        setFiles(files)
+    }
 
-    const onFileChange = e => {
-        // for (let i = 0; i < e.target.files.length; i++) {
-        //     const newFile = e.target.files[i];
-        //     newFile["id"] = Math.random();
-        //     // add an "id" property to each File object
-        //     setFiles(prevState => [...prevState, newFile]);
-        // }
-    };
-
-    // const uploadTask =
-    //     firebase.storage().ref().child(`/schoolImages/${files.name}`).put(files);
-    // uploadTask.on(
-    //     firebase.storage.TaskEvent.STATE_CHANGED,
-    //     snapshot => {
-    //         const progress = (
-    //             (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-    //         console.log(`Progress: ${progress}%`);
-    //         if (snapshot.state === firebase.storage.TaskState.RUNNING) {
-    //             console.log('file uploading...')
-    //         }
-    //         // ...etc
-    //     },
-    //     error => console.log(error.code),
-    //     async () => {
-    //         const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-    //         console.log(downloadURL);
-    //         // the web storage url for our file
-    //     });
-
-    // const onUploadSubmission = e => {
-    //     e.preventDefault(); // prevent page refreshing
-    //     const promises = [];
-    //     files.forEach(file => {
-    //         const uploadTask = firebase.storage().ref().child(`your/file/path/${file.name}`).put(file);
-    //         promises.push(uploadTask);
-    //         uploadTask.on(
-    //             firebase.storage.TaskEvent.STATE_CHANGED,
-    //             snapshot => {
-
-    //             }
-    //         );
-    //     });
-
-    // }
-
-    console.log("School Name")
+    console.log("School Data")
+    console.log(schoolType)
+    console.log(educationType)
     console.log(educationLevel)
+    console.log(files)
+    console.log(selectedlocation)
+    console.log("Primary")
+    console.log(primary)
+
+    let uploadImages = (files) => {
+        var index
+        //let bucketName = "default"
+        //var fileLinks = []
+        if (files.length > 0) {
+            for (index = 0; index < files.length; index++) {
+                let file = files[index]
+                //var add = getRandom(10)
+                //let storageRef = firebaseMobile.storage().ref(`${add}${file.name}`)
+                let uploadTask = storage.ref(`/images/${file.name}`).put(files)
+                //let uploadTask = storageRef.put(file)
+                uploadTask.on('state_changed',
+                    () => {
+                        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                            FileLinks.push({ path: downloadURL });
+                        });
+                    }
+                );
+            }
+            console.log("File Links")
+            console.log(FileLinks)
+            //school.images = FileLinks
+            console.log("School Images")
+            console.log(school.images)
+        }
+        else {
+            console.log("No images selected")
+        }
+        setCreateSchoolBool(true)
+        createSchool()
+    }
+
+    let createSchool = () => {
+        //setLoadingPage(true)
+        console.log("inside createSchool")
+
+        school.adminID = user._id
+        school.schoolName = schoolName
+        school.schoolAddress = schoolAddress
+        school.schoolIcon = schoolIcon
+        school.zipCode = zipCode
+        school.schoolEmail = schoolEmail
+        school.aboutSchool = aboutSchool
+        school.contactNumber = schoolPhoneNumber
+        school.schoolFB = schoolFB
+        school.schoolType = schoolType
+        //school.educationLevel = educationLevel
+        school.educationType = educationType
+        school.schoolCoordinates = selectedlocation
+        if (educationLevel.checkedA == true) {
+            school.feeStructure.push(primary)
+            school.educationLevel.primary = true
+        }
+        if (educationLevel.checkedB == true) {
+            school.feeStructure.push(middle)
+            school.educationLevel.middle = true
+        }
+        if (educationLevel.checkedC == true) {
+            school.feeStructure.push(higher)
+            school.educationLevel.higher = true
+        }
+        //school.feeStructure = {}
+        //school.images = FileLinks
+        school.images = FileLinks
+        console.log("New Images")
+        console.log(FileLinks)
+        console.log(files)
+        //school.images = files
+        school.videos = videoLink
+
+        // uploadImages(files)
+        sendRequest(school)
+        //sendRequest(createSchoolBool)
+    }
+
+
+
+    const sendRequest = useCallback(async (schoolFinal) => {
+
+        // console.log("FileLinkss")
+        // console.log(FileLinkss)
+        console.log("inside CreateSchool Function")
+        console.log("School")
+        console.log(schoolFinal)
+        async function fetchData(schoolFinal) {
+
+            let request;
+            console.log('inside fetchdata')
+            console.log(schoolFinal)
+
+            console.log(createSchoolBool)
+            // if (createSchoolBool === true) {
+            // console.log("Final Images")
+            // console.log(school.images)
+
+            request = await axios.post("http://localhost:8080/school/Create_School", schoolFinal)
+            console.log("request")
+            console.log(request)
+
+            props.history.push('/adminDashboard')
+            //window.location.reload()
+
+            return request;
+            // } else {
+            //     console.log("post is false")
+            // }
+        }
+        fetchData(schoolFinal)
+
+    }, [])
 
     switch (stepIndex) {
         case 0:
@@ -252,6 +365,11 @@ function GetStepContent(stepIndex) {
                             <InputAdornment position="start"><Room /></InputAdornment>
                         ),
                     }} id="address" placeholder="School Address" fullWidth />
+                    <TextField value={aboutSchool} onChange={e => setAboutSchool(e.target.value)} InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start"><InfoIcon /></InputAdornment>
+                        ),
+                    }} id="aboutSchool" placeholder="School Description" fullWidth />
                     <TextField value={zipCode} type="number" onChange={e => setZipCode(e.target.value)} InputProps={{
                         startAdornment: (
                             <InputAdornment position="start"><Code /></InputAdornment>
@@ -275,7 +393,7 @@ function GetStepContent(stepIndex) {
 
                     <div className={classes.Checks}>
                         <text style={{ fontWeight: 'bold' }}>School type: </text>
-                        <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="type" name="type" value={value} onChange={handleChangeSchoolType}>
+                        <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="type" name="type" value={schoolType} onChange={handleChangeSchoolType}>
                             <FormControlLabel value="Co-Education" control={<Radio />} label="Co-Education" />
                             <FormControlLabel value="Boys" control={<Radio />} label="Boys" />
                             <FormControlLabel value="Girls" control={<Radio />} label="Girls " />
@@ -312,7 +430,7 @@ function GetStepContent(stepIndex) {
                     </div>
                     <div className={classes.Checks}>
                         <text style={{ fontWeight: 'bold' }}>Education type: </text>
-                        <RadioGroup onChange={(e) => { setEducationType(e.target.value) }} style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  " value={value3} onChange={handleChange3}>
+                        <RadioGroup onChange={(e) => { setEducationType(e.target.value) }} style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  " value={educationType} onChange={handleChange3}>
                             <FormControlLabel value="Matric/Fsc" control={<Radio />} label="Matric/Fsc" />
                             <FormControlLabel value="IGCSE" control={<Radio />} label="IGCSE" />
                         </RadioGroup>
@@ -338,7 +456,10 @@ function GetStepContent(stepIndex) {
                             <div className={classes.pics}>
                                 <AddBox className={classes.pic} />
                                 <label>Select Files
-                                    <input type="file" multiple onChange={onFileChange} />
+                                    {/* <input type="file" multiple onChange={onFileChange} /> */}
+                                    <input type="file" name="file" multiple="multiple" onChange={(event) => {
+                                        handleImageSelect(event.target.files)
+                                    }} />
                                 </label>
                                 {/* <div className={classes.pics}>
                                 {pics.map(function (item) {
@@ -355,7 +476,7 @@ function GetStepContent(stepIndex) {
                     )}
                     {activeTabId === 1 && (
                         <React.Fragment>
-                            <div className={classes.AR}>
+                            {/* <div className={classes.AR}>
                                 <PartyMode />
                                 <text>Request AR model</text>
                             </div>
@@ -363,6 +484,13 @@ function GetStepContent(stepIndex) {
                             <div className={classes.pics}>
                                 {video1 == 'true' ? <div className={classes.video}><PlayArrow className={classes.video} /> <Cancel className={classes.cancel} /></div> : <AddBox className={classes.pic} />}
 
+                            </div> */}
+                            <div>
+                                <TextField value={videoLink} onChange={e => setVideoLink(e.target.value)} InputProps={{
+                                    startAdornment: (
+                                        <InputAdornment position="start"><VideoLibraryIcon /></InputAdornment>
+                                    ),
+                                }} id="facebook" placeholder="School Facebook Link" fullWidth />
                             </div>
                         </React.Fragment>
                     )}
@@ -372,7 +500,7 @@ function GetStepContent(stepIndex) {
         case 2:
             return <div className={classes.box}>
                 <Widget title='Fee Details' disableWidgetMenu>
-                    <Fee />
+                    <Fee group={educationLevel} />
                 </Widget>
             </div>;
         case 3:
@@ -400,7 +528,10 @@ function GetStepContent(stepIndex) {
                 <Widget title='Request submitted' disableWidgetMenu>
                     <text>Process for adding your school has been completed.</text>
                     <br />
-                    <text>Your request has been submitted and will be processed soon.</text>
+                    <text>Click Finish to Create School.</text>
+                    <br />
+                    <br />
+                    <Button onClick={() => uploadImages(files)}>Finish</Button>
                 </Widget>
             </div>;;
         default:
@@ -445,7 +576,7 @@ export default function AdminAdding(props) {
                 ) : (
                     <div>
                         <div >
-                            <Typography className={classes.instructions}>{GetStepContent(activeStep)}</Typography>
+                            <Typography className={classes.instructions}>{GetStepContent(activeStep, props)}</Typography>
                         </div>
                         <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
                             <Button
@@ -459,6 +590,8 @@ export default function AdminAdding(props) {
                             <Button variant="contained" className={classes.button}
                                 onClick={activeStep === 4 ? () => props.history.push('/adminDashboard') : handleNext}
                             >
+                                {/* onClick={activeStep === 4 ? () => props.history.push('/adminDashboard') : handleNext} */}
+
                                 {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
                             </Button>
                         </div>
@@ -501,6 +634,15 @@ function AddMarkerToClick() {
             setMarkers([newMarker]);
         },
     })
+    console.log("Current location")
+    //console.log(markers)
+    //console.log(markers[0])
+    if (markers[0] != undefined) {
+        console.log(markers[0].lat)
+        selectedlocation.latitude = markers[0].lat
+        console.log(markers[0].lng)
+        selectedlocation.longitude = markers[0].lng
+    }
 
     return (
         <>

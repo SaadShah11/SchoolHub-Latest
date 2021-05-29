@@ -9,7 +9,7 @@ import AuthService from "../../services/auth.service";
 import SearchIcon from '@material-ui/icons/Search';
 // components
 import Widget from "../../components/Widget/Widget";
-import { useRechartToPng } from "recharts-to-png";
+// import { useRechartToPng } from "recharts-to-png";
 import FileSaver from "file-saver";
 
 
@@ -91,23 +91,6 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
   }
 }))
-const ratingsdata = [
-  { name: "Pak turk international school", Ratings: 5 },
-  { name: "Roots school and college", Ratings: 4 },
-  { name: "Allied schools system", Ratings: 2 },
-  { name: "Army public school", Ratings: 5 },
-];
-
-const datafee = [
-  { name: "Pak turk international school", primary: 5000, middle: 10000, higher: 12000 },
-  { name: "Roots school and college", primary: 3000, middle: 7000, higher: 10000 },
-  { name: "Allied schools system", primary: 8000, middle: 10000, higher: 11000 },
-];
-const searchresults = [
-  { id: '1', name: 'Army Public School, Islamabad', location: 'I-8 markaz, Islamabad' },
-  { id: '2', name: 'Pak Turk International School, Islamabad', location: 'Taramri chowk, Islamabad' },
-  { id: '3', name: 'Grafton School, Islamabad', location: 'Taramri chowk, Islamabad' }
-]
 
 let newData = {}
 
@@ -117,15 +100,15 @@ export default function Charts(props) {
   var theme = useTheme();
   var classes = useStyles();
 
-  const [png, ref] = useRechartToPng();
+  // const [png, ref] = useRechartToPng();
 
-  const handleDownload = React.useCallback(async () => {
-    FileSaver.saveAs(png, "myChart.png");
-  }, [png]);
+  // const handleDownload = React.useCallback(async () => {
+  //   // FileSaver.saveAs(png, "myChart.png");
+  // }, [png]);
 
-  const handleDownload1 = React.useCallback(async () => {
-    FileSaver.saveAs(png, "myChart1.png");
-  }, [png]);
+  // const handleDownload1 = React.useCallback(async () => {
+  //   // FileSaver.saveAs(png, "myChart1.png");
+  // }, [png]);
 
   let [searchValue, setSearchValue] = useState("");
   var [searchResults, setSearchResults] = useState();
@@ -198,7 +181,8 @@ export default function Charts(props) {
       let request;
       console.log("inside get all reviews")
       request = await axios.get("http://localhost:8080/review/reviews")
-      console.log("request")
+      console.log("Reviews request")
+      console.log(request.data)
       setAllReviews(request.data)
       return request.data;
     }
@@ -264,7 +248,11 @@ export default function Charts(props) {
     // {return <GetAllPosts allPosts= {allPosts}/>}
     displayResults = searchResults.map((i) => {
 
+      console.log("Reviews")
+      console.log(getReviews)
       const ratingObject = getReviews.filter((items) => items.schoolID == i._id)
+      console.log("rating Object")
+      console.log(ratingObject)
       //console.log("rating Obj")
       //console.log(ratingObject)
       let totalRating = 0;
@@ -325,7 +313,9 @@ export default function Charts(props) {
   try {
     displayBarGraph = <Widget title="Ratings Comparision" noBodyPadding upperTitle disableWidgetMenu>
       <ResponsiveContainer width="100%" height={350} >
-        <BarChart ref={ref} width={730} height={250} data={getschools}>
+        <BarChart
+          // ref={ref} 
+          width={730} height={250} data={getschools}>
 
           <XAxis dataKey="schoolName" />
           <YAxis domain={[0, 5]} label={{ value: 'Average Ratings', angle: -90 }} />
@@ -335,7 +325,7 @@ export default function Charts(props) {
         </BarChart>
 
       </ResponsiveContainer>
-      <Button onClick={handleDownload}>Download</Button>
+      {/* <Button onClick={handleDownload}>Download</Button> */}
     </Widget>
   } catch (err) {
     console.log(err)
@@ -348,7 +338,7 @@ export default function Charts(props) {
     return <Widget title="Fee Comparision" noBodyPadding upperTitle disableWidgetMenu>
       <ResponsiveContainer width="100%" height={300}>
         <BarChart
-          ref={ref}
+          // ref={ref}
           width={500}
           height={400}
           data={getschools}
@@ -369,7 +359,7 @@ export default function Charts(props) {
           <Bar dataKey="higher" fill="#43445d" />
         </BarChart>
       </ResponsiveContainer>
-      <Button onClick={handleDownload1}>Download</Button>
+      {/* <Button onClick={handleDownload1}>Download</Button> */}
     </Widget>
     //}, [reload])
   }

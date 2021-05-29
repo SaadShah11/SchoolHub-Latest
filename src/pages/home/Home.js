@@ -30,10 +30,14 @@ let post = {
   comments: {}
 }
 
+const user = AuthService.getCurrentUser()
+console.log(user)
+
 export default function Home(props) {
 
   var [isLoading, setIsLoading] = useState(false);
   var [loadingPage, setLoadingPage] = useState(false);
+  var [onlyTextBool, setOnlyTextBool] = useState(false);
   var [allPosts, setAllPosts] = useState()
   var [kee, setKee] = useState()
   let [reloadHome, setReloadHome] = useState(false)
@@ -54,10 +58,6 @@ export default function Home(props) {
   //const auth = useContext(AuthContext);
   var classes = useStyles();
 
-  const user = AuthService.getCurrentUser()
-  console.log(user)
-
-
   // var [useridValue, setUseridValue] = useState("");
   // var [usernameValue, setUsernameValue] = useState("");
   var [textValue, setTextValue] = useState("");
@@ -69,14 +69,15 @@ export default function Home(props) {
   let postBool;
   let imgBool;
 
-  const allInputs = { imgUrl: '' }
+  // const allInputs = { imgUrl: '' }
   const [imageAsFile, setImageAsFile] = useState('')
-  const [imageAsUrl, setImageAsUrl] = useState(allInputs)
+  const [imageAsUrl, setImageAsUrl] = useState({ imgUrl: '' })
+  const [progress, setProgress] = useState(0)
 
   const handleImageAsFile = (e) => {
     const image = e.target.files[0]
-    console.log("image")
-    console.log(image)
+    // console.log("image")
+    // console.log(image)
 
     if (image !== undefined) {
       var imageExtension = image.name.split('.').pop();
@@ -85,7 +86,8 @@ export default function Home(props) {
       let newImage = uuidv4() + '.' + imageExtension;
       console.log(newImage)
 
-      setImageAsFile(imageFile => (image))//(newImage))
+      // setImageAsFile(imageFile => (image))//(newImage))
+      setImageAsFile(image)
 
       imgBool = true
       setImageBoolean(true)
@@ -94,30 +96,41 @@ export default function Home(props) {
 
   const handleFireBaseUpload = e => {
     //e.preventDefault()
-    console.log('start of upload')
+
     // async magic goes here...
     if (imageAsFile === '') {
+      setOnlyTextBool(true)
       console.error(`not an image, the image file is a ${typeof (imageAsFile)}`)
+    } else {
+      console.log('start of upload')
+      const uploadTask = storage.ref(`/images/${imageAsFile.name}`).put(imageAsFile)
+
+      //initiates the firebase side uploading 
+      uploadTask.on('state_changed',
+        (snapShot) => {
+          //takes a snap shot of the process as it is happening
+          const progress = Math.round(
+            (snapShot.bytesTransferred / snapShot.totalBytes) * 100
+          );
+          setProgress(progress)
+          if (progress == 100) {
+            setProgress(0)
+          }
+          console.log(snapShot)
+        }, (err) => {
+          //catches the errors
+          console.log(err)
+        }, () => {
+          // gets the functions from storage refences the image storage in firebase by the children
+          // gets the download url then sets the image from firebase as the value for the imgUrl key:
+          storage.ref('images').child(imageAsFile.name).getDownloadURL()
+            .then(fireBaseUrl => {
+              setImageAsUrl(prevObject => ({ ...prevObject, imgUrl: fireBaseUrl }))
+            })
+
+        })
     }
-    const uploadTask = storage.ref(`/images/${imageAsFile.name}`).put(imageAsFile)
 
-    //initiates the firebase side uploading 
-    uploadTask.on('state_changed',
-      (snapShot) => {
-        //takes a snap shot of the process as it is happening
-        console.log(snapShot)
-      }, (err) => {
-        //catches the errors
-        console.log(err)
-      }, () => {
-        // gets the functions from storage refences the image storage in firebase by the children
-        // gets the download url then sets the image from firebase as the value for the imgUrl key:
-        storage.ref('images').child(imageAsFile.name).getDownloadURL()
-          .then(fireBaseUrl => {
-            setImageAsUrl(prevObject => ({ ...prevObject, imgUrl: fireBaseUrl }))
-          })
-
-      })
   }
 
   const postSubmit = (PostBool) => {
@@ -171,12 +184,7 @@ export default function Home(props) {
         request = await axios.post("http://localhost:8080" + props.fetchUrl, post)
         console.log("request")
         console.log(request)
-        // if (loadPosts === true) {
-        //   setLoadPosts(false)
-        // } else {
-        //   setLoadPosts(true)
-        // }
-        //window.location.reload()
+
         setLoadingPage(false)
         setReloadHome(true)
         return request;
@@ -195,6 +203,7 @@ export default function Home(props) {
     if (imageAsUrl.imgUrl === '') {
       console.log("empty img")
       console.log(imageAsUrl.imgUrl)
+
     } else {
       console.log("inside else img")
       postBool = true
@@ -202,6 +211,10 @@ export default function Home(props) {
       setImageBoolean(false)
     }
   } else {
+    if (onlyTextBool == true) {
+      postBool = true
+      postSubmit(postBool)
+    }
     console.log("bool:")
     console.log(imgBoolean)
   }
@@ -244,6 +257,7 @@ export default function Home(props) {
         {
           loadingPage ? <Loading /> :
             <Grid item md={8}>
+              <progress value={progress} max="100" />
               <Widget title="What's on your mind?" disableWidgetMenu>
                 <form onSubmit={handleFireBaseUpload}>
                   <TextField className={classes.textfield} value={textValue}
@@ -265,17 +279,17 @@ export default function Home(props) {
               </Widget>
               {/* <div><img src={imageAsUrl.imgUrl} alt="image tag" /></div> */}
             </Grid>
-            }
+        }
         {/* <img src={imageAsUrl.imgUrl} alt="image tag" /> */}
-      
+
         <div style={{ width: '95%', marginLeft: '15px' }}>
           {
             isLoading ? (<CircularProgress size={50} />) : displayPosts
           }
         </div>
-        
+
       </Grid>
-        
+
 
     </>
   );

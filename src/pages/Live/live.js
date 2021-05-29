@@ -10,6 +10,7 @@ import ReactPlayer from 'react-player'
 import Iframe from 'react-iframe'
 import ReactHlsPlayer from 'react-hls-player'
 import { CometChat } from "@cometchat-pro/chat"
+import { useUserState } from "../../context/UserContext";
 //import Iframe from 'react-iframe'
 // styles
 
@@ -102,6 +103,22 @@ const detail = { name: 'School-Hub', time: '20 mins ago' }
 var stream = 1
 export default function Live(props) {
 
+  var { isAuthenticated } = useUserState();
+  const appID = "3372201956af684";
+  const region = "us";
+  const appSetting = new CometChat.AppSettingsBuilder().subscribePresenceForAllUsers().setRegion(region).build();
+
+  CometChat.init(appID, appSetting).then(
+    () => {
+      console.log("Initialization completed successfully");
+      // You can now call login function.
+    },
+    error => {
+      console.log("Initialization failed with error:", error);
+      // Check the reason for error and take appropriate action.
+    }
+  );
+
   let [allComments, setAllComments] = useState()
   let [commentValue, setCommentValue] = useState()
 
@@ -109,6 +126,7 @@ export default function Live(props) {
   console.log("props")
   console.log(props.location.state)
   let liveStreamData = props.location.state
+
 
   let srcUrl = "https://dist.bambuser.net/player/?resourceUri="
   //let url = 'https%3A%2F%2Fcdn.bambuser.net%2Fgroups%2F101842%2Fbroadcasts%3Fby_authors%3D%26title_contains%3D%26has_any_tags%3D%26has_all_tags%3D%26da_id%3D60ab58d7-50fb-320f-94fd-6b79d9cb36b4%26da_timestamp%3D1621954098%26da_signature_method%3DHMAC-SHA256%26da_ttl%3D0%26da_static%3D1%26da_signature%3Dcac1fbd7eac0b1d480f6992d50c8748fa32eb6d1bd6e6e7c63769b90b06733ba'
@@ -122,10 +140,11 @@ export default function Live(props) {
   console.log(srcUrl1)
 
   CometChat.addMessageListener(
-    "UNIQUE_LISTENER_ID",
+    liveStreamData.schoolID,
     new CometChat.MessageListener({
       onTextMessageReceived: textMessage => {
         console.log("Text message received successfully", textMessage);
+        console.log(textMessage)
       }
     })
   );
@@ -165,8 +184,8 @@ export default function Live(props) {
                   })}
                 </div>
                 <div class={classes.commentbox}>
-                  <InputBase className={classes.comment} onChange={(e)=>{setCommentValue(e.target.value)}} value={commentValue} placeholder='Leave a comment'></InputBase>
-                  <SendIcon class={classes.commButton}/>
+                  <InputBase className={classes.comment} onChange={(e) => { setCommentValue(e.target.value) }} value={commentValue} placeholder='Leave a comment'></InputBase>
+                  <SendIcon class={classes.commButton} />
                 </div>
               </div>
             </Widget>

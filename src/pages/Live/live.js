@@ -11,6 +11,7 @@ import Iframe from 'react-iframe'
 import ReactHlsPlayer from 'react-hls-player'
 import { CometChat } from "@cometchat-pro/chat"
 import { useUserState } from "../../context/UserContext";
+import Header from '../Admin/Header/Header'
 //import Iframe from 'react-iframe'
 // styles
 
@@ -151,6 +152,7 @@ export default function Live(props) {
 
   return (
     <>
+    <Header history={props.history}/>
       {stream == 0 ? <div className={classes.no}><Typography variant='h2'>There is no stream available at the moment.</Typography> <Error className={classes.error} /></div> :
         <Grid container spacing={2}>
           <Grid item md={8}>

@@ -49,9 +49,10 @@ export default function Home(props) {
 
   let handleFollow = (followBool) => {
     console.log("Handle Follow")
+
     let finalObj = {
       userID: selectedUser.userID,
-      follow: followValue
+      follow: followBool
     }
     updateFollowing(finalObj)
 
@@ -200,6 +201,18 @@ export default function Home(props) {
     //     }
     //   }
     // }
+    if (currentUserData != undefined) {
+      // if (userData.length !== 0) {
+      console.log("Inside Iff")
+      console.log(currentUserData)
+      let followExists = currentUserData.following.filter(follow => follow.userID == selectedUser.userID)
+      if (followExists.length != 0) {
+        setFollowValue(followExists[0].follow)
+        console.log("Inside FollowExists")
+        console.log(followExists[0].follow)
+      }
+      //}
+    }
 
   }, [reloadButton]);
 
@@ -226,19 +239,23 @@ export default function Home(props) {
 
   let userDetails
 
-  try {
-    if (userData != undefined) {
-      console.log("inside diaplay Details")
-      userDetails = <div>
-
-      </div>
-    } else {
-      console.log("nothing")
-    }
-  } catch (err) {
-    console.log("error")
-    console.log(err)
-  }
+  // try {
+  //   if (currentUserData != undefined) {
+  //     // if (userData.length !== 0) {
+  //     console.log("Inside Iff")
+  //     console.log(currentUserData)
+  //     let followExists = currentUserData.following.filter(follow => follow.userID == selectedUser.userID)
+  //     if (followExists.length != 0) {
+  //       setFollowValue(followExists[0].follow)
+  //       console.log("Inside FollowExists")
+  //       console.log(followExists[0].follow)
+  //     }
+  //     //}
+  //   }
+  // } catch (err) {
+  //   console.log("error")
+  //   console.log(err)
+  // }
 
   return (
     <>

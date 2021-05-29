@@ -95,7 +95,17 @@ export default function Maps(props) {
       request = await axios.post("http://localhost:8080/user_management/searchUser/" + newData.search, filter)
       console.log("request")
       console.log(request)
-      setSearchResults(request.data)
+      let finalArr = []
+      request.data.map((userObj)=>{
+        if(userObj._id != user._id){
+          finalArr.push(userObj)
+        }else{
+          console.log("Else")
+        }
+      })
+      console.log(finalArr)
+      setSearchResults(finalArr)
+      //setSearchResults(request.data)
       //window.location.reload()
       return request.data;
     }

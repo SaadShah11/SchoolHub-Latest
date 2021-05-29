@@ -37,14 +37,15 @@ function EditFee(props) {
   var classes = useStyles();
 
   const schoolID = AuthService.getCurrentSchool()
-  console.log("SCHOOL")
-  console.log(schoolID)
+  // console.log("SCHOOL")
+  // console.log(schoolID)
 
   var [reloadHome, setReloadHome] = useState(false)
+  var [allSchools, setAllSchools] = useState()
 
-  var [bool1, setBool1] = useState(false)
-  var [bool2, setBool2] = useState(false)
-  var [bool3, setBool3] = useState(false)
+  var [bool1, setBool1] = useState(true)
+  var [bool2, setBool2] = useState(true)
+  var [bool3, setBool3] = useState(true)
 
   var [row1_1, setRow1_1] = useState()
   var [row1_2, setRow1_2] = useState()
@@ -84,41 +85,41 @@ function EditFee(props) {
 
   primary = {
     group: 'primary',
-    admissionFee: row1_1,
-    tutionFee: row2_1,
-    examFee: row3_1,
-    sportsFee: row4_1,
-    labFee: row5_1,
-    libraryFee: row6_1,
-    totalAdmissionFee: row7_1,
-    monthlyFee: row8_1,
-    othersFee: row9_1,
+    admissionFee: parseInt(row1_1, 10),
+    tutionFee: parseInt(row2_1, 10),
+    examFee: parseInt(row3_1, 10),
+    sportsFee: parseInt(row4_1, 10),
+    labFee: parseInt(row5_1, 10),
+    libraryFee: parseInt(row6_1, 10),
+    totalAdmissionFee: parseInt(row7_1, 10),
+    monthlyFee: parseInt(row8_1, 10),
+    othersFee: parseInt(row9_1, 10),
   }
 
   middle = {
     group: 'middle',
-    admissionFee: row1_2,
-    tutionFee: row2_2,
-    examFee: row3_2,
-    sportsFee: row4_2,
-    labFee: row5_2,
-    libraryFee: row6_2,
-    totalAdmissionFee: row7_2,
-    monthlyFee: row8_2,
-    othersFee: row9_2,
+    admissionFee: parseInt(row1_2, 10),
+    tutionFee: parseInt(row2_2, 10),
+    examFee: parseInt(row3_2, 10),
+    sportsFee: parseInt(row4_2, 10),
+    labFee: parseInt(row5_2, 10),
+    libraryFee: parseInt(row6_2, 10),
+    totalAdmissionFee: parseInt(row7_2, 10),
+    monthlyFee: parseInt(row8_2, 10),
+    othersFee: parseInt(row9_2, 10)
   }
 
   higher = {
     group: 'higher',
-    admissionFee: row1_3,
-    tutionFee: row2_3,
-    examFee: row3_3,
-    sportsFee: row4_3,
-    labFee: row5_3,
-    libraryFee: row6_3,
-    totalAdmissionFee: row7_3,
-    monthlyFee: row8_3,
-    othersFee: row9_3,
+    admissionFee: parseInt(row1_3, 10),
+    tutionFee: parseInt(row2_3, 10),
+    examFee: parseInt(row3_3, 10),
+    sportsFee: parseInt(row4_3, 10),
+    labFee: parseInt(row5_3, 10),
+    libraryFee: parseInt(row6_3, 10),
+    totalAdmissionFee: parseInt(row7_3, 10),
+    monthlyFee: parseInt(row8_3, 10),
+    othersFee: parseInt(row9_3, 10),
   }
 
   const getSchool = useCallback(async () => {
@@ -128,48 +129,55 @@ function EditFee(props) {
       console.log("request")
       console.log(request.data.schoolName)
 
-      //setAllSchools(request.data)
+      setAllSchools(request.data[0])
+      console.log("Fee Structure")
+      console.log(request.data[0].feeStructure)
 
-      if (request.data[0].educationLevel.primary == true) {
-        console.log("inside bool1")
-        setBool1(true)
-        setRow1_1(request.data[0].feeStructure.admissionFee)
-        setRow2_1(request.data[0].feeStructure.tutionFee)
-        setRow3_1(request.data[0].feeStructure.examFee)
-        setRow4_1(request.data[0].feeStructure.sportsFee)
-        setRow5_1(request.data[0].feeStructure.labFee)
-        setRow6_1(request.data[0].feeStructure.libraryFee)
-        setRow7_1(request.data[0].feeStructure.totalAdmissionFee)
-        setRow8_1(request.data[0].feeStructure.monthlyFee)
-        setRow9_1(request.data[0].feeStructure.othersFee)
-      }
-      if (request.data[0].educationLevel.middle == true) {
-        console.log("inside bool2")
-        setBool2(true)
-        setRow1_2(request.data[0].feeStructure.admissionFee)
-        setRow2_2(request.data[0].feeStructure.tutionFee)
-        setRow3_2(request.data[0].feeStructure.examFee)
-        setRow4_2(request.data[0].feeStructure.sportsFee)
-        setRow5_2(request.data[0].feeStructure.labFee)
-        setRow6_2(request.data[0].feeStructure.libraryFee)
-        setRow7_2(request.data[0].feeStructure.totalAdmissionFee)
-        setRow8_2(request.data[0].feeStructure.monthlyFee)
-        setRow9_2(request.data[0].feeStructure.othersFee)
-      }
-      if (request.data[0].educationLevel.higher == true) {
-        console.log("inside bool3")
-        setBool3(true)
-        setRow1_3(request.data[0].feeStructure.admissionFee)
-        setRow2_3(request.data[0].feeStructure.tutionFee)
-        setRow3_3(request.data[0].feeStructure.examFee)
-        setRow4_3(request.data[0].feeStructure.sportsFee)
-        setRow5_3(request.data[0].feeStructure.labFee)
-        setRow6_3(request.data[0].feeStructure.libraryFee)
-        setRow7_3(request.data[0].feeStructure.totalAdmissionFee)
-        setRow8_3(request.data[0].feeStructure.monthlyFee)
-        setRow9_3(request.data[0].feeStructure.othersFee)
-      }
+      for (let i = 0; i < request.data[0].feeStructure.length; i++) {
+        if (request.data[0].feeStructure[i].group == 'primary') {
+          if (request.data[0].educationLevel.primary == true) {
+            setBool1(false)
+          }
+          setRow1_1(request.data[0].feeStructure[i].admissionFee)
+          setRow2_1(request.data[0].feeStructure[i].tutionFee)
+          setRow3_1(request.data[0].feeStructure[i].examFee)
+          setRow4_1(request.data[0].feeStructure[i].sportsFee)
+          setRow5_1(request.data[0].feeStructure[i].labFee)
+          setRow6_1(request.data[0].feeStructure[i].libraryFee)
+          setRow7_1(request.data[0].feeStructure[i].totalAdmissionFee)
+          setRow8_1(request.data[0].feeStructure[i].monthlyFee)
+          setRow9_1(request.data[0].feeStructure[i].othersFee)
+        }
+        if (request.data[0].feeStructure[i].group == 'middle') {
+          if (request.data[0].educationLevel.middle == true) {
+            setBool2(false)
+          }
+          setRow1_2(request.data[0].feeStructure[i].admissionFee)
+          setRow2_2(request.data[0].feeStructure[i].tutionFee)
+          setRow3_2(request.data[0].feeStructure[i].examFee)
+          setRow4_2(request.data[0].feeStructure[i].sportsFee)
+          setRow5_2(request.data[0].feeStructure[i].labFee)
+          setRow6_2(request.data[0].feeStructure[i].libraryFee)
+          setRow7_2(request.data[0].feeStructure[i].totalAdmissionFee)
+          setRow8_2(request.data[0].feeStructure[i].monthlyFee)
+          setRow9_2(request.data[0].feeStructure[i].othersFee)
+        }
+        if (request.data[0].feeStructure[i].group == 'higher') {
+          if (request.data[0].educationLevel.higher == true) {
+            setBool3(false)
+          }
+          setRow1_3(request.data[0].feeStructure[i].admissionFee)
+          setRow2_3(request.data[0].feeStructure[i].tutionFee)
+          setRow3_3(request.data[0].feeStructure[i].examFee)
+          setRow4_3(request.data[0].feeStructure[i].sportsFee)
+          setRow5_3(request.data[0].feeStructure[i].labFee)
+          setRow6_3(request.data[0].feeStructure[i].libraryFee)
+          setRow7_3(request.data[0].feeStructure[i].totalAdmissionFee)
+          setRow8_3(request.data[0].feeStructure[i].monthlyFee)
+          setRow9_3(request.data[0].feeStructure[i].othersFee)
+        }
 
+      }
       return request.data;
     }
     //And here you call it
@@ -177,22 +185,60 @@ function EditFee(props) {
     setReloadHome(true)
   }, [])
 
-  useEffect(()=>{
+  let updateFee = () => {
+    let finalArr = []
+    if (allSchools.educationLevel.primary == true) {
+      finalArr.push(primary)
+    }
+    if (allSchools.educationLevel.middle == true) {
+      finalArr.push(middle)
+    }
+    if (allSchools.educationLevel.higher == true) {
+      finalArr.push(higher)
+    }
+
+    console.log("Final Object")
+    console.log(finalArr)
+    updateSchoolFee(finalArr)
+  }
+
+  const updateSchoolFee = useCallback(async (schoolFinal) => {
+
+    async function fetchData(schoolFinal) {
+
+      let request;
+      console.log('inside fetchdata')
+      console.log(schoolFinal)
+
+      request = await axios.patch("http://localhost:8080/school/Edit_SchoolFee/" + schoolID.schoolID, schoolFinal)
+      console.log("request")
+      console.log(request)
+      alert("School Fee Updated!")
+      return request;
+    }
+    fetchData(schoolFinal)
+
+  }, [])
+
+
+  useEffect(() => {
     getSchool()
+
     setReloadHome(false)
-  },[reloadHome])
+  }, [reloadHome])
 
   const data = [
-    { Des: 'Admission Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow1_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow1_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow1_3(e.target.value)} /> },
-    { Des: 'Tution Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow2_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow2_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow2_3(e.target.value)} /> },
-    { Des: 'Exam Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow3_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow3_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow3_3(e.target.value)} /> },
-    { Des: 'Sport Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow4_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow4_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow4_3(e.target.value)} /> },
-    { Des: 'Lab Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow5_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow5_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow5_3(e.target.value)} /> },
-    { Des: 'Library Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow6_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow6_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow6_3(e.target.value)} /> },
-    { Des: 'Total Admission Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow7_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow7_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow7_3(e.target.value)} /> },
-    { Des: 'Total Monthly Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow8_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow8_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow8_3(e.target.value)} /> },
-    { Des: 'Others Fee', name: <TextField disabled={bool1} placeholder="" onChange={e => setRow9_1(e.target.value)} />, name2: <TextField disabled={bool2} placeholder="" onChange={e => setRow9_2(e.target.value)} />, name3: <TextField disabled={bool3} placeholder="" onChange={e => setRow9_3(e.target.value)} /> },
+    { Des: 'Admission Fee', name: <TextField type="number" value={row1_1} disabled={bool1} placeholder="" onChange={e => setRow1_1(e.target.value)} />, name2: <TextField type="number" value={row1_2} disabled={bool2} placeholder="" onChange={e => setRow1_2(e.target.value)} />, name3: <TextField type="number" value={row1_3} disabled={bool3} placeholder="" onChange={e => setRow1_3(e.target.value)} /> },
+    { Des: 'Tution Fee', name: <TextField type="number" value={row2_1} disabled={bool1} placeholder="" onChange={e => setRow2_1(e.target.value)} />, name2: <TextField type="number" value={row2_2} disabled={bool2} placeholder="" onChange={e => setRow2_2(e.target.value)} />, name3: <TextField type="number" value={row2_3} disabled={bool3} placeholder="" onChange={e => setRow2_3(e.target.value)} /> },
+    { Des: 'Exam Fee', name: <TextField type="number" value={row3_1} disabled={bool1} placeholder="" onChange={e => setRow3_1(e.target.value)} />, name2: <TextField type="number" value={row3_2} disabled={bool2} placeholder="" onChange={e => setRow3_2(e.target.value)} />, name3: <TextField type="number" value={row3_3} disabled={bool3} placeholder="" onChange={e => setRow3_3(e.target.value)} /> },
+    { Des: 'Sport Fee', name: <TextField type="number" value={row4_1} disabled={bool1} placeholder="" onChange={e => setRow4_1(e.target.value)} />, name2: <TextField type="number" value={row4_2} disabled={bool2} placeholder="" onChange={e => setRow4_2(e.target.value)} />, name3: <TextField type="number" value={row4_3} disabled={bool3} placeholder="" onChange={e => setRow4_3(e.target.value)} /> },
+    { Des: 'Lab Fee', name: <TextField type="number" value={row5_1} disabled={bool1} placeholder="" onChange={e => setRow5_1(e.target.value)} />, name2: <TextField type="number" value={row5_2} disabled={bool2} placeholder="" onChange={e => setRow5_2(e.target.value)} />, name3: <TextField type="number" value={row5_3} disabled={bool3} placeholder="" onChange={e => setRow5_3(e.target.value)} /> },
+    { Des: 'Library Fee', name: <TextField type="number" value={row6_1} disabled={bool1} placeholder="" onChange={e => setRow6_1(e.target.value)} />, name2: <TextField type="number" value={row6_2} disabled={bool2} placeholder="" onChange={e => setRow6_2(e.target.value)} />, name3: <TextField type="number" value={row6_3} disabled={bool3} placeholder="" onChange={e => setRow6_3(e.target.value)} /> },
+    { Des: 'Total Admission Fee', name: <TextField type="number" value={row7_1} disabled={bool1} placeholder="" onChange={e => setRow7_1(e.target.value)} />, name2: <TextField type="number" value={row7_2} disabled={bool2} placeholder="" onChange={e => setRow7_2(e.target.value)} />, name3: <TextField type="number" value={row7_3} disabled={bool3} placeholder="" onChange={e => setRow7_3(e.target.value)} /> },
+    { Des: 'Total Monthly Fee', name: <TextField type="number" value={row8_1} disabled={bool1} placeholder="" onChange={e => setRow8_1(e.target.value)} />, name2: <TextField type="number" value={row8_2} disabled={bool2} placeholder="" onChange={e => setRow8_2(e.target.value)} />, name3: <TextField type="number" value={row8_3} disabled={bool3} placeholder="" onChange={e => setRow8_3(e.target.value)} /> },
+    { Des: 'Others Fee', name: <TextField type="number" value={row9_1} disabled={bool1} placeholder="" onChange={e => setRow9_1(e.target.value)} />, name2: <TextField type="number" value={row9_2} disabled={bool2} placeholder="" onChange={e => setRow9_2(e.target.value)} />, name3: <TextField type="number" value={row9_3} disabled={bool3} placeholder="" onChange={e => setRow9_3(e.target.value)} /> },
   ];
+
   const columns = [{
     dataField: 'Des',
     text: 'Description'
@@ -213,6 +259,14 @@ function EditFee(props) {
 
   }];
 
+  console.log("Data:")
+  // console.log(primary)
+  // console.log(middle)
+  // console.log(higher)
+  console.log(bool1)
+  console.log(bool2)
+  console.log(bool3)
+
   return (
     <div>
       <Header history={props.history} />
@@ -226,7 +280,7 @@ function EditFee(props) {
               onClick={() => { props.history.goBack() }}
             > Cancel</Button>
             <Button size="large" variant="contained"
-              className={classes.button}
+              className={classes.button} onClick={()=>updateFee()}
             > Update</Button>
           </Widget>
 

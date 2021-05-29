@@ -286,10 +286,12 @@ export default function Charts(props) {
       //console.log("Length of FeeStruc")
       //console.log(i.feeStructure.length)
       for (let ii = 0; ii < i.feeStructure.length; ii++) {
-        if (i.feeStructure[ii].group === "1-5") {
+        if (i.feeStructure[ii].group === "primary") {
           primary = i.feeStructure[ii].tutionFee
-        } else if (i.feeStructure[ii].group === "5-8") {
+        } else if (i.feeStructure[ii].group === "middle") {
           middle = i.feeStructure[ii].tutionFee
+        } else if (i.feeStructure[ii].group === "higher") {
+          higher = i.feeStructure[ii].tutionFee
         }
       }
 

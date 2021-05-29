@@ -34,6 +34,7 @@ import AuthService from "../services/auth.service"
 
 import superAdminlogin from '../pages/SuperAdmin/login/Login'
 import SuperAdmin from './LayoutSuperAdmin'
+import SuperAdminDashboard from '../pages/SuperAdmin/Dashboard'
 
 import Faq from '../pages/faq/Feedback'
 
@@ -61,17 +62,22 @@ export default function App() {
       // Check the reason for error and take appropriate action.
     }
   );
-  const authKey = "6686381f7d6999ea04c5eb3feea375ae7d205b0f";
-  const uid = user._id;
 
-  CometChat.login(uid, authKey).then(
-    user => {
-      console.log("Login Successful:", { user });
-    },
-    error => {
-      console.log("Login failed with exception:", { error });
-    }
-  );
+  if (user != null) {
+
+    const authKey = "6686381f7d6999ea04c5eb3feea375ae7d205b0f";
+    const uid = user._id;
+
+    CometChat.login(uid, authKey).then(
+      user => {
+        console.log("Login Successful:", { user });
+      },
+      error => {
+        console.log("Login failed with exception:", { error });
+      }
+    );
+  }
+
 
   return (
     <HashRouter>
@@ -96,18 +102,18 @@ export default function App() {
         <Route exact path="/reviews" component={Feedback} />
         {/* <Route exact path="/app/liveStream"  component={LiveStream} /> */}
         <Route path="/app/liveStream" render={(props) => (
-              <LiveStream {...props} />
-            )} />
+          <LiveStream {...props} />
+        )} />
         <Route exact path="/uploadImage" component={uploadImage} />
 
         <Route exact path="/admin" component={AdminAdding} />
         <Route exact path="/adminDashboard" component={AdminDashboard} />
-        <Route exact path="/landing" component={Landing} />
+        <Route exact path="/" component={Landing} />
         {/* <Route exact path="/" render={(props) => (
           <Landing {...props} fetchUrl1={url1} fetchUrl2={url2} />
         )} /> */}
         {/* <Route exact path="/landing" component={Landing} /> */}
-        <Route exact path="/" render={(props) => (
+        <Route exact path="/login" render={(props) => (
           <Login {...props} fetchUrl1={url1} fetchUrl2={url2} />
         )} />
         <Route exact path="/live" component={Live} />
@@ -117,6 +123,8 @@ export default function App() {
 
         <Route exact path="/superAdmin" component={superAdminlogin} />
         <Route path="/superAdminDashboard" component={SuperAdmin} />
+        <Route path="/superAdminDashboard/dashboard" component={SuperAdminDashboard} />
+        {/* <Route path="/superAdminLayout/superAdminDashboard" component={SuperAdminDashboard} /> */}
 
         {/* <PublicRoute path="/login" render={(props) => (
           <Login {...props} fetchUrl={url1} fetchUrl2={url2} />

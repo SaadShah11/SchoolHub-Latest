@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import FilterListIcon from '@material-ui/icons/FilterList';
-import marker from '../../logo.png'
+// import marker from './mapMarker.png'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -19,9 +19,10 @@ import useStyles from "./styles";
 import axios from "../../Util/axios"
 import * as geolib from 'geolib';
 import AuthService from "../../services/auth.service";
+import { mdiConsoleLine } from "@mdi/js";
 
 const customMarker = new L.icon({
-  iconUrl: require("../../marker.png"),
+  iconUrl: require("./mapMarker.png"),
   iconSize: [25, 25],
   iconAnchor: [0, 0],
 });
@@ -63,9 +64,9 @@ let newData = {
 
 export default function Maps(props) {
 
-  const [value, setValue] = React.useState('Co-Education');
-  const [value2, setValue2] = React.useState('Primary');
-  const [value3, setValue3] = React.useState('Matric/Fsc');
+  // const [value, setValue] = React.useState('Co-Education');
+  // const [value2, setValue2] = React.useState('Primary');
+  // const [value3, setValue3] = React.useState('Matric/Fsc');
   let [searchValue, setSearchValue] = useState("");
   var [searchResults, setSearchResults] = useState();
   var [allSchools, setAllSchools] = useState()
@@ -85,6 +86,16 @@ export default function Maps(props) {
   var [educationType, setEducationType] = useState()
   //var [currentLocation, setCurrentLocation] = useState()
   const [open, setOpen] = React.useState(false);
+
+  const handleCloseReset = () => {
+    setFeeMin()
+    setFeeMax()
+    setDistance()
+    setSchoolType()
+    setEducationLevel()
+    setEducationType()
+    setOpen(false);
+  };
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -114,6 +125,8 @@ export default function Maps(props) {
   };
   var classes = useStyles();
   const position = [30.3753, 69.3451]
+
+  
 
   let handleSend = () => {
     let finalFilters = {
@@ -190,8 +203,8 @@ export default function Maps(props) {
       //   username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
       // />
       return (
-        <div class={classes.result} onClick={()=>{
-          AuthService.setCurrentSchool({schoolID:i._id})
+        <div class={classes.result} onClick={() => {
+          AuthService.setCurrentSchool({ schoolID: i._id })
           props.history.push("/schoolDetails");
           //props.history.push({ pathname: '/schoolDetails', data: i._id })
         }}>
@@ -234,7 +247,7 @@ export default function Maps(props) {
     console.log("inside allSchool If")
     displayLocation = allSchools.map((i) => {
       let key = i._id
-      let position = [Number(i.schoolCoordinates.longitude), Number(i.schoolCoordinates.latitude)]
+      let position = [Number(i.schoolCoordinates.latitude), Number(i.schoolCoordinates.longitude)]
       let content = i.aboutSchool
       let markers = {
         key: key,
@@ -255,10 +268,13 @@ export default function Maps(props) {
     console.log(distance)
   };
 
+  console.log("School type")
+  console.log(schoolType)
+
   return (
     <div>
       <Grid container spacing={1}>
-        <Grid item md={3}>
+        <Grid item md={4}>
           <Widget title="Search School Here" disableWidgetMenu>
             <div className={classes.searchfield}>
               <InputBase placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
@@ -291,8 +307,8 @@ export default function Maps(props) {
                   </div>
                   <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Fee: </text>
-                    <TextField placeholder="Min (PKR)" class={classes.feefield} onChange={e => setFeeMin(e.target.value)} />
-                    <TextField placeholder="Max (PKR)" class={classes.feefield} onChange={e => setFeeMax(e.target.value)} />
+                    <TextField placeholder="Min (PKR)" class={classes.feefield} value={feeMin} onChange={e => setFeeMin(e.target.value)} />
+                    <TextField placeholder="Max (PKR)" class={classes.feefield} value={feeMax} onChange={e => setFeeMax(e.target.value)} />
                   </div>
 
                   <div class={classes.eachF}>
@@ -317,15 +333,15 @@ export default function Maps(props) {
                     <text style={{ fontWeight: 'bold' }}>Education type: </text>
                     <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  "
                       value={educationType} onChange={handleChangeEducationType}>
-                      <FormControlLabel value="Matric/Fsc" control={<Radio />} label="Matric/Fsc" />
-                      <FormControlLabel value="IGCSE" control={<Radio />} label="IGCSE" />
+                      <FormControlLabel value="Arts" control={<Radio />} label="Arts" />
+                      <FormControlLabel value="Science" control={<Radio />} label="Science" />
                     </RadioGroup>
                   </div>
 
 
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={handleClose} color="primary">
+                  <Button onClick={handleCloseReset} color="primary">
                     Reset
                   </Button>
                   <Button onClick={handleClose} color="primary">
@@ -427,7 +443,7 @@ export default function Maps(props) {
           </Widget>
         </Grid>
 
-        <Grid item md={9}>
+        <Grid item md={8}>
           <Widget disableWidgetMenu>
             <MapContainer center={position}
               zoom={6}
@@ -440,10 +456,10 @@ export default function Maps(props) {
 
               <MyMarkersList markers={markersArray} />
               {/* <Marker position={position}>
-                  <Popup>
-                    You are here
+                <Popup>
+                  You are here
                   </Popup>
-                </Marker> */}
+              </Marker> */}
             </MapContainer>
           </Widget>
         </Grid>

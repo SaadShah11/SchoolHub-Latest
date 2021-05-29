@@ -2,8 +2,8 @@ import { makeStyles } from "@material-ui/styles";
 
 export default makeStyles(theme => ({
   mapContainer: {
-    height: "75vh",
-    width:'113vh',
+    height: "80vh",
+    width:'110vh',
   },
   searchfield:{
     display:'flex',

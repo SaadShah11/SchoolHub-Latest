@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { Grid, Typography } from "@material-ui/core";
 import { TextField, InputBase, Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
@@ -9,6 +9,7 @@ import SendIcon from '@material-ui/icons/Send';
 import ReactPlayer from 'react-player'
 import Iframe from 'react-iframe'
 import ReactHlsPlayer from 'react-hls-player'
+import { CometChat } from "@cometchat-pro/chat"
 //import Iframe from 'react-iframe'
 // styles
 
@@ -97,8 +98,12 @@ const comment = [
   { id: '3', name: 'Another Name', content: 'Brother asked a very good questions.' }
 ]
 const detail = { name: 'School-Hub', time: '20 mins ago' }
+
 var stream = 1
 export default function Live(props) {
+
+  let [allComments, setAllComments] = useState()
+  let [commentValue, setCommentValue] = useState()
 
   var classes = useStyles();
   console.log("props")
@@ -116,6 +121,15 @@ export default function Live(props) {
   let srcUrl1 = srcUrl + uri
   console.log(srcUrl1)
 
+  CometChat.addMessageListener(
+    "UNIQUE_LISTENER_ID",
+    new CometChat.MessageListener({
+      onTextMessageReceived: textMessage => {
+        console.log("Text message received successfully", textMessage);
+      }
+    })
+  );
+
   return (
     <>
       {stream == 0 ? <div className={classes.no}><Typography variant='h2'>There is no stream available at the moment.</Typography> <Error className={classes.error} /></div> :
@@ -130,8 +144,8 @@ export default function Live(props) {
                 </div>
               </div>
               <Iframe src={srcUrl1} style="border: none" width="850px"
-        height="450px"></Iframe>
-              
+                height="450px"></Iframe>
+
             </Widget>
           </Grid>
           <Grid item md={4}>
@@ -151,8 +165,8 @@ export default function Live(props) {
                   })}
                 </div>
                 <div class={classes.commentbox}>
-                  <InputBase className={classes.comment} placeholder='Leave a comment'></InputBase>
-                  <SendIcon class={classes.commButton} />
+                  <InputBase className={classes.comment} onChange={(e)=>{setCommentValue(e.target.value)}} value={commentValue} placeholder='Leave a comment'></InputBase>
+                  <SendIcon class={classes.commButton}/>
                 </div>
               </div>
             </Widget>

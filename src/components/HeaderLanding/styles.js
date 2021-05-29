@@ -18,7 +18,7 @@ export default makeStyles(theme => ({
     }
   },
   appBar: {
-    backgroundColor:'#a20a0a',
+    backgroundColor:'#43425d',
     width: "100vw",
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["margin"], {
@@ -133,9 +133,7 @@ export default makeStyles(theme => ({
   profileMenuIcon: {
     marginRight: theme.spacing(2),
     color: theme.palette.text.hint,
-    '&:hover': {
-      color: theme.palette.primary.main,
-    }
+    
   },
   profileMenuLink: {
     fontSize: 16,

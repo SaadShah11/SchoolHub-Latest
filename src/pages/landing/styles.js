@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 export default makeStyles(theme => ({
   mapContainer: {
     height: "100vh",
-    width:'149vh',
+    width:'130vh',
   },
   searchfield:{
     display:'flex',
@@ -65,9 +65,10 @@ export default makeStyles(theme => ({
     
   },
   eachF:{
-    disply:"flex",
+    alignItems:'center',
+    display:"flex",
     flexDirection:'row',
-    justifyContent:'space-around',
+    justifyContent:'space-between',
     width:'100%',
     paddingBottom:'10px'
   },
@@ -75,11 +76,8 @@ export default makeStyles(theme => ({
     float:'right',
   },
   feefield:{
-    textAlign:'center',
-    border:'1px solid rgba(0,0,0, 0.2)', 
-    width:'50%', 
-    height:"30px",
-    borderRadius:'5px'
+    width:'30%', 
+    marginLeft:'5px'
   },
 
   

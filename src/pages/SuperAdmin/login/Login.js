@@ -29,6 +29,7 @@ import axios from "../../../Util/axios"
 import AuthService from "../../../services/auth.service";
 
 let userLogin = {
+  type: 'Super Admin',
   email: "",
   password: ""
 }
@@ -75,8 +76,8 @@ function Login(props) {
         (response) => {
           console.log(response)
 
-          props.history.push("/superAdminDashboard");
-          window.location.reload();
+          props.history.push("/superAdminDashboard/dashboard");
+          // window.location.reload();
         },
         error => {
           console.log(error)

@@ -142,7 +142,7 @@ function Login(props) {
             var user = new CometChat.User(uid);
 
             user.setName(name);
-
+            console.log("Creating User in Comet chat")
             CometChat.createUser(user, authKey).then(
               user => {
                 console.log("user created", user);
@@ -203,7 +203,7 @@ function Login(props) {
                 }
               );
               props.history.push("/app/home");
-              window.location.reload();
+              // window.location.reload();
             }
           },
           error => {

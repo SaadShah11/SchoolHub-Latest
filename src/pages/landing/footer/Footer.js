@@ -4,7 +4,7 @@ import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
 import Insta from './instagram.png';
 import GitHubIcon from '@material-ui/icons/GitHub';
-import Logo from './logo.png'
+import Logo from '../../../logo.png'
 import PhoneIcon from '@material-ui/icons/Phone';
 import WhatsAppIcon from '@material-ui/icons/WhatsApp';
 import MailOutlineIcon from '@material-ui/icons/MailOutline';

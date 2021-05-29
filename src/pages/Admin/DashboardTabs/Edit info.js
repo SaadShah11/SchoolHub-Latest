@@ -165,7 +165,7 @@ function EditInfo(props) {
       let request;
       request = await axios.get("http://localhost:8080/searchSchool/search/specificSchool/" + schoolID.schoolID)
       console.log("request")
-      console.log(request.data.schoolName)
+      console.log(request.data)
 
       setAllSchools(request.data)
       setSchoolName(request.data[0].schoolName)
@@ -220,7 +220,7 @@ function EditInfo(props) {
       console.log("request")
       console.log(request)
 
-      window.location.reload()
+      alert("School Information Updated!")
 
       return request;
     }

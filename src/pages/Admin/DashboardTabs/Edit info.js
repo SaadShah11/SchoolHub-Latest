@@ -13,6 +13,7 @@ import Widget from "../../../components/Widget/Widget";
 import { AccountCircle, Room, PhoneAndroid, AlternateEmail, Code, Facebook } from '@material-ui/icons'
 import axios from "../../../Util/axios"
 import AuthService from "../../../services/auth.service";
+import VideoLibraryIcon from '@material-ui/icons/VideoLibrary';
 import { mdiWindowShutter } from "@mdi/js";
 
 const useStyles = makeStyles((theme) => ({
@@ -77,7 +78,8 @@ let school = {
     higher: false
   },
   educationType: "",
-  schoolCoordinates: {}
+  schoolCoordinates: {},
+  videos: ''
 }
 
 let selectedlocation = {
@@ -112,6 +114,7 @@ function EditInfo(props) {
   let [schoolType, setSchoolType] = useState()
   let [reloadHome, setReloadHome] = useState(false)
   var [allSchools, setAllSchools] = useState()
+  let [schoolVideo, setSchoolVideo] = useState()
 
   const user = AuthService.getCurrentUser()
   console.log(user)
@@ -144,6 +147,7 @@ function EditInfo(props) {
     //school.educationLevel = educationLevel
     school.educationType = educationType
     school.schoolCoordinates = selectedlocation
+    school.videos = schoolVideo
 
     position = [school.schoolCoordinates.latitude, school.schoolCoordinates.longitude]
 
@@ -174,9 +178,12 @@ function EditInfo(props) {
       setZipCode(request.data[0].zipCode)
       setSchoolEmail(request.data[0].schoolEmail)
       setSchoolPhoneNumber(request.data[0].contactNumber)
+      console.log("Contact Number")
+      console.log(request.data[0].contactNumber)
       setSchoolFB(request.data[0].schoolFB)
       setSchoolType(request.data[0].schoolType)
       setEducationType(request.data[0].educationType)
+      setSchoolVideo(request.data[0].videos)
 
       let educationLevelArray = {
         checkedA: false,
@@ -216,7 +223,7 @@ function EditInfo(props) {
       console.log('inside fetchdata')
       console.log(schoolFinal)
 
-      request = await axios.patch("http://localhost:8080/school/Edit_School/"+schoolID.schoolID, schoolFinal)
+      request = await axios.patch("http://localhost:8080/school/Edit_School/" + schoolID.schoolID, schoolFinal)
       console.log("request")
       console.log(request)
 
@@ -292,6 +299,11 @@ function EditInfo(props) {
                     <InputAdornment position="start"><Facebook /></InputAdornment>
                   ),
                 }} id="facebook" placeholder="School Facebook Link" fullWidth />
+                <TextField value={schoolVideo} onChange={e => setSchoolVideo(e.target.value)} InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start"><VideoLibraryIcon /></InputAdornment>
+                  ),
+                }} id="facebook" placeholder="School Facebook Link" fullWidth />
 
                 <div className={classes.Checks}>
                   <text style={{ fontWeight: 'bold' }}>School type: </text>
@@ -358,7 +370,7 @@ function EditInfo(props) {
               onClick={() => { props.history.goBack() }}
             > Cancel</Button>
             <Button size="large" variant="contained" color="seconadary"
-              className={classes.button} onClick={()=>updateSchoolObject()}
+              className={classes.button} onClick={() => updateSchoolObject()}
             > Update</Button>
           </Widget>
         </div>

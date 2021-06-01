@@ -10,11 +10,8 @@ export default makeStyles(theme => ({
     flexDirection:'row',
     borderBottom:'1px solid black'
   },
-  search:{width:'80%'},
   result:{
     borderBottom:'1px solid rgba(0,0,0, 0.3)',
-    display:'flex',
-    flexDirection:'row',
     marginTop:'5px',
     '&:hover':{
       backgroundColor:'#F7F7F7',
@@ -24,7 +21,6 @@ export default makeStyles(theme => ({
   },
   icon:{
     width:'30px',
-    height:'30px',
     '&:hover':{
       fill:'#626262'
     }

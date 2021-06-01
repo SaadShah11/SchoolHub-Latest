@@ -165,8 +165,8 @@ function Faculty(props) {
 
     return (
         <div>
-            <Header />
-            <br /><br /><br /><br />
+            {/* <Header />
+            <br /><br /><br /><br /> */}
             <Grid container >
                 <div className={classes.box}>
                     <Widget title='Faculty' disableWidgetMenu>

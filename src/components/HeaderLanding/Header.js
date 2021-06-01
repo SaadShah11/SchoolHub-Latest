@@ -10,9 +10,11 @@ export default function Header(props){
   return(
     <AppBar position='fixed' className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-      <img style={{marginLeft:'20px', width:"40px", height:'45px'}} src={Logo} />
-       <Typography>SCHOOLHUB</Typography>
-       <Typography onClick={()=>props.history.push('/login')}>Login/Signup</Typography>
+      <div style={{display:'flex', flexDirection:'row', alignItems:'center'}}>
+      <img style={{marginLeft:'20px', width:"40px", height:'45px', marginRight:'10px'}} src={Logo} />
+       <Typography variant='h5' onClick={()=>props.history.push('/')}>SCHOOLHUB</Typography>
+       </div>
+       <Typography className={classes.signin} onClick={()=>props.history.push('/login')}>Sign in</Typography>
        </Toolbar>
     </AppBar>
   )

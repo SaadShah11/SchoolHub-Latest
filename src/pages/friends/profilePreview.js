@@ -15,7 +15,7 @@ import Post from '../home/post'
 import { CometChat } from "@cometchat-pro/chat"
 
 // styles
-import useStyles from "./styles";
+
 
 // components
 import DP from './default profile pic.jpg'
@@ -23,12 +23,12 @@ import PageTitle from "../../components/PageTitle/PageTitle";
 import PhotoIcon from '@material-ui/icons/Photo';
 import Widget from "../../components/Widget/Widget";
 import Header from '../../components/Header/Header'
-
+import useStyles from "./stylespreview";
 import axios from "../../Util/axios"
 import AuthService from "../../services/auth.service";
 import { storage } from "../../Util/firebase"
 import { v4 as uuidv4 } from 'uuid';
-import './style.css'
+//import './style.css'
 
 export default function Home(props) {
   var classes = useStyles();
@@ -42,17 +42,19 @@ export default function Home(props) {
   const allInputs = { imgUrl: '' }
 
   const user = AuthService.getCurrentUser()
-  //console.log(user)
+  console.log("User Profile")
+  console.log(user)
   const selectedUser = AuthService.getSelectedUser()
-  // console.log("Selected User")
-  // console.log(selectedUser)
+  //const selectedUser = props.selectedUser
+  console.log("Selected User Profile Preview")
+  console.log(selectedUser)
+  //console.log(props.selectedUser)
 
   let handleFollow = (followBool) => {
     console.log("Handle Follow")
-
     let finalObj = {
       userID: selectedUser.userID,
-      follow: followBool
+      follow: followValue
     }
     updateFollowing(finalObj)
 
@@ -105,10 +107,10 @@ export default function Home(props) {
       console.log("Inside Get User")
       request = await axios.get("http://localhost:8080/user_management/userProfile/" + selectedUser.userID)
       //console.log("request")
-      //let userDataa = request.data
+      let userDataa = request.data
       console.log("User Data")
-      console.log(request.data[0])
-      setUserData(request.data[0])
+      console.log(userData)
+      setUserData(userDataa[0])
 
       // setUserDataBool(true)
 
@@ -137,10 +139,11 @@ export default function Home(props) {
       console.log("Inside Get User")
       request = await axios.get("http://localhost:8080/user_management/userProfile/" + user._id)
       //console.log("request")
-      let userDataa = request.data
+      //let userDataa = request.data
       console.log("Current User Data")
       console.log(userData)
-      setCurrentUserData(userDataa[0])
+      console.log(request.data[0])
+      setCurrentUserData(request.data[0])
 
       setUserDataBool(true)
 
@@ -201,18 +204,6 @@ export default function Home(props) {
     //     }
     //   }
     // }
-    if (currentUserData != undefined) {
-      // if (userData.length !== 0) {
-      console.log("Inside Iff")
-      console.log(currentUserData)
-      let followExists = currentUserData.following.filter(follow => follow.userID == selectedUser.userID)
-      if (followExists.length != 0) {
-        setFollowValue(followExists[0].follow)
-        console.log("Inside FollowExists")
-        console.log(followExists[0].follow)
-      }
-      //}
-    }
 
   }, [reloadButton]);
 
@@ -239,59 +230,42 @@ export default function Home(props) {
 
   let userDetails
 
-  // try {
-  //   if (currentUserData != undefined) {
-  //     // if (userData.length !== 0) {
-  //     console.log("Inside Iff")
-  //     console.log(currentUserData)
-  //     let followExists = currentUserData.following.filter(follow => follow.userID == selectedUser.userID)
-  //     if (followExists.length != 0) {
-  //       setFollowValue(followExists[0].follow)
-  //       console.log("Inside FollowExists")
-  //       console.log(followExists[0].follow)
-  //     }
-  //     //}
-  //   }
-  // } catch (err) {
-  //   console.log("error")
-  //   console.log(err)
-  // }
+  try {
+    if (userData != undefined) {
+      console.log("inside diaplay Details")
+      userDetails = <div>
+
+      </div>
+    } else {
+      console.log("nothing")
+    }
+  } catch (err) {
+    console.log("error")
+    console.log(err)
+  }
 
   return (
     <>
-      <Header history={props.history} />
-      <br /><br /><br /><br />
-
       <div className={classes.main}>
 
         {
-          userData == undefined ? <div>Loadiing...</div> :
+          userData == undefined ? <div>Loading...</div> :
             <div className={classes.info}>
-              <Widget disableWidgetMenu>
-                {userDataBool ? <div><div>
-                  <img className={classes.dp} src={userData.profilePic} /></div>
-                  <br />
-                  {
-                    followValue ? <Button onClick={() => handleFollow(false)}>Unfollow</Button> : <Button onClick={() => handleFollow(true)}>Follow</Button>
-                  }
-                  <Button onClick={() => handleChat()}>Message</Button>
-                  <Typography variant="h5">{userData.username} </Typography>
-                  <Typography >{userData.type}</Typography>
-                  <Typography >{userData.email}</Typography></div> : <text>Loading</text>}
 
-
-              </Widget>
+              {userDataBool ? <div><div>
+                <img className={classes.dp} src={userData.profilePic} /></div>
+                <br />
+                {/* {
+                  followValue ? <Button onClick={() => handleFollow(false)}>Unfollow</Button> : <Button onClick={() => handleFollow(true)}>Follow</Button>
+                } */}
+                <Button onClick={() => handleChat()}>Message</Button>
+                <Typography variant="h5">{userData.username} </Typography>
+                <Typography >{userData.type}</Typography>
+                <Typography >{userData.email}</Typography></div> : <text>Loading</text>}
+              <Button variant="contained" onClick={() => props.history.push('/profilePage')}>View Profile</Button>
 
             </div>
         }
-
-        {/* <div style={{ marginLeft: '28%' }}> */}
-        <Grid container spacing={4} style={{ marginLeft: '28%' }}>
-          {
-            displayPosts
-          }
-        </Grid>
-        {/* </div> */}
 
       </div>
     </>

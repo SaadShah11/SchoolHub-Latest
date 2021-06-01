@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {AppBar,Toolbar,IconButton,InputBase,Menu,MenuItem,Fab,Link} from "@material-ui/core";
 import {AccountCircle, MailOutline as MailIcon,NotificationsNone as NotificationsIcon,Person as AccountIcon,Search as SearchIcon,Send as SendIcon} from "@material-ui/icons";
 import classNames from "classnames";
@@ -13,6 +13,7 @@ import UserAvatar from "../UserAvatar/UserAvatar";
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../context/LayoutContext";
 import { useUserDispatch, signOut, toProfile, home } from "../../context/UserContext";
 import AuthService from "../../services/auth.service";
+import axios from "../../Util/axios"
 
 
 const messages = [
@@ -26,12 +27,21 @@ const notifications = [
 
 const profile={name:'John Smith', user:'Student', profile:'Profile', photo:<AccountIcon/>}
 
+let user = AuthService.getCurrentUser()
+  console.log("User")
+  console.log(user)
+
+  if(user==null){
+    console.log("changing user")
+    user = {
+      username: '',
+      type:''
+    }
+  }
 
 export default function Header(props) {
 
-  const user = AuthService.getCurrentUser()
-  console.log("User")
-  console.log(user)
+
 
   var classes = useStyles();
   // global
@@ -45,12 +55,49 @@ export default function Header(props) {
   var [isNotificationsUnread, setIsNotificationsUnread] = useState(true);
   var [profileMenu, setProfileMenu] = useState(null);
   var [isSearchOpen, setSearchOpen] = useState(false);
+
+  var [allNotifications, setAllNotifications] = useState()
+  var [reload, setReload] = useState(false)
+  
+  const getNotifications = useCallback(async (bool) => {
+    async function fetchData() {
+      let request;
+      request = await axios.get("http://localhost:8080/user_management/login")
+      console.log("request")
+
+      let finalUser
+      request.data.filter((users)=>{
+        if(user != undefined){
+          finalUser = users
+        }
+      })
+
+      console.log("Final Users")
+      console.log(finalUser)
+      setAllNotifications(finalUser.notification)
+      return request.data;
+    }
+    fetchData()
+    setReload(true)
+  }, [])
+
+  useEffect(()=>{
+    getNotifications()
+    setReload(false)
+  },[reload])
+
   return (
     <AppBar position="fixed" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
       <img style={{marginLeft:'20px', width:"40px", height:'45px'}} src={Logo} />
         <Typography 
-        onClick={() => props.history.push('/app/home')}
+        onClick={() => {
+          // if(user.type==''){
+          //   props.history.push('/')
+          // }else{
+            props.history.push('/app/home')
+          // }
+          }}
         variant="h5" weight="bold" className={classes.logotype}>
           
           SCHOOLHUB
@@ -58,7 +105,7 @@ export default function Header(props) {
         </Typography>
         
         <div className={classes.grow} />
-        <div
+        {/* <div
           className={classNames(classes.search, {
             [classes.searchFocused]: isSearchOpen,
           })}
@@ -79,6 +126,7 @@ export default function Header(props) {
             }}
           />
         </div>
+        */}
         <IconButton
           color="inherit"
           aria-haspopup="true"
@@ -96,6 +144,7 @@ export default function Header(props) {
             <NotificationsIcon classes={{ root: classes.headerIcon }} />
           </Badge>
         </IconButton>
+        {/*
         <IconButton
           color="inherit"
           aria-haspopup="true"
@@ -112,7 +161,7 @@ export default function Header(props) {
           >
             <MailIcon classes={{ root: classes.headerIcon }} />
           </Badge>
-        </IconButton>
+        </IconButton> */}
         <IconButton
           aria-haspopup="true"
           color="inherit"
@@ -122,7 +171,7 @@ export default function Header(props) {
         >
          <div className={classes.headerICon}> {profile.photo}</div>
         </IconButton>
-        <Menu
+        {/* <Menu
           id="mail-menu"
           open={Boolean(mailMenu)}
           anchorEl={mailMenu}
@@ -177,6 +226,7 @@ export default function Header(props) {
             <SendIcon className={classes.sendButtonIcon} />
           </Fab>
         </Menu>
+        */}
         <Menu
           id="notifications-menu"
           open={Boolean(notificationsMenu)}
@@ -185,15 +235,15 @@ export default function Header(props) {
           className={classes.headerMenu}
           disableAutoFocusItem
         >
-          {notifications.map(notification => (
+          {allNotifications!=undefined ? allNotifications.map(notification => (
             <MenuItem
-              key={notification.id}
+              key={notification._id}
               onClick={() => setNotificationsMenu(null)}
               className={classes.headerMenuItem}
             >
               <Notification {...notification} typographyVariant="inherit" />
             </MenuItem>
-          ))}
+          )) : console.log("Undefined Notifications")}
         </Menu>
         <Menu
           id="profile-menu"

@@ -209,6 +209,7 @@ function LiveStream(props) {
       request = await axios.post("http://localhost:8080/videoStreaming/addStream/", newData)
       console.log("request")
       console.log(request)
+      alert("LiveStream Request has been sent to Super Admin, Please wait for a while.")
       return request.data;
     }
     fetchData()

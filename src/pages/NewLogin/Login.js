@@ -328,12 +328,12 @@ function Login(props) {
                     Login
                   </Button>
 
-                  <Button
+                  {/* <Button
                     size="large"
                     className={classes.forgetButton}
                   >
                     Forget Password
-                </Button>
+                </Button> */}
 
                   {/* <Link onClick={() => admin(props.history)}>hi</Link> */}
                   {/* </form> */}

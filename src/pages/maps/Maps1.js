@@ -1,28 +1,46 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputBase, MenuItem, Select, TextField } from "@material-ui/core";
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import React, { Fragment, useState, useCallback, useEffect } from "react";
+import { Grid } from "@material-ui/core";
+import Popup from 'reactjs-popup';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet';
+import FilterListIcon from '@material-ui/icons/FilterList';
 // import marker from './mapMarker.png'
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
-import FilterListIcon from '@material-ui/icons/FilterList';
-import GpsFixedIcon from '@material-ui/icons/GpsFixed';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import FormLabel from '@material-ui/core/FormLabel';
+import { TextField, InputBase, Button, MenuItem, Select, DialogContent, Dialog, DialogTitle, DialogActions } from "@material-ui/core";
 import SearchIcon from '@material-ui/icons/Search';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import React, { Fragment, useCallback, useEffect, useState } from "react";
-import { MapContainer, Marker, TileLayer,useMapEvents, Popup } from 'react-leaflet';
 import Widget from "../../components/Widget/Widget";
-import AuthService from "../../services/auth.service";
-import axios from "../../Util/axios";
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import useStyles from "./styles";
 
+import axios from "../../Util/axios"
+import * as geolib from 'geolib';
+import AuthService from "../../services/auth.service";
+import { mdiConsoleLine } from "@mdi/js";
 
 const customMarker = new L.icon({
   iconUrl: require("./mapMarker.png"),
   iconSize: [25, 25],
   iconAnchor: [0, 0],
 });
+const MyMarkersList = ({ markers }) => {
+  const items = markers.map(({ key, ...props }) => (
+    <MyPopupMarker key={key} {...props} />
 
+  ))
+  return <Fragment>{items}</Fragment>
+}
+
+const MyPopupMarker = ({ content, position }) => (
+  <Marker position={position} icon={customMarker} >
+    <Popup>
+      {content}
+    </Popup>
+  </Marker>
+)
 const markers = [
   { key: 'marker1', position: [33.647895, 73.028724], content: 'My first popup' },
   { key: 'marker2', position: [33.6879129, 73.0314367], content: 'My second popup' },
@@ -106,8 +124,8 @@ export default function Maps(props) {
     console.log(educationType)
   };
   var classes = useStyles();
-  var position = [30.3753, 69.3451]
-  
+  const position = [30.3753, 69.3451]
+
   
 
   let handleSend = () => {
@@ -177,16 +195,18 @@ export default function Maps(props) {
 
   let displayResults //= () => { let displayPostsVar
 
-  if (searchResults !== undefined) {
+  if (searchResults != undefined) {
     console.log("inside displayresults")
+    // {return <GetAllPosts allPosts= {allPosts}/>}
     displayResults = searchResults.map((i) => {
-      
+      // return <Post key={i._id} id={i._id}
+      //   username={i.username} time={i.time} text={i.text} image={i.image} comments={i.comments} likes={i.likes} //onSelect={this.onSelect} 
+      // />
       return (
         <div class={classes.result} onClick={() => {
-          
           AuthService.setCurrentSchool({ schoolID: i._id })
           props.history.push("/schoolDetails");
-          props.history.push({ pathname: '/schoolDetails', data: i._id })
+          //props.history.push({ pathname: '/schoolDetails', data: i._id })
         }}>
           <text>{i.schoolName}</text>
           <br />
@@ -201,13 +221,34 @@ export default function Maps(props) {
   let displayLocation;
   let markersArray = []
 
+  // useEffect(() => {
+  //   if (allSchools != undefined) {
+  //     console.log("inside allSchool If")
+  //     displayLocation = allSchools.map((i) => {
+  //       let key = i._id
+  //       let position = [Number(i.schoolCoordinates.latitude), Number(i.schoolCoordinates.longitude)]
+  //       let content = i.aboutSchool
+  //       let markers = {
+  //         key: key,
+  //         position: position,
+  //         content: content
+  //       }
+  //       markersArray.push(markers)
+  //     })
+
+  //     console.log(markersArray)
+  //   } else {
+  //     console.log("allSchools Else")
+  //   }
+  //   //getItems().then(data => setItems(data));
+  // }, [allSchools]);
+
   if (allSchools != undefined) {
     console.log("inside allSchool If")
     displayLocation = allSchools.map((i) => {
-      console.log(i)
       let key = i._id
       let position = [Number(i.schoolCoordinates.latitude), Number(i.schoolCoordinates.longitude)]
-      let content = i.schoolName
+      let content = i.aboutSchool
       let markers = {
         key: key,
         position: position,
@@ -220,21 +261,7 @@ export default function Maps(props) {
   } else {
     console.log("allSchools Else")
   }
-  const MyMarkersList = ({ markers }) => {
-    const items = markers.map(({ key, ...props }) => (
-      <MyPopupMarker key={key} {...props} />
-      
-    ))
-    return <Fragment>{items}</Fragment>
-  }
-  
-  const MyPopupMarker = ({ content, position }) => (
-    <Marker position={position} icon={customMarker} >
-      <Popup >
-        {content}
-      </Popup>
-    </Marker>
-  )
+
   const handleChangeDistance = (event) => {
     console.log("inisde handle Distance")
     setDistance(event.target.value);
@@ -250,7 +277,7 @@ export default function Maps(props) {
         <Grid item md={4}>
           <Widget title="Search School Here" disableWidgetMenu>
             <div className={classes.searchfield}>
-              <InputBase className={classes.input} placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
+              <InputBase placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
 
               <FilterListIcon class={classes.icon} onClick={handleClickOpen} />
               {/* <SearchIcon fontSize='large' class={classes.icon} /> */}
@@ -293,7 +320,7 @@ export default function Maps(props) {
                       <FormControlLabel value="Girls" control={<Radio color='inherit' />} label="Girls " />
                     </RadioGroup>
                   </div >
-                  {/* <div class={classes.eachF}>
+                  <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Education level: </text>
                     <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationlevel" name="educationlevel"
                       value={educationLevel} onChange={handleChangeEducationLevel}>
@@ -301,14 +328,13 @@ export default function Maps(props) {
                       <FormControlLabel value="Middle" control={<Radio color='inherit' />} label="Middle" />
                       <FormControlLabel value="Higher" control={<Radio color='inherit' />} label="Higher " />
                     </RadioGroup>
-                  </div> */}
+                  </div>
                   <div class={classes.eachF}>
                     <text style={{ fontWeight: 'bold' }}>Education type: </text>
                     <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  "
                       value={educationType} onChange={handleChangeEducationType}>
                       <FormControlLabel value="Arts" control={<Radio />} label="Arts" />
                       <FormControlLabel value="Science" control={<Radio />} label="Science" />
-                      <FormControlLabel value="Both" control={<Radio />} label="Both" />
                     </RadioGroup>
                   </div>
 
@@ -324,7 +350,89 @@ export default function Maps(props) {
                 </DialogActions>
               </Dialog>
 
-              
+              {/* <InputBase onChange={e => setSearchValue(e.target.value)} placeholder='Search here...'></InputBase>
+
+              <Popup
+                trigger={<FilterListIcon class={classes.icon} />}
+                position="right center">
+                <Grid container>
+                  <Grid item md={3} class={classes.popup2} >
+                    <Widget title="Filter School Here" disableWidgetMenu>
+                      <div class={classes.eachF}>
+                        <text style={{ fontWeight: 'bold' }}>Disatnce: </text>
+                        <InputBase placeholder='Max' class={classes.feefield}></InputBase> */}
+              {/* <FormControl className={classes.formControl}>
+                          <Select
+                            id="demo-simple-select"
+                            value={distance}
+                            onChange={handleChangeDistance}
+                          >
+                            <MenuItem value={1}>1 km</MenuItem>
+                            <MenuItem value={5}>5 km</MenuItem>
+                            <MenuItem value={10}>10 km</MenuItem>
+                          </Select>
+                        </FormControl>
+                        <FormControl className={classes.formControl}>
+                          <Select
+                            value={distance}
+                            onChange={handleChangeDistance}
+                            displayEmpty
+                            className={classes.selectEmpty}
+                            inputProps={{ 'aria-label': 'Without label' }}
+                          >
+                            <MenuItem value="">
+                              <em>None</em>
+                            </MenuItem>
+                            <MenuItem value={0.5}>500m</MenuItem>
+                            <MenuItem value={1}>1km</MenuItem>
+                            <MenuItem value={5}>5km</MenuItem>
+                            <MenuItem value={10}>10km</MenuItem>
+                            <MenuItem value={50}>50km</MenuItem>
+                          </Select>
+                        </FormControl>
+                      </div>
+                      <div class={classes.eachF1}>
+                        <text style={{ fontWeight: 'bold' }}>Fee: </text>
+                        <InputBase placeholder='Min' class={classes.feefield}></InputBase>
+                        <InputBase placeholder='Max' class={classes.feefield}></InputBase>
+                      </div>
+
+                      <div class={classes.eachF1}>
+                        <text style={{ fontWeight: 'bold' }}>School type: </text>
+                        <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="type" name="type" value={schoolType}
+                          onChange={handleChangeSchoolType}>
+                          <FormControlLabel value="Co-Education" control={<Radio />} label="Co-Education" />
+                          <FormControlLabel value="Boys" control={<Radio />} label="Boys" />
+                          <FormControlLabel value="Girls" control={<Radio />} label="Girls " />
+                        </RadioGroup>
+                      </div >
+                      <div class={classes.eachF}>
+                        <text style={{ fontWeight: 'bold' }}>Education level: </text>
+                        <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationlevel"
+                          name="educationlevel" value={educationLevel} onChange={handleChangeEducationLevel}>
+                          <FormControlLabel value="Primary" control={<Radio />} label="Primary" />
+                          <FormControlLabel value="Middle" control={<Radio />} label="Middle" />
+                          <FormControlLabel value="Higher" control={<Radio />} label="Higher " />
+                        </RadioGroup>
+                      </div>
+                      <div class={classes.eachF}>
+                        <text style={{ fontWeight: 'bold' }}>Education type: </text>
+                        <RadioGroup style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype"
+                          name="educationtype  " value={educationType} onChange={handleChangeEducationType}>
+                          <FormControlLabel value="Matric/Fsc" control={<Radio />} label="Matric/Fsc" />
+                          <FormControlLabel value="IGCSE" control={<Radio />} label="IGCSE" />
+                        </RadioGroup>
+                      </div>
+                      <div class={classes.buttons}>
+                        <button>Reset</button>
+                        <button>submit</button>
+                      </div>
+                    </Widget>
+                  </Grid>
+                </Grid>
+              </Popup>
+              <Button onClick={() => handleSend()}> <SearchIcon fontSize='large' class={classes.icon} /></Button> */}
+
             </div>
 
             <div >
@@ -336,7 +444,7 @@ export default function Maps(props) {
         </Grid>
 
         <Grid item md={8}>
-        <text style={{ fontSize: '10px' }}>Double click to go to your current location.</text>
+          <Widget disableWidgetMenu>
             <MapContainer center={position}
               zoom={6}
               className={classes.mapContainer}
@@ -347,39 +455,16 @@ export default function Maps(props) {
               />
 
               <MyMarkersList markers={markersArray} />
-              
-              <LocationMarker />
+              {/* <Marker position={position}>
+                <Popup>
+                  You are here
+                  </Popup>
+              </Marker> */}
             </MapContainer>
-          
+          </Widget>
         </Grid>
       </Grid>
     </div >
 
   );
 }
-function LocationMarker() {
-  const [position, setPosition] = React.useState(null)
-  const map = useMapEvents({
-      dblclick() {
-          map.locate()
-      },
-      locationfound(e) {
-          setPosition(e.latlng)
-          map.flyTo(e.latlng, 15)
-      },
-  })
-
-  return position === null ? null : (
-      <Marker position={position} icon={iconPerson}>
-          <Popup>You are here</Popup>
-      </Marker>
-  )
-}
-
-const iconPerson = new L.Icon({
-  iconUrl: require("./gps.png"),
-
-  iconSize: [30, 30],
-
-});
-

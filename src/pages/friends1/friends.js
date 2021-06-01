@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useCallback, useEffect } from "react";
-import { Grid, Typography } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import Popup from 'reactjs-popup';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -15,7 +15,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Widget from "../../components/Widget/Widget";
 import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 import useStyles from "./styles";
-import ProfilePreview from './profilePreview'
+
 import axios from "../../Util/axios"
 import * as geolib from 'geolib';
 import AuthService from "../../services/auth.service";
@@ -29,9 +29,6 @@ export default function Maps(props) {
   let [searchValue, setSearchValue] = useState("");
   var [searchResults, setSearchResults] = useState();
   var [allSchools, setAllSchools] = useState()
-  var [selectedBool, setSelectedBool] = useState(false)
-  var [reloadProfile, setReloadProfile] = useState(false)
-
 
   var [userType, setUserType] = useState()
   //var [currentLocation, setCurrentLocation] = useState()
@@ -61,7 +58,7 @@ export default function Maps(props) {
 
   let handleSend = () => {
     let finalFilters = {
-      type: userType
+      type:userType
     }
     console.log("search Value")
     console.log(searchValue)
@@ -98,7 +95,6 @@ export default function Maps(props) {
       request = await axios.post("http://localhost:8080/user_management/searchUser/" + newData.search, filter)
       console.log("request")
       console.log(request)
-      
       let finalArr = []
       request.data.map((userObj)=>{
         if(userObj._id != user._id){
@@ -107,8 +103,9 @@ export default function Maps(props) {
           console.log("Else")
         }
       })
+      console.log(finalArr)
       setSearchResults(finalArr)
-      // setSearchResults(request.data)
+      //setSearchResults(request.data)
       //window.location.reload()
       return request.data;
     }
@@ -116,27 +113,20 @@ export default function Maps(props) {
   }, [])
 
   let displayResults
-  let selectedUserValue
 
   if (searchResults != undefined) {
     console.log("inside displayresults")
     displayResults = searchResults.map((i) => {
       return (
-        <div class={classes.result} onClick={() => {
-          AuthService.setSelectedUser({ userID: i._id })
-          console.log(i._id)
-          setReloadProfile(true)
-          // selectedUserValue = i._id
-
-          setSelectedBool(true)
-          // props.history.push("/profilePage");
+        <div class={classes.result} onClick={()=>{
+          AuthService.setSelectedUser({userID:i._id})
+          props.history.push("/profilePage");
         }}>
-          <img style={{ height: '50px', width: '50px', borderRadius: '50%', marginRight: '10px', marginBottom: '3px' }} src={i.profilePic} />
-          <div>
-            <text>{i.username}</text>
-            <br />
-            <text style={{ fontSize: '10px' }}>{i.type}</text>
-          </div>
+          <text>{i.username}</text>
+          <br />
+          <text style={{ fontSize: '10px' }}>{i.type}</text>
+          <br />
+          <text style={{ fontSize: '10px' }}>{i.email}</text>
         </div>
       )
     })
@@ -144,35 +134,17 @@ export default function Maps(props) {
     console.log("nothing")
   }
 
-
-  let displayProfile
-
-  if (reloadProfile == true) {
-    console.log("inside displayresults")
-    displayProfile = <div>{selectedBool ? <ProfilePreview
-    //selectedUser={{userID:selectedUserValue}}
-    /> : <Typography variant="h2">No User selected...</Typography>}
-    </div>
-
-    //displayProfile = <div><ProfilePreview/></div>
-
-    setReloadProfile(false)
-  } else {
-    console.log("nothing")
-  }
-
-
   return (
     <div>
       <Grid container spacing={1}>
-        <Grid item md={4}>
-          <Widget title="User Search" disableWidgetMenu>
+        <Grid item md={3}>
+          <Widget title="Search School Here" disableWidgetMenu>
             <div className={classes.searchfield}>
-              <InputBase className={classes.search} placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
+              <InputBase placeholder='Search here...' onChange={e => setSearchValue(e.target.value)}></InputBase>
 
               <FilterListIcon class={classes.icon} onClick={handleClickOpen} />
               {/* <SearchIcon fontSize='large' class={classes.icon} /> */}
-              <Button onClick={() => handleSend()} style={{ height: '30px' }}> <SearchIcon fontSize='large' class={classes.icon} /></Button>
+              <Button onClick={() => handleSend()}> <SearchIcon fontSize='large' class={classes.icon} /></Button>
               <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title">Filters</DialogTitle>
                 <DialogContent>
@@ -205,17 +177,8 @@ export default function Maps(props) {
             </div>
           </Widget>
         </Grid>
-        <Grid item md={7}>
-          <Widget title="Profile Preview" disableWidgetMenu>
-            <div>{selectedBool ? <ProfilePreview history={props.history}
-            //selectedUser={{userID:selectedUserValue}}
-            /> : <Typography variant="h5">No User selected...</Typography>}
-            </div>
-          </Widget>
-        </Grid>
       </Grid>
-
-    </div>
+    </div >
 
   );
 }

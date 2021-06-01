@@ -84,7 +84,7 @@ export default function Home(props) {
   useEffect(() => {
     getPosts()
     getUser()
-    
+
   }, []);
 
   const handleImageAsFile = (e) => {
@@ -134,7 +134,7 @@ export default function Home(props) {
 
       })
 
-      
+
   }
 
   const updateProfilePic = useCallback(async (img) => {
@@ -202,69 +202,73 @@ export default function Home(props) {
       <div className={classes.main}>
 
         <div className={classes.info}>
-          <Widget disableWidgetMenu>
-            <div>
-              <img className={classes.dp} src={userData.profilePic} />
-              {/* replace with add icon */}
-              <form onSubmit={handleFireBaseUpload}>
-                <div id='updateImg'>
-                  <AddAPhoto className={classes.editimage} />
-                  <input type="file" onChange={handleImageAsFile} />
+          {/* <Grid container spacing={4} > */}
+            <Widget disableWidgetMenu>
+              <div>
+                <img className={classes.dp} src={userData.profilePic} />
+                {/* replace with add icon */}
+                <form onSubmit={handleFireBaseUpload}>
+                  <div id='updateImg'>
+                    <AddAPhoto className={classes.editimage} />
+                    <input type="file" onChange={handleImageAsFile} />
 
-                </div>
-                <Button type='submit'>Update</Button>
-              </form>
+                  </div>
+                  <Button type='submit'>Update</Button>
+                </form>
 
-            </div>
-            <Typography variant="h5">{user.username} </Typography>
-            <Typography >{user.type}</Typography>
-            <Typography >{user.email}</Typography>
-            <Button variant='contained' style={{ marginTop: '5px' }} onClick={handleClickOpen}>Edit Profile</Button>
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-              <DialogTitle id="form-dialog-title">Edit Profile</DialogTitle>
-              <DialogContent>
-                <div className={classes.editfields}>
-                  <Typography>Username: </Typography>
-                  <InputBase value={user.username} className={classes.editinputs}></InputBase>
-                </div>
-                <div className={classes.editfields}>
-                  <Typography>Phone number: </Typography>
-                  <InputBase value={user.phoneNumber} className={classes.editinputs}></InputBase>
-                </div>
-                <div className={classes.editfields}>
-                  <Typography>Old Password: </Typography>
-                  <InputBase type='password' className={classes.editinputs}></InputBase>
-                </div>
-                <div className={classes.editfields}>
-                  <Typography>New Password: </Typography>
-                  <InputBase type='password' className={classes.editinputs}></InputBase>
-                </div>
-                <div className={classes.editfields}>
-                  <Typography>Confirm New Password:  </Typography>
-                  <InputBase type='password' className={classes.editinputs}></InputBase>
-                </div>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose} color="primary">
-                  Cancel
+              </div>
+              <Typography variant="h5">{user.username} </Typography>
+              <Typography >{user.type}</Typography>
+              <Typography >{user.email}</Typography>
+              <Button variant='contained' style={{ marginTop: '5px' }} onClick={handleClickOpen}>Edit Profile</Button>
+              <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Edit Profile</DialogTitle>
+                <DialogContent>
+                  <div className={classes.editfields}>
+                    <Typography>Username: </Typography>
+                    <InputBase value={user.username} className={classes.editinputs}></InputBase>
+                  </div>
+                  <div className={classes.editfields}>
+                    <Typography>Phone number: </Typography>
+                    <InputBase value={user.phoneNumber} className={classes.editinputs}></InputBase>
+                  </div>
+                  <div className={classes.editfields}>
+                    <Typography>Old Password: </Typography>
+                    <InputBase type='password' className={classes.editinputs}></InputBase>
+                  </div>
+                  <div className={classes.editfields}>
+                    <Typography>New Password: </Typography>
+                    <InputBase type='password' className={classes.editinputs}></InputBase>
+                  </div>
+                  <div className={classes.editfields}>
+                    <Typography>Confirm New Password:  </Typography>
+                    <InputBase type='password' className={classes.editinputs}></InputBase>
+                  </div>
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleClose} color="primary">
+                    Cancel
                   </Button>
-                <Button onClick={handleClose} color="primary">
-                  Update
+                  <Button onClick={handleClose} color="primary">
+                    Update
                   </Button>
-              </DialogActions>
-            </Dialog>
-          </Widget>
-
+                </DialogActions>
+              </Dialog>
+            </Widget>
+          {/* </Grid> */}
         </div>
 
 
-        <div style={{ marginLeft: '28%' }}>
-          <Grid container spacing={4}>
-            {
-              displayPosts
-            }
-          </Grid>
-        </div>
+        {/* <div style={{ marginLeft: '28%' }}> */}
+        <Grid container spacing={4} style={{ marginLeft: '28%' }}>
+          {/* <Grid item md={8} > */}
+
+          {
+            displayPosts
+          }
+          {/* </Grid> */}
+        </Grid>
+        {/* </div> */}
 
       </div>
     </>

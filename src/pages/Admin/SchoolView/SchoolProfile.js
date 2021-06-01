@@ -17,6 +17,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaf
 import axios from "../../../Util/axios"
 import AuthService from "../../../services/auth.service";
 import Review from "./review"
+import { LaptopWindows } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => ({
     intro: {
@@ -119,6 +120,17 @@ let reviewData = {
     reply: {}
 }
 
+const user = AuthService.getCurrentUser()
+console.log("User")
+console.log(user)
+
+// if(user==null){
+//     user={
+//         type:'',
+//         username:''
+//     }
+// }
+
 export default function SchoolProfile(props) {
 
     console.log("props")
@@ -127,7 +139,7 @@ export default function SchoolProfile(props) {
     console.log(school)
     //console.log(school[0].aboutSchool)
 
-    const user = AuthService.getCurrentUser()
+
 
     const classes = useStyles();
     const position = [school[0].schoolCoordinates.latitude, school[0].schoolCoordinates.longitude]
@@ -137,6 +149,9 @@ export default function SchoolProfile(props) {
     let [allReviews, setAllReviews] = useState();
     let [reloadReview, setReloadReview] = useState(false);
     let [teacherButton, setTeacherButton] = useState(false);
+    let [reviewButton, setReviewButton] = useState(false);
+
+
 
     const handleSend = () => {
 
@@ -172,6 +187,8 @@ export default function SchoolProfile(props) {
             request = await axios.post("http://localhost:8080/review/addReview", reviewData)
             console.log("request")
             console.log(request)
+            alert('Reivew Added')
+            window.location.reload()
             return request.data;
         }
         fetchData()
@@ -236,9 +253,18 @@ export default function SchoolProfile(props) {
         setReloadReview(false)
         console.log("reload review")
         console.log(reloadReview)
-        if (user.type == 'Teacher') {
-            setTeacherButton(true)
+        // if (user != null) {
+        if (user != null) {
+            if (user.type == 'Teacher') {
+                setTeacherButton(true)
+            }
         }
+
+        // }
+        // if (user == null) {
+        //     setReviewButton(true)
+        // }
+
     }, [reloadReview]);
 
     let displayReviews //= () => { let displayPostsVar
@@ -253,8 +279,7 @@ export default function SchoolProfile(props) {
         //     //onSelect={this.onSelect} 
         //     />
         // })
-        displayReviews =
-            <Review reviews={allReviews} />
+        displayReviews = <Review reviews={allReviews} />
 
     } else {
         console.log("nothing")
@@ -307,25 +332,29 @@ export default function SchoolProfile(props) {
                     </MapContainer>
                 </div>
 
-                <div className={classes.reviews}>
-                    <Widget style={{ height: '65vh' }} title='Rate our School' disableWidgetMenu>
-                        <div className={classes.leavecomment}>
-                            <StarRatings starDimension="20px" rating={newRating}
-                                starSpacing="3px" changeRating={(rating) => { setNewRating(rating) }} starRatedColor="#D10B0B" />
-                            <textarea className={classes.para} id="about" placeholder="Leave a review"
-                                onChange={e => setNewReview(e.target.value)} fullWidth />
-                            <Button style={{ float: "right" }} onClick={() => handleSend()
-                            }
-                                size="large" variant="contained" color="seconadary"
-                                disabled={
-                                    newReview.length === 0  || newReview === '' || newReview ===undefined
-                                }> Submit</Button>
-                        </div>
-                        <Typography variant='h3'>Frequently Asked Questions</Typography>
+                {
+                    user == null ?
+                        <div></div> :
+                        <div className={classes.reviews}>
+                            <Widget style={{ height: '65vh' }} title='Rate our School' disableWidgetMenu>
+                                <div className={classes.leavecomment}>
+                                    <StarRatings starDimension="20px" rating={newRating}
+                                        starSpacing="3px" changeRating={(rating) => { setNewRating(rating) }} starRatedColor="#D10B0B" />
+                                    <textarea className={classes.para} id="about" placeholder="Leave a review"
+                                        onChange={e => setNewReview(e.target.value)} fullWidth />
+                                    <Button style={{ float: "right" }} onClick={() => handleSend()
+                                    }
+                                        size="large" variant="contained" color="seconadary"
+                                        disabled={
+                                            reviewButton || newReview.length === 0 || newReview === '' || newReview === undefined
+                                        }> Submit</Button>
+                                </div>
+                                {/* <Typography variant='h3'>Frequently Asked Questions</Typography> */}
 
 
-                    </Widget>
-                </div>
+                            </Widget>
+                        </div>}
+
 
             </div>
             {

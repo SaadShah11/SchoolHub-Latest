@@ -33,20 +33,20 @@ export default class Footer extends Component {
                     <p className={classes.abtHead2}>Get In Touch</p>
                     <div className={classes.contactLink}>
                         <PhoneIcon className={classes.contactIcon}  />
-                        <p className={classes.contactText}>(+92)-323-2344242</p>
+                        <p className={classes.contactText}>0306-9384728</p>
                     </div>
                     <div className={classes.contactLink}>
                         <MailOutlineIcon className={classes.contactIcon} s/>
-                        <p className={classes.contactText}>rootsinter@gmail.com</p>
+                        <p className={classes.contactText}>schoolhubfyp@gmail.com</p>
                     </div>
                     <div className={classes.contactLink}>
                         <WhatsAppIcon className={classes.contactIcon} />
-                        <p className={classes.contactText}>(+92)-323-2344242</p>
+                        <p className={classes.contactText}>0306-9384728</p>
                     </div>
                     <div className={classes.accCont}>
-                        <FacebookIcon className={classes.accIcon}/>
-                        <GitHubIcon className={classes.accIcon} />
-                        <InstagramIcon className={classes.accIcon}  />
+                        <FacebookIcon onClick={()=>window.open("https://www.facebook.com/saadullah.shah.1/")} className={classes.accIcon}/>
+                        <GitHubIcon onClick={()=>window.open("https://github.com/SaadShah11")} className={classes.accIcon} />
+                        <InstagramIcon onClick={()=>window.open("https://www.instagram.com/saadullah.shah/")} className={classes.accIcon}  />
                     </div>
                 </div>
             </div>

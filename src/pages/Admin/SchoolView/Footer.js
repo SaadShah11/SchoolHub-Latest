@@ -23,14 +23,13 @@ export default class Footer extends Component {
                     </div>
                     <div className={classes.contactLink}>
                         <WhatsAppIcon className={classes.contactIcon} />
-                        <p className={classes.contactText}>(+92)-323-2344242</p>
+                        <p className={classes.contactText}>{this.props.school[0].contactNumber}</p>
                     </div>
                 </div>
 
                 <div className={classes.third}>
-                    <FacebookIcon className={classes.accIcon} />
-                    <GitHubIcon className={classes.accIcon} />
-                    <InstagramIcon className={classes.accIcon} />
+                    <FacebookIcon onClick={()=>window.open(this.props.school[0].schoolFB)} className={classes.accIcon} />
+                    <InstagramIcon onClick={()=>window.open(this.props.school[0].schoolFB)} className={classes.accIcon} />
                 </div>
                 
             </div>

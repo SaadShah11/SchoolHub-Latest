@@ -31,6 +31,7 @@ let post = {
 }
 
 const user = AuthService.getCurrentUser()
+console.log("Current User")
 console.log(user)
 
 export default function Home(props) {
@@ -47,7 +48,28 @@ export default function Home(props) {
       let request;
       request = await axios.get("http://localhost:8080/dashboard/Home")
       console.log("request")
-      setAllPosts(request.data.reverse())
+
+      let finalArr = []
+      request.data.filter((post) => {
+        console.log("Step 1")
+        if (user != undefined) {
+          if (user.following != null || user.following != [] || user.following != undefined) {
+            console.log("Step 2")
+            for (let i = 0; i < user.following.length; i++) {
+              if (user.following[i].follow == true && user.following[i].userID == post.userID) {
+                console.log("Post found")
+                finalArr.push(post)
+              }
+            }
+          }
+        }
+
+
+      })
+      console.log("Final Array")
+      console.log(finalArr)
+      //setAllPosts(request.data.reverse())
+      setAllPosts(finalArr)
       return request.data;
     }
     //And here you call it
@@ -284,7 +306,7 @@ export default function Home(props) {
 
         <div style={{ width: '95%', marginLeft: '15px' }}>
           {
-            isLoading ? (<CircularProgress size={50} />) : displayPosts
+            allPosts == undefined ? <div>Loading...</div> : displayPosts
           }
         </div>
 

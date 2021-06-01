@@ -3,13 +3,15 @@ import { makeStyles } from "@material-ui/styles";
 export default makeStyles(theme => ({
   mapContainer: {
     height: "80vh",
-    width:'110vh',
+    width:'100vh',
   },
   searchfield:{
     display:'flex',
     flexDirection:'row',
-    borderBottom:'1px solid black'
+    borderBottom:'1px solid black',
+
   },
+  input:{width:"80%"},
   result:{
     borderBottom:'1px solid rgba(0,0,0, 0.3)',
     marginTop:'5px',

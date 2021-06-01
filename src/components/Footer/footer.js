@@ -56,7 +56,7 @@ export default function Footer(props) {
             </div>
             <div>
                 <Link
-                    href={'https://www.facebook.com/osama2jz'}
+                    href={'https://www.facebook.com/saadullah.shah.1/'}
                     target={'_blank'}
                 >
                     <IconButton aria-label="facebook">
@@ -80,7 +80,7 @@ export default function Footer(props) {
                     </IconButton>
                 </Link>
                 <Link
-                    href={'https://github.com/imub33n/School-Hub'}
+                    href={'https://github.com/SaadShah11/SchoolHub-Latest'}
                     target={'_blank'}
                 >
                     <IconButton

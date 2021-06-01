@@ -155,7 +155,7 @@ export default function Live(props) {
     <Header history={props.history}/>
       {stream == 0 ? <div className={classes.no}><Typography variant='h2'>There is no stream available at the moment.</Typography> <Error className={classes.error} /></div> :
         <Grid container spacing={2}>
-          <Grid item md={8}>
+          <Grid item md={12}>
             <Widget disableWidgetMenu>
               <div className={classes.profile}>
                 <AccountCircleIcon style={{ fontSize: '50' }} />
@@ -169,7 +169,7 @@ export default function Live(props) {
 
             </Widget>
           </Grid>
-          <Grid item md={4}>
+          {/* <Grid item md={4}>
             <Widget title='Comments' disableWidgetMenu>
               <div className={classes.comments}>
                 <div>
@@ -191,7 +191,7 @@ export default function Live(props) {
                 </div>
               </div>
             </Widget>
-          </Grid>
+          </Grid> */}
         </Grid>}
     </>
   );

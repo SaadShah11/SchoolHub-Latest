@@ -103,11 +103,11 @@ export default function Charts(props) {
   // const [png, ref] = useRechartToPng();
 
   // const handleDownload = React.useCallback(async () => {
-  //   // FileSaver.saveAs(png, "myChart.png");
+  //   FileSaver.saveAs(png, "myChart.png");
   // }, [png]);
 
   // const handleDownload1 = React.useCallback(async () => {
-  //   // FileSaver.saveAs(png, "myChart1.png");
+  //   FileSaver.saveAs(png, "myChart1.png");
   // }, [png]);
 
   let [searchValue, setSearchValue] = useState("");

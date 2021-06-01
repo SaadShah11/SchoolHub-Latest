@@ -45,13 +45,13 @@ export default function Header(props) {
         onClick={() => props.history.push('/app/home')}
         variant="h5" weight="bold" className={classes.logotype}>
           
-          SCHOOLHUB Admin Panel
+          SCHOOLHUB Super Admin Panel
           
         </Typography>
         
         <div className={classes.grow} />
         
-        <IconButton
+        {/* <IconButton
           color="inherit"
           aria-haspopup="true"
           aria-controls="mail-menu"
@@ -67,7 +67,7 @@ export default function Header(props) {
           >
             <NotificationsIcon classes={{ root: classes.headerIcon }} />
           </Badge>
-        </IconButton>
+        </IconButton> */}
         <Typography
               className={classes.profileMenuLink}
               color="Inherit"
@@ -75,7 +75,7 @@ export default function Header(props) {
             >
               Sign Out
             </Typography>
-        <Menu
+        {/* <Menu
           id="notifications-menu"
           open={Boolean(notificationsMenu)}
           anchorEl={notificationsMenu}
@@ -92,7 +92,7 @@ export default function Header(props) {
               <Notification {...notification} typographyVariant="inherit" />
             </MenuItem>
           ))}
-        </Menu>
+        </Menu> */}
         
       </Toolbar>
     </AppBar>

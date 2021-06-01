@@ -29,6 +29,8 @@ export default makeStyles(theme => ({
   toolbar: {
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    display:'flex',
+    justifyContent:'space-between'
   },
   hide: {
     display: "none",
@@ -36,6 +38,9 @@ export default makeStyles(theme => ({
   grow: {
     flexGrow: 1,
   },
+  signin:{'&:hover':{
+    cursor:'pointer'
+  }},
   search: {
     position: "relative",
     borderRadius: 25,

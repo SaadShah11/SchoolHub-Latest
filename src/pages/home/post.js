@@ -176,10 +176,10 @@ export default function Post(props) {
 
     let correctIcon = () => {
         if (likesValue === true) {
-            return <div><text>{postLikes}</text><ThumbUpAltIcon onClick={() => handleSendLike(false)} color="primary" fontSize='medium' /></div>
+            return <div><ThumbUpAltIcon onClick={() => handleSendLike(false)} color="primary" fontSize='medium' /></div>
         }
         else {
-            return <div><text>{postLikes}</text><ThumbUpAltIcon onClick={() => handleSendLike(true)} fontSize='medium' /></div>
+            return <div><ThumbUpAltIcon onClick={() => handleSendLike(true)} fontSize='medium' /></div>
         }
     }
 
@@ -208,6 +208,7 @@ export default function Post(props) {
                                 correctIcon()
                             }
                             <text style={{ fontSize: '16px' }}>Like</text>
+                            <text>&ensp;({postLikes})</text>
                         </div>
                         <div onClick={handleFocus} class={classes.comm}><CommentIcon fontSize='medium' />
                             <text style={{ fontSize: '16px' }}>Comment</text></div>

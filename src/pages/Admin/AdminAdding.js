@@ -303,10 +303,10 @@ function GetStepContent(stepIndex, props) {
         }
         //school.feeStructure = {}
         //school.images = FileLinks
-        school.images = FileLinks
-        console.log("New Images")
-        console.log(FileLinks)
-        console.log(files)
+        //school.images = FileLinks
+        //console.log("New Images")
+        //console.log(FileLinks)
+        //console.log(files)
         //school.images = files
         school.videos = videoLink
 
@@ -350,6 +350,49 @@ function GetStepContent(stepIndex, props) {
         fetchData(schoolFinal)
 
     }, [])
+
+    // {activeTabId === 1 && (
+    //     // <React.Fragment>
+    //     //     {/* <div className={classes.AR}>
+    //     //         <PartyMode />
+    //     //         <text>Request AR model</text>
+    //     //     </div>
+
+    //     //     <div className={classes.pics}>
+    //     //         {video1 == 'true' ? <div className={classes.video}><PlayArrow className={classes.video} /> <Cancel className={classes.cancel} /></div> : <AddBox className={classes.pic} />}
+
+    //     //     </div> */}
+    //     //     <div>
+    //     //         <TextField value={videoLink} onChange={e => setVideoLink(e.target.value)} InputProps={{
+    //     //             startAdornment: (
+    //     //                 <InputAdornment position="start"><VideoLibraryIcon /></InputAdornment>
+    //     //             ),
+    //     //         }} id="facebook" placeholder="School Facebook Link" fullWidth />
+    //     //     </div>
+    //     // </React.Fragment>
+    // )}
+
+    // <React.Fragment >
+    //     <div className={classes.pics}>
+    //         <AddBox className={classes.pic} />
+    //         <label>Select Files
+    //             {/* <input type="file" multiple onChange={onFileChange} /> */}
+    //             <input type="file" name="file" multiple="multiple" onChange={(event) => {
+    //                 handleImageSelect(event.target.files)
+    //             }} />
+    //         </label>
+    //         {/* <div className={classes.pics}>
+    //         {pics.map(function (item) {
+    //             return (
+    //                 <div className={classes.pic}>
+    //                     {item.source}
+    //                     <Cancel className={classes.cancel} />
+    //                 </div>
+    //             )
+    //         })}
+    //     </div> */}
+    //     </div>
+    // </React.Fragment>
 
     switch (stepIndex) {
         case 0:
@@ -431,8 +474,8 @@ function GetStepContent(stepIndex, props) {
                     <div className={classes.Checks}>
                         <text style={{ fontWeight: 'bold' }}>Education type: </text>
                         <RadioGroup onChange={(e) => { setEducationType(e.target.value) }} style={{ dispaly: 'flex', flexDirection: 'row' }} aria-label="educationtype" name="educationtype  " value={educationType} onChange={handleChange3}>
-                            <FormControlLabel value="Matric/Fsc" control={<Radio />} label="Matric/Fsc" />
-                            <FormControlLabel value="IGCSE" control={<Radio />} label="IGCSE" />
+                            <FormControlLabel value="Arts" control={<Radio />} label="Arts" />
+                            <FormControlLabel value="Science" control={<Radio />} label="Science" />
                         </RadioGroup>
                     </div>
                 </Widget>
@@ -448,33 +491,11 @@ function GetStepContent(stepIndex, props) {
                         textColor="primary"
                         centered
                     >
-                        <Tab label="Photos" classes={{ root: classes.tab }} />
                         <Tab label="Videos" classes={{ root: classes.tab }} />
+                        {/* <Tab label="Videos" classes={{ root: classes.tab }} /> */}
                     </Tabs>
                     {activeTabId === 0 && (
-                        <React.Fragment >
-                            <div className={classes.pics}>
-                                <AddBox className={classes.pic} />
-                                <label>Select Files
-                                    {/* <input type="file" multiple onChange={onFileChange} /> */}
-                                    <input type="file" name="file" multiple="multiple" onChange={(event) => {
-                                        handleImageSelect(event.target.files)
-                                    }} />
-                                </label>
-                                {/* <div className={classes.pics}>
-                                {pics.map(function (item) {
-                                    return (
-                                        <div className={classes.pic}>
-                                            {item.source}
-                                            <Cancel className={classes.cancel} />
-                                        </div>
-                                    )
-                                })}
-                            </div> */}
-                            </div>
-                        </React.Fragment>
-                    )}
-                    {activeTabId === 1 && (
+
                         <React.Fragment>
                             {/* <div className={classes.AR}>
                                 <PartyMode />
@@ -490,10 +511,11 @@ function GetStepContent(stepIndex, props) {
                                     startAdornment: (
                                         <InputAdornment position="start"><VideoLibraryIcon /></InputAdornment>
                                     ),
-                                }} id="facebook" placeholder="School Facebook Link" fullWidth />
+                                }} id="facebook" placeholder="School Video Link" fullWidth />
                             </div>
                         </React.Fragment>
                     )}
+
                     <br />
                 </Widget>
             </div>;;
@@ -589,6 +611,8 @@ export default function AdminAdding(props) {
                                 </Button>
                             <Button variant="contained" className={classes.button}
                                 onClick={activeStep === 4 ? () => props.history.push('/adminDashboard') : handleNext}
+                                //onClick={activeStep === 4 ? () => GetStepContent.createSchool() : handleNext}
+                                
                             >
                                 {/* onClick={activeStep === 4 ? () => props.history.push('/adminDashboard') : handleNext} */}
 

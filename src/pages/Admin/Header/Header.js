@@ -12,6 +12,8 @@ import UserAvatar from "../../../components/UserAvatar";
 // context
 import {useLayoutState,useLayoutDispatch,toggleSidebar,} from "../../../context/LayoutContext";
 import { useUserDispatch, signOut, Shome } from "../../../context/UserContext";
+import AuthService from "../../../services/auth.service";
+
 const messages = [
   {id: 0,variant: "warning",name: "Jane Hew",message: "Hey! How is it going?",time: "9:32"},
   {id: 1,variant: "success",name: "Lloyd Brown",message: "Check out my new Dashboard",time: "9:18",},
@@ -20,6 +22,17 @@ const notifications = [
   { id: 0, color: "warning", message: "Check out this awesome ticket" },
   {id: 1,color: "success",type: "info",message: "What is the best way to get ..."},
 ];
+
+let user = AuthService.getCurrentUser()
+  console.log("User")
+  console.log(user)
+
+  if(user==null){
+    user={
+      type:"",
+      username:"",
+    }
+  }
 
 export default function Header(props) {
   var classes = useStyles();
@@ -47,7 +60,7 @@ export default function Header(props) {
         </Typography>
         
         <div className={classes.grow} />
-        <div
+        {/* <div
           className={classNames(classes.search, {
             [classes.searchFocused]: isSearchOpen,
           })}
@@ -67,8 +80,8 @@ export default function Header(props) {
               input: classes.inputInput,
             }}
           />
-        </div>
-        <IconButton
+        </div> */}
+        {/* <IconButton
           color="inherit"
           aria-haspopup="true"
           aria-controls="mail-menu"
@@ -84,8 +97,8 @@ export default function Header(props) {
           >
             <NotificationsIcon classes={{ root: classes.headerIcon }} />
           </Badge>
-        </IconButton>
-        <IconButton
+        </IconButton> */}
+        {/* <IconButton
           color="inherit"
           aria-haspopup="true"
           aria-controls="mail-menu"
@@ -101,7 +114,7 @@ export default function Header(props) {
           >
             <MailIcon classes={{ root: classes.headerIcon }} />
           </Badge>
-        </IconButton>
+        </IconButton> */}
         <IconButton
           aria-haspopup="true"
           color="inherit"
@@ -111,7 +124,7 @@ export default function Header(props) {
         >
           <AccountIcon classes={{ root: classes.headerIcon }} />
         </IconButton>
-        <Menu
+        {/* <Menu
           id="mail-menu"
           open={Boolean(mailMenu)}
           anchorEl={mailMenu}
@@ -183,7 +196,7 @@ export default function Header(props) {
               <Notification {...notification} typographyVariant="inherit" />
             </MenuItem>
           ))}
-        </Menu>
+        </Menu> */}
         <Menu
           id="profile-menu"
           open={Boolean(profileMenu)}
@@ -195,25 +208,24 @@ export default function Header(props) {
         >
           <div className={classes.profileMenuUser}>
             <Typography variant="h4" weight="medium">
-              John Smith
+            {user.username}
             </Typography>
             <Typography
               className={classes.profileMenuLink}
               component="a"
-              color="primary"
-              href="https://flatlogic.com"
             >
-              Flalogic.com
+              {user.type}
             </Typography>
           </div>
-          <MenuItem
+          {/* <MenuItem
             className={classNames(
               classes.profileMenuItem,
               classes.headerMenuItem,
             )}
+            
           >
             <AccountIcon className={classes.profileMenuIcon} /> Profile
-          </MenuItem>
+          </MenuItem> */}
               
           <div className={classes.profileMenuUser}>
             <Typography

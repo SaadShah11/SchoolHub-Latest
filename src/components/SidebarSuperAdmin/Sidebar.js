@@ -13,7 +13,7 @@ import {useLayoutState} from "../../context/LayoutContext";
 const structure = [
   {id: 0, label: "Dashboard", link: "/superAdminDashboard/dashboard", icon: <HomeIcon /> },
   {id: 1, label: "Schools", link: "/superAdminDashboard/schools", icon: <Apartment />},
-  {id: 2, label: "AR requests", link: "/superAdminDashboard/ar", icon: <AR /> },
+  // {id: 2, label: "AR requests", link: "/superAdminDashboard/ar", icon: <AR /> },
   {id: 3,label: "Live Stream",link: "/superAdminDashboard/live",icon: <Stream />},
   {id: 4,label: "Reviews and Feedbacks",link: "/superAdminDashboard/reviews",icon: <UIElementsIcon />},
 ];

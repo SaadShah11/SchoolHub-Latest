@@ -32,7 +32,7 @@ const stats = [
   { name: 'Total Teachers', content: '', icon: <People /> },
   { name: 'Total Students', content: '', icon: <People /> },
   { name: 'Total Posts', content: '', icon: <Posts /> },
-  { name: 'AR Requests ', content: '', icon: <AR /> },
+  // { name: 'AR Requests ', content: '', icon: <AR /> },
   { name: 'Live Stream Requests', content: '', icon: <Stream /> }
 ]
 export default function Dashboard() {

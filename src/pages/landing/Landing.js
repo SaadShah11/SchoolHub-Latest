@@ -131,6 +131,8 @@ export default function Landing(props) {
   // }
   console.log("All Schools At End")
   console.log(allSchools)
+  console.log("displayTopSchools")
+  console.log(displayTopSchools)
 
   var classes = useStyles();
   return (
@@ -148,17 +150,34 @@ export default function Landing(props) {
             <text>Top Ranking School</text>
           </div>
           <div style={{ width: "100%", }}>
-            <Carousel cols={5} rows={1} gap={2} loop autoplay={3000}>
+            {/* <Carousel cols={5} rows={1} gap={2} loop autoplay={3000}> */}
               {
-                displayTopSchools
+                allSchools == undefined ? <div>Loading...</div> :
+                  <Carousel cols={4} rows={1} gap={2} loop autoplay={2000}>
+                    {
+                      allSchools.map((obj) => {
+                        return <Carousel.Item>
+                          <Grid item xs={3} class={classes.top}>
+                            <Widget disableWidgetMenu>
+                              <img style={{ width: '200px', height: '200px' }} src={obj.schoolIcon} alt="school" />
+                              <text style={{ fontWeight: 'bold' }}>{obj.schoolName}</text>
+                              <br />
+                              <text style={{ fontSize: '13px' }}>{obj.schoolAddress}</text>
+                              <StarRatings rating={obj.totalRating} starDimension="25px" starSpacing="3px" starRatedColor="#D10B0B" />
+                            </Widget>
+                          </Grid>
+                        </Carousel.Item>
+                      })
+                    }
+                  </Carousel>
               }
-            </Carousel>
+            {/* </Carousel> */}
           </div>
 
 
         </Grid>
         {/* SchoolHub recommended Shools */}
-        <Grid container spacing={1} style={{ marginTop: '10px', backgroundColor: '#FFFFFF' }} item md={11}>
+        {/* <Grid container spacing={1} style={{ marginTop: '10px', backgroundColor: '#FFFFFF' }} item md={11}>
           <div class={classes.toptitle}>
             <text>SchoolHub Recommendation</text>
           </div>
@@ -186,11 +205,11 @@ export default function Landing(props) {
             </Carousel>
           </div>
 
-        </Grid>
+        </Grid> */}
         <br />
         <br />
 
-        <Mapp />
+        <Mapp history={props.history} />
         {/* Search Schools */}
         {/* <Grid item md={3}>
         <Widget  title="Search School" disableWidgetMenu>

@@ -171,12 +171,12 @@ function Login(props) {
                       Login
                     </Button>
                   )}
-                  <Button
+                  {/* <Button
                     size="large"
                     className={classes.forgetButton}
                   >
                     Forget Password
-                </Button>
+                </Button> */}
                 </div>
               {/* </form> */}
             </React.Fragment>

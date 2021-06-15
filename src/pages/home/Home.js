@@ -53,6 +53,9 @@ export default function Home(props) {
       request.data.filter((post) => {
         console.log("Step 1")
         if (user != undefined) {
+          if(user._id==post.userID){
+            finalArr.push(post)
+          }
           if (user.following != null || user.following != [] || user.following != undefined) {
             console.log("Step 2")
             for (let i = 0; i < user.following.length; i++) {
@@ -60,16 +63,16 @@ export default function Home(props) {
                 console.log("Post found")
                 finalArr.push(post)
               }
+              
             }
           }
         }
-
 
       })
       console.log("Final Array")
       console.log(finalArr)
       //setAllPosts(request.data.reverse())
-      setAllPosts(finalArr)
+      setAllPosts(finalArr.reverse())
       return request.data;
     }
     //And here you call it
